@@ -1,0 +1,10 @@
+Attendance: Everyone
+
+Notes: 
+    - Discussed user stories and half way checkpoint
+    - We plan to do all of the user stories for the half way checkpoint
+    - Discussed the adittion of user stories
+    - Went through what we did last week and what we are doing for the upcoming week
+        - Main completions: figma, story board, mockup, wiki, crc cards
+        - Plans: UML, design
+
