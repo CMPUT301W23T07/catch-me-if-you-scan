@@ -1,0 +1,32 @@
+Begin: 2:05pm
+
+Attendance: Mohammad, Riley, Charlie, Yosri, Mark, Jay
+
+Notes:
+    - Discussed the coding standards that Moh created for the entire project
+        - Outlined variables, classes and mainly comments
+    - Talked about revising the UML and adding new stuff, possibly making a new one form scratch
+    - Class and UML naming standards
+    - Need to discuss Java version and API
+
+    Old business:
+        - Riley: Created the entire Activity skeleton, also finished the map, location and region objects
+        - Mark: Worked with Charlie to edit the UML diagram, worked on class objects interacting with activities
+        - Jay: Researching with camera, scanner, and coordinates, worked on the UML specifics as well
+        - Moh: Created the document that outlines our coding standards, researched setting up firestore
+        - Charlie: Worked with Mark on the UML, added some classea and features, renamed QRCodes to Monsters
+        - Yosri: Worked a bit on the UML, revised and added some comments / multiplicities
+
+    Reflection:
+        - No notable reflections
+
+    New business:
+        - Riley: Setup the App in git. Finish UML, and setting up the figma properly, and convert some of the storyboards to XML
+        - Mark: Work on the code for the camera activities and some kind of code skeleton
+        - Jay: Work on retrieving the info and packaging the attributes form the QRCode
+        - Moh: Initializing the database and the connection to the app, database interaction
+        - Charlie: Get the system for generating score and start working on the visual system, work on user API
+        - Yosri: Work on total UML revision, user Classes
+        - Group: 
+
+Meeting concluded: 2:30pm
