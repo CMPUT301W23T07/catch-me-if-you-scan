@@ -19,7 +19,7 @@ public class Monster {
     private String hashToBinary;
     private String hashHex;
     private int hashInt;
-    private Hashtable<Integer,String[]> nameSystem = new Hashtable<Integer, String[]>();
+    private Hashtable<Integer,String[]> bitWords = new Hashtable<Integer, String[]>();
 
 
 
@@ -37,14 +37,13 @@ public class Monster {
 
     public String getName(){
         for(int i = 0; i<6; i++){
-            int currentBit =  (int)hashToBinary.charAt(i) - 48;
-            String bitWord = nameSystem.get(i)[currentBit];
+            int currentBit = (int)hashToBinary.charAt(i) - 48;
+            String bitWord = bitWords.get(i)[currentBit];
             if(i==0){
                 name = bitWord + " ";
             }
             else name = name + bitWord;
         }
-        System.out.println(name);
         return this.name;
     }
 
@@ -61,12 +60,12 @@ public class Monster {
         this.comments.add(comment);
     }
     public void initializedHashTables(){
-        nameSystem.put(0, new String[]{"cool", "hot"});
-        nameSystem.put(1, new String[]{"Fro", "Glo"});
-        nameSystem.put(2, new String[]{"Mo", "Lo"});
-        nameSystem.put(3, new String[]{"Mega", "Ultra"});
-        nameSystem.put(4, new String[]{"Spectral", "Sonic"});
-        nameSystem.put(5, new String[]{"Crab", "Shark"});
+        bitWords.put(0, new String[]{"cool", "hot"});
+        bitWords.put(1, new String[]{"Fro", "Glo"});
+        bitWords.put(2, new String[]{"Mo", "Lo"});
+        bitWords.put(3, new String[]{"Mega", "Ultra"});
+        bitWords.put(4, new String[]{"Spectral", "Sonic"});
+        bitWords.put(5, new String[]{"Crab", "Shark"});
     }
 }
 
