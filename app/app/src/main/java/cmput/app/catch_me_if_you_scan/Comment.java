@@ -7,6 +7,10 @@ public class Comment {
     private User user;
     private String content;
 
+    Comment(User user, String content){
+        this.user = user;
+        this.content = content;
+    }
     public User getUser(){
         return this.user;
     }
