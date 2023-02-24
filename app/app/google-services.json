@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "73968952874",
+    "project_id": "catch-me-if-you-can-51284",
+    "storage_bucket": "catch-me-if-you-can-51284.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73968952874:android:bf0ec81896f33443be4553",
+        "android_client_info": {
+          "package_name": "cmput.app.catch_me_if_you_scan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73968952874-e8a71jhdjtn8c56c08m4ntaqe42ekti6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKR9VbkddGeLtzzR8jMPhGfexxEqwxdhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "73968952874-e8a71jhdjtn8c56c08m4ntaqe42ekti6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
