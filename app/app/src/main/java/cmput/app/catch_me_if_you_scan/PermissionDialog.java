@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Button;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 public class PermissionDialog extends DialogFragment {
@@ -33,11 +34,15 @@ public class PermissionDialog extends DialogFragment {
                     dialog.cancel();
                 });
         AlertDialog dialog = builder.create();
+
+        System.out.println("HELOOooOOO");
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
                 Button negativeButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-                negativeButton.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+
+                negativeButton.setTextColor(ContextCompat.getColor(((AlertDialog) dialog).getContext(), android.R.color.holo_red_light));
+
             }
         });
         return dialog;
