@@ -1,25 +1,54 @@
 package cmput.app.catch_me_if_you_scan;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.renderscript.ScriptGroup;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.io.Console;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarMenu;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        replaceFragment(new ProfileFragment());
+
+        BottomNavigationView navbar = findViewById(R.id.bottom_navigation_bar);
+        navbar.getMenu().getItem(3).setChecked(true);
+
+        navbar.setOnItemSelectedListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.leaderboard_nav:
+                    replaceFragment(new LeaderboardFragment());
+                    break;
+                case R.id.map_nav:
+                    replaceFragment(new MapFragment());
+                    break;
+                case R.id.camera_nav:
+                    replaceFragment(new CameraFragment());
+                    break;
+                case R.id.profile_nav:
+                    replaceFragment(new ProfileFragment());
+                    break;
+            }
+            return true;
+        });
+
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.main_fragment_container, fragment);
+        ft.commit();
     }
 }

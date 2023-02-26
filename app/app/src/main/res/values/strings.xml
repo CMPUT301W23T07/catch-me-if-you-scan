@@ -1,3 +1,28 @@
 <resources>
-    <string name="app_name">Catch Me If You Scan</string>
+    <string name="app_name">Catch Me If You Scan!</string>
+
+    <!-- Log In/Sign Up Strings -->
+    <string name="hint_name">Name</string>
+    <string name="hint_email">E-mail</string>
+    <string name="login_top">Welcome to</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+
+
+    <!-- Profile Strings -->
+    <string name="summary_1">Scores Summary</string>
+    <string name="summary_2">Total Code Scans</string>
+    <string name="summary_3">Scores Sum</string>
+    <string name="summary_4">Highest</string>
+    <string name="summary_5">Lowest</string>
+    <string name="view_all">View All</string>
+
+
+    <!-- Menu Strings -->
+    <string name="leaderboard">Leaderboard</string>
+    <string name="map">Map</string>
+    <string name="camera">Camera</string>
+    <string name="profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
