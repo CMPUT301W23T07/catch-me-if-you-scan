@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "cmput.app.catch_me_if_you_scan"
-        minSdk 22
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
