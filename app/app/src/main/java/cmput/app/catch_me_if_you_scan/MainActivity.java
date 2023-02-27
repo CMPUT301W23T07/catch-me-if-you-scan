@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new MapFragment());
                     break;
                 case R.id.camera_nav:
-                    replaceFragment(new CameraFragment());
+                    ScanningManager scanningManager = new ScanningManager(this);
                     break;
                 case R.id.profile_nav:
                     replaceFragment(new ProfileFragment());
