@@ -15,8 +15,6 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
-
     ScanningManager scanningManager = new ScanningManager(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -30,16 +30,26 @@ public class SubmissionActivity extends AppCompatActivity {
     TextView latititude_Text;
     TextView longitutde_Text;
     ImageButton photoButton;
+    Bitmap compressed_img;
 
     private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
                     Bundle extras = result.getData().getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    Bitmap image_taken = (Bitmap) extras.get("data");
 
+                    //Now we have to compress the picture
+                    int width = image_taken.getWidth();
+                    int height = image_taken.getHeight();
+                    float aspectRatio = (float) width / (float) height;
+                    int newWidth = 800;
+                    int newHeight = Math.round(newWidth / aspectRatio);
+
+                    // Resize the bitmap to the new dimensions
+                    compressed_img = Bitmap.createScaledBitmap(image_taken, newWidth, newHeight, false);
 
                     photoButton = findViewById(R.id.photo_button);
-                    photoButton.setImageBitmap(imageBitmap);
+                    photoButton.setImageBitmap(image_taken);
                 }
             });
 
