@@ -16,6 +16,8 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    ScanningManager scanningManager = new ScanningManager(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new MapFragment());
                     break;
                 case R.id.camera_nav:
-                    ScanningManager scanningManager = new ScanningManager(this);
+                    scanningManager.scanCode();
                     break;
                 case R.id.profile_nav:
                     replaceFragment(new ProfileFragment());
