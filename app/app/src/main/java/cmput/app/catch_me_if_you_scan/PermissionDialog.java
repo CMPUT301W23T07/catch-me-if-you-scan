@@ -35,7 +35,6 @@ public class PermissionDialog extends DialogFragment {
                 });
         AlertDialog dialog = builder.create();
 
-        System.out.println("HELOOooOOO");
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
