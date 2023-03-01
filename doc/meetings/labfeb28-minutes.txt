@@ -1,0 +1,15 @@
+Start: 6:20pm
+
+Attendence: Everyone
+
+Notes: 
+    - Discussed old business and new business
+        - Main Completions: Scanning system, Naming system, UML, Camera, Connecting UI components, Documentation
+        - Plans: Monster, VIsual, Naming, UI, Mock backend, Set up Real Database
+    - Discussed workload, efficiency, work division etc.
+    - Discussed problems:
+        - Switching between activities
+    - Demo
+
+End: 6:45pm
+
