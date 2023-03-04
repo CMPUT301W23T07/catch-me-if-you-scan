@@ -7,9 +7,12 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,22 +24,42 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class SubmissionActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private double longitude;
     private double latitude;
     private String message;
+    private String currentPhotoPath;
     TextView info_Text;
     TextView latititude_Text;
     TextView longitutde_Text;
-    ImageButton photoButton;
+
+    Button photoButton;
     Bitmap compressed_img;
+
+    ImageView background_img;
 
     private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
+                    // Save the picture first to a file. The filename will be the date
+                    DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date currentDate = new Date();
+                    String dateString = dateFormat.format(currentDate);
+
+                    File storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
                     Bundle extras = result.getData().getExtras();
                     Bitmap image_taken = (Bitmap) extras.get("data");
+
+                    // this is for the background image
+                    background_img = findViewById(R.id.background_image);
+                    background_img.setImageBitmap(image_taken);
 
                     //Now we have to compress the picture
                     int width = image_taken.getWidth();
@@ -48,8 +71,6 @@ public class SubmissionActivity extends AppCompatActivity {
                     // Resize the bitmap to the new dimensions
                     compressed_img = Bitmap.createScaledBitmap(image_taken, newWidth, newHeight, false);
 
-                    photoButton = findViewById(R.id.photo_button);
-                    photoButton.setImageBitmap(image_taken);
                 }
             });
 
@@ -60,10 +81,9 @@ public class SubmissionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_submission);
 
         // Find the view IDs
-        info_Text = findViewById(R.id.QRinfo);
-        latititude_Text = findViewById(R.id.Latitude);
-        longitutde_Text = findViewById(R.id.Longitude);
-        photoButton = findViewById(R.id.photo_button);
+//        latititude_Text = findViewById(R.id.Latitude);
+//        longitutde_Text = findViewById(R.id.Longitude);
+        photoButton = findViewById(R.id.take_photo_button);
 
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +95,11 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // Get the intents
         message = getIntent().getStringExtra("Code name");
-        info_Text.setText(message);
 
         getCurrentLocation();
     }
 
+    ////// This is responsible for getting the location/////////////////////////////////////////////
     private void getCurrentLocation() {
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -100,22 +120,21 @@ public class SubmissionActivity extends AppCompatActivity {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
                             // Update the latitude and longitude values here
-                            updateLocationViews();
+//                            updateLocationViews();
                         }
                     }
                 });
-
     }
+    // This will only update the location views. This is mainly for testing purposes////////////////
+//    private void updateLocationViews() {
+//        TextView latitude_display = findViewById(R.id.Latitude);
+//        latitude_display.setText(Double.toString(latitude));
+//
+//        TextView longitude_display = findViewById(R.id.Longitude);
+//        longitude_display.setText(Double.toString(longitude));
+//    }
 
-
-    private void updateLocationViews() {
-        TextView latitude_display = findViewById(R.id.Latitude);
-        latitude_display.setText(Double.toString(latitude));
-
-        TextView longitude_display = findViewById(R.id.Longitude);
-        longitude_display.setText(Double.toString(longitude));
-    }
-
+    // This is responsible for the picture taking //////////////////////////////////////////////////
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null)
