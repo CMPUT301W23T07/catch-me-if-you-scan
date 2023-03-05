@@ -1,5 +1,6 @@
 package cmput.app.catch_me_if_you_scan;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -20,6 +21,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+    PermissionManager permissionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +32,19 @@ public class LoginActivity extends AppCompatActivity {
 
         Button signUp = findViewById(R.id.sign_up_button);
 
+        permissionManager = new PermissionManager(LoginActivity.this);
+        permissionManager.requestAllPermissions();
+
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(i);
+                if (permissionManager.hasAllPermissions()) {
+                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(i);
+                } else {
+                    permissionManager.requestAllPermissions();
+                }
+
             }
         });
 
@@ -61,4 +72,12 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "You can't make map requests, API cannot connect.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }
+
+

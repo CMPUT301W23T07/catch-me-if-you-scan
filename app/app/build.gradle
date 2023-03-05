@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "cmput.app.catch_me_if_you_scan"
-        minSdk 22
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -40,4 +40,12 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // For the QR & Barcode Scanner
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    // For QR Code Location
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+
 }
