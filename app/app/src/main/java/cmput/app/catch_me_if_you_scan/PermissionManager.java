@@ -15,16 +15,32 @@ import androidx.fragment.app.FragmentActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PermissionManager class provides methods to manage permissions related to location, camera, and storage.
+ * It checks for the required permissions and requests them if necessary.
+ * It also handles the result of the permission request and shows relevant messages to the user.
+ */
 public class PermissionManager {
 
+    // Request code for the permission request
     private static final int PERMISSION_REQUEST_CODE = 101;
+
+    // The context in which the permissions are requested
     Context context;
 
+    /**
+     * Constructor for PermissionManager.
+     *
+     * @param context The context in which the permissions are requested.
+     */
     public PermissionManager(Context context) {
         this.context = context;
     }
 
-
+    /**
+     * Requests all the necessary permissions for the app.
+     * Checks if any of the permissions are already granted, and requests the ones that are not.
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void requestAllPermissions() {
         List<String> permissionsNeeded = new ArrayList<>();
@@ -41,18 +57,42 @@ public class PermissionManager {
             permissionsNeeded.add(Manifest.permission.CAMERA);
         }
 
+        if (context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+
+        if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
         if (!permissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions((Activity) context, permissionsNeeded.toArray(new String[permissionsNeeded.size()]), PERMISSION_REQUEST_CODE);
         }
     }
 
+    /**
+     * Checks if all the required permissions for the app are granted or not.
+     *
+     * @return True if all the required permissions are granted, False otherwise.
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean hasAllPermissions() {
         return context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+                && context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
+    /**
+     * Handles the result of the permission request.
+     * If all the required permissions are granted, the app proceeds.
+     * If some of the permissions are not granted, it shows an appropriate message to the user.
+     *
+     * @param requestCode  The request code used to request permissions.
+     * @param permissions  The permissions requested.
+     * @param grantResults The results of the permission request.
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
