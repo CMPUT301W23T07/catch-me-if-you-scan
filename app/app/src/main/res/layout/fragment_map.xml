@@ -13,4 +13,13 @@
         android:clickable="true"
         android:enabled="true"
         android:focusable="true" />
+
+    <Button
+        android:id="@+id/filter_map_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/filter" />
+
 </FrameLayout>

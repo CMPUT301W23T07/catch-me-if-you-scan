@@ -25,6 +25,14 @@
     <string name="map">Map</string>
     <string name="camera">Camera</string>
     <string name="profile">Profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Map Strings -->
+    <string name="filter">Filter</string>
+    <string name="bronze">Bronze</string>
+    <string name="silver">Silver</string>
+    <string name="gold">Gold</string>
+    <string name="platinum">Platinum</string>
+    <string name="diamond">Diamond</string>
+    <string name="confirm">Confirm</string>
 </resources>

@@ -1,6 +1,7 @@
 package cmput.app.catch_me_if_you_scan;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -9,10 +10,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -24,11 +28,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -38,6 +44,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private PermissionManager permissions;
     private Location userLocation;
     private FusedLocationProviderClient mLocationClient;
+    private ArrayList<Marker> markers = new ArrayList<>();
+
+    //HARDCODED MONSTERS
+    private final Double[][] monsters = {{53.527275, -113.523964, 256.0}, {53.527471, -113.526879, 9237.0}};
+    private ArrayList<Integer> rankings = new ArrayList<>();
 
     private static final float DEFAULT_ZOOM = 15f;
 
@@ -48,12 +59,33 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
+        rankings.add(2);
+        rankings.add(5);
+
         permissions = new PermissionManager(getActivity());
 
         mView = v.findViewById(R.id.map_view);
         mView.onCreate(savedInstanceState);
 
         mView.getMapAsync(this);
+
+        Button filterButton = v.findViewById(R.id.filter_map_button);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentManager fragMan = getChildFragmentManager();
+                FragmentTransaction fragTrans = fragMan.beginTransaction();
+                FilterMapFragment filterFragment = new FilterMapFragment();
+                fragTrans.add(R.id.map, filterFragment);
+                fragTrans.addToBackStack("FILTER");
+                fragTrans.commit();
+                //Intent i = new Intent(getActivity(), FilterMapFragment.class);
+
+                //ArrayList<Integer> tiers = i.getIntegerArrayListExtra("TIERS");
+                //filterMonsterTier(tiers);
+            }
+        });
 
         return v;
     }
@@ -104,18 +136,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Bitmap b = bitMapDraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-        //HARDCODED MONSTERS
-        Double[][] monsters = {{53.527275, -113.523964, 256.0}, {53.527471, -113.526879, 9237.0}};
-
         int i = 0;
         for (i = 0; i < monsters.length; i++) {
             MarkerOptions options = new MarkerOptions()
                     .position(new LatLng(monsters[i][0], monsters[i][1]))
                     .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                     .title(monsters[i][2].toString());
-            map.addMarker(options);
+            Marker marker = map.addMarker(options);
+            markers.add(marker);
         }
 
+    }
+
+    private void filterMonsterTier(ArrayList<Integer> tiers) {
+        for (int i = 0; i < markers.size(); i++) {
+            if (!tiers.contains(rankings.get(i))) {
+                markers.get(i).setVisible(false);
+            }
+        }
     }
 
     @Override
