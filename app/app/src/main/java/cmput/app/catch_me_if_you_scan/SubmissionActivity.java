@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -27,6 +30,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,6 +51,14 @@ public class SubmissionActivity extends AppCompatActivity {
     Bitmap compressed_img;
 
     ImageView background_img;
+
+    FileOutputStream fos = null;
+
+    File photoFile = null;
+
+    Uri photoURI;
+    String photoname;
+
 
 
 
@@ -133,30 +146,45 @@ public class SubmissionActivity extends AppCompatActivity {
 //
 //                    // Resize the bitmap to the new dimensions
 //                    compressed_img = Bitmap.createScaledBitmap(image_taken, newWidth, newHeight, false);
-                //              }
-            //});
+//
+//            });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create a file to store the image
-            File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Handle error creating file
             }
 
+            try {
+                fos = new FileOutputStream(photoFile);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                }
+                }
+            }
+
             if (photoFile != null) {
                 // Get the content URI for the file
-                Uri photoURI = FileProvider.getUriForFile(this,
+                photoURI = FileProvider.getUriForFile(this,
                         "cmput.app.catch_me_if_you_scan.fileprovider",
                         photoFile);
-//                // Add the content URI to the intent as an extra
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                // Start the camera app with the intent
-//                takePictureLauncher.launch(takePictureIntent);
+
+                // Add the content URI to the intent as an extra
+
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                // Start the camera app with the intent
+                takePictureLauncher.launch(takePictureIntent);
             }
 
         }
@@ -165,12 +193,14 @@ public class SubmissionActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create a unique file name for the image
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        photoname = timeStamp + ".jpg";
+
         // Get the directory where the image file will be saved
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         // Create the File object for the image file
         File imageFile = File.createTempFile(
-                imageFileName,  // prefix
+                timeStamp,  // prefix
                 ".jpg",         // suffix
                 storageDir      // directory
         );
@@ -182,22 +212,38 @@ public class SubmissionActivity extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
 
-                    Bundle extras = result.getData().getExtras();
-                    Bitmap image_taken = (Bitmap) extras.get("data");
-
                     // this is for the background image
                     background_img = findViewById(R.id.background_image);
-                    background_img.setImageBitmap(image_taken);
+
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
+
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(90);
+                    Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+
+                    background_img.setImageBitmap(rotatedBitmap);
 
                     //Now we have to compress the picture
-                    int width = image_taken.getWidth();
-                    int height = image_taken.getHeight();
+                    int width = rotatedBitmap.getWidth();
+                    int height = rotatedBitmap.getHeight();
                     float aspectRatio = (float) width / (float) height;
                     int newWidth = 800;
                     int newHeight = Math.round(newWidth / aspectRatio);
 
-                    // Resize the bitmap to the new dimensions
-                    compressed_img = Bitmap.createScaledBitmap(image_taken, newWidth, newHeight, false);
+                    compressed_img = Bitmap.createScaledBitmap(rotatedBitmap, newWidth, newHeight, false);
+
+
+
+
+
+
+
+
+
                 }
             });
+
+
 }
