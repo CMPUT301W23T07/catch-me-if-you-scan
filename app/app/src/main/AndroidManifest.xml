@@ -19,15 +19,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CatchMeIfYouScan"
         tools:targetApi="31">
+
         <activity
             android:name=".ScanningActivity"
             android:exported="false"/>
+
         <activity
             android:name=".SubmissionActivity"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -37,11 +41,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".CaptureAct"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="cmput.app.catch_me_if_you_scan.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>
