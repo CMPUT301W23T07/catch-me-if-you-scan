@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,6 +30,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -58,10 +60,6 @@ public class SubmissionActivity extends AppCompatActivity {
 
     Uri photoURI;
     String photoname;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,42 +111,6 @@ public class SubmissionActivity extends AppCompatActivity {
                     }
                 });
     }
-    // This will only update the location views. This is mainly for testing purposes////////////////
-//    private void updateLocationViews() {
-//        TextView latitude_display = findViewById(R.id.Latitude);
-//        latitude_display.setText(Double.toString(latitude));
-//
-//        TextView longitude_display = findViewById(R.id.Longitude);
-//        longitude_display.setText(Double.toString(longitude));
-//    }
-
-    // This is responsible for the picture taking //////////////////////////////////////////////////
-//    private void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
-//            takePictureLauncher.launch(takePictureIntent);
-//    }
-//    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-//            result -> {
-//                    Bundle extras = result.getData().getExtras();
-//                    Bitmap image_taken = (Bitmap) extras.get("data");
-//
-//                    // this is for the background image
-//                    background_img = findViewById(R.id.background_image);
-//                    background_img.setImageBitmap(image_taken);
-//
-//                    //Now we have to compress the picture
-//                    int width = image_taken.getWidth();
-//                    int height = image_taken.getHeight();
-//                    float aspectRatio = (float) width / (float) height;
-//                    int newWidth = 800;
-//                    int newHeight = Math.round(newWidth / aspectRatio);
-//
-//                    // Resize the bitmap to the new dimensions
-//                    compressed_img = Bitmap.createScaledBitmap(image_taken, newWidth, newHeight, false);
-//
-//            });
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -215,35 +177,39 @@ public class SubmissionActivity extends AppCompatActivity {
                     // this is for the background image
                     background_img = findViewById(R.id.background_image);
 
+                    // this will decode the file which contains the image, but the image is rotated
                     Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
-
+                    // This will rotate the image
                     Matrix matrix = new Matrix();
                     matrix.postRotate(90);
                     Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-
+                    // Paste the Image to the screen
                     background_img.setImageBitmap(rotatedBitmap);
 
-                    //Now we have to compress the picture
-                    int width = rotatedBitmap.getWidth();
-                    int height = rotatedBitmap.getHeight();
-                    float aspectRatio = (float) width / (float) height;
-                    int newWidth = 800;
-                    int newHeight = Math.round(newWidth / aspectRatio);
-
-                    compressed_img = Bitmap.createScaledBitmap(rotatedBitmap, newWidth, newHeight, false);
-
-
-
-
-
-
+                    //Now we have to compress the picture and save it into compressed_img.
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                        rotatedBitmap.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, stream); // Compress bitmap using RLE compression
+//                    }
+//                    byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+//
+//
+//                    // This will unpack the compressedBitmap
+//                    BitmapFactory.Options options = new BitmapFactory.Options();
+//                    options.inPreferredConfig = Bitmap.Config.RGB_565; // Set the bitmap configuration to ARGB_8888
+//                    options.inDither = false;
+//                    options.inPreferQualityOverSpeed = true;
+//
+//
+////                    options.inPreferredConfig = Bitmap.CompressFormat.WEBP_LOSSLESS; // Specify the RLE compression format
+//
+//                    Bitmap decompressed_bitmap = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length, options); // Decode the compressed bitmap data
+//
 
 
 
                 }
             });
-
-
 }
