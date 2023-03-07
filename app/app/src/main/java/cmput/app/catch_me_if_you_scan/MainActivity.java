@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         navbar.setOnItemSelectedListener(item -> {
             switch(item.getItemId()) {
                 case R.id.leaderboard_nav:
-                    replaceFragment(new LeaderboardFragment());
+                    replaceFragment(new VisualTestFragment()); // FOR TESTING PURPOSES - CHANGE BACK TO LeaderboardFragment()
                     break;
                 case R.id.map_nav:
                     replaceFragment(new MapFragment());
