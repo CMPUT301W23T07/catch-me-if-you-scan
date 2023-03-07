@@ -13,7 +13,7 @@ public class Monster {
 
     private String name;
     private int score;
-    private int scoreClass;
+    private int scoreRank;
     private String[] visual;
     private ArrayList<Comment> comments = new ArrayList<Comment>();
     private HashCode hash;
@@ -90,13 +90,28 @@ public class Monster {
     }
 
     /**
+     * ranks the score based on a fixed limits
+     * @return score's ranks
+     */
+    public int getScoreRank(){
+        if(this.score < 99) scoreRank = 1;
+        else if(this.score < 199) scoreRank = 2;
+        else if(this.score < 399) scoreRank = 3;
+        else if(this.score < 599) scoreRank = 4;
+        else if(this.score >= 600) scoreRank = 5;
+        return this.scoreRank;
+    }
+    /**
      * It creates a unique name for the monster
      * by using its hash's bits
      * @return the name of the monster
      */
     public String getName(){
+        // loops through the first 6 bits
         for(int i = 0; i<6; i++){
+            // turn the 0/1 char into 0/1 int
             int currentBit = (int)hashToBinary.charAt(i) - 48;
+            // gets the word from the list at given (i)
             String bitWord = bitWords.get(i)[currentBit];
             if(i==0){
                 name = bitWord + " ";
@@ -118,6 +133,10 @@ public class Monster {
     public void addComment(Comment comment){
         this.comments.add(comment);
     }
+
+    /**
+     * initializes the hashtables for the visual/naming systems to use
+     */
     public void initializedHashTables(){
         bitWords.put(0, new String[]{"cool", "hot"});
         bitWords.put(1, new String[]{"Fro", "Glo"});
