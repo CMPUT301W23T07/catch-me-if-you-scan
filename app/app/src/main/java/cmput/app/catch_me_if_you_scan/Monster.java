@@ -46,7 +46,7 @@ public class Monster {
             int repeatCounter = 1;
             int j = i;
             // Count the number of consecutive occurrences of the current character
-            while(currentChar == this.hashHex.charAt(j+1)){
+            while(j<this.hashHex.length()-1 && currentChar == this.hashHex.charAt(j+1)){
                 repeatCounter++;
                 j++;
             }
