@@ -12,4 +12,10 @@ public class MonsterTest {
         Monster monster = createMonster("test");
         monster.getName();
     }
+
+    @Test
+    void testScoreSys(){
+        Monster monster = createMonster("hesa");
+        monster.getScore();
+    }
 }

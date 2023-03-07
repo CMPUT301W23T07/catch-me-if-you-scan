@@ -13,6 +13,7 @@ public class Monster {
 
     private String name;
     private int score;
+    private int scoreClass;
     private String[] visual;
     private ArrayList<Comment> comments = new ArrayList<Comment>();
     private HashCode hash;
@@ -29,12 +30,70 @@ public class Monster {
         this.hashInt = hash.asInt();
         this.hashToBinary = Integer.toBinaryString(this.hashInt);
         this.initializedHashTables();
+        System.out.println();
     }
 
+    /**
+     * Calculates the monster's score based on
+     * the system the client asked for
+     * @return The monster's score
+     */
     public int getScore(){
+        // Iterate over the characters in the hash string
+        for(int i=0; i<this.hashHex.length()-1; i++){
+            char currentChar = this.hashHex.charAt(i);
+            // Initialize the repeat counter and index
+            int repeatCounter = 1;
+            int j = i;
+            // Count the number of consecutive occurrences of the current character
+            while(currentChar == this.hashHex.charAt(j+1)){
+                repeatCounter++;
+                j++;
+            }
+            // Calculate the score based on the character and the number of consecutive occurrences
+            if(currentChar == '0'){
+                // For '0', add 20^(repeatCounter-1) to the score
+                this.score+=Math.pow(20, repeatCounter-1);
+            }
+            else if(repeatCounter>1){
+                // For other characters with more than one consecutive occurrence,
+                // calculate the score based on their value and the number of occurrences
+                if (currentChar == 'a'){
+                    this.score+=Math.pow(10, repeatCounter-1);
+                }
+                else if (currentChar == 'b'){
+                    this.score+=Math.pow(11, repeatCounter-1);
+                }
+                else if (currentChar == 'c'){
+                    this.score+=Math.pow(12, repeatCounter-1);
+                }
+                else if (currentChar == 'd'){
+                    this.score+=Math.pow(13, repeatCounter-1);
+                }
+                else if (currentChar == 'e'){
+                    this.score+=Math.pow(14, repeatCounter-1);
+                }
+                else if (currentChar == 'f'){
+                    this.score+=Math.pow(15, repeatCounter-1);
+                }
+                else{
+                    // For other characters, convert their ASCII value to an integer and calculate the score
+                    int x = (int)currentChar - 48;
+                    this.score+=Math.pow(x, repeatCounter-1);
+                }
+            }
+            // Update the index based on the number of consecutive occurrences
+            i+= repeatCounter-1;
+        }
+        // Return the final score
         return this.score;
     }
 
+    /**
+     * It creates a unique name for the monster
+     * by using its hash's bits
+     * @return the name of the monster
+     */
     public String getName(){
         for(int i = 0; i<6; i++){
             int currentBit = (int)hashToBinary.charAt(i) - 48;
