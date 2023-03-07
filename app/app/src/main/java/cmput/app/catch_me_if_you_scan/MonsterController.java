@@ -1,5 +1,6 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,19 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MonsterController {
+
+    private FirebaseFirestore db;
+    private CollectionReference collection;
+
+    public MonsterController(FirebaseFirestore db){
+        this.db = db;
+        this.collection = db.collection("Monsters");
+    }
 
     /*
     Takes in a Monster object and sends it to the database.
@@ -25,20 +36,26 @@ public class MonsterController {
      * Adds Monster to Database Collection.
      * @return A boolean value correlated with the success of the database write.
      */
-    public boolean create(Monster monster, CollectionReference collection) {
-        collection.add(monster).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                // after the data addition is successful
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // this method is called when the data addition process is failed.
-                
-            }
-        });
-        return false;
+    public ArrayList<Boolean> create(Monster monster) {
+        ArrayList<Boolean> success = new ArrayList<Boolean>();
+        collection.document(monster.getHexHash())
+                .set(monster)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Hi", "DocumentSnapshot successfully written!");
+                        success.add(Boolean.TRUE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Hi", "Error writing document", e);
+                        success.add(Boolean.FALSE);
+                    }
+                });
+
+        return success;
     }
 
     //TODO

@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 import java.io.Console;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +49,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Monster mon = new Monster("Timbo");
+        MonsterController controller = new MonsterController(db);
+
+        ArrayList<Boolean> test = controller.create(mon);
+
+
+
+        if(test.get(0) == Boolean.TRUE){
+            System.out.println("nice");
+        } else {
+            System.out.println("not nice");
+        }
 
     }
 
