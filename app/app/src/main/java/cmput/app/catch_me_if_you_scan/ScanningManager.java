@@ -25,7 +25,7 @@ public class ScanningManager {
 
         this.barLauncher = activity.registerForActivityResult(new ScanContract(), result ->
         {
-            // If the capture was successfull. We take them to the Submission Activity
+            // If the capture was successful. We take them to the Submission Activity
             if ((result.getContents() != null))
             {
                 message = result.getContents();
