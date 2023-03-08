@@ -5,16 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SubmissionActivity">
+<!--    This is for the background(environment photo), which is displayed after the user takes a photo-->
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/QRinfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submission Page"
+    <ImageView
+        android:id="@+id/transparentView"
+        android:layout_width="370dp"
+        android:layout_height="500dp"
+        android:background="#80022646"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/QRinfo"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="QR INFO"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.225"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/Longitude"
@@ -24,30 +41,87 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QRinfo" />
+        app:layout_constraintTop_toBottomOf="@+id/photo_textView" />
 
     <TextView
         android:id="@+id/Latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="Latitude"
         app:layout_constraintBottom_toTopOf="@+id/Longitude"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/QRinfo" />
+        app:layout_constraintTop_toBottomOf="@+id/photo_textView" />
 
-    <ImageButton
-        android:id="@+id/photo_button"
-        android:layout_width="wrap_content"
-        android:layout_height="257dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+<!--    <ImageButton-->
+<!--        android:id="@+id/photo_button"-->
+<!--        android:layout_width="87dp"-->
+<!--        android:layout_height="126dp"-->
+<!--        android:layout_marginTop="300dp"-->
+<!--        android:adjustViewBounds="true"-->
 
-        app:layout_constraintBottom_toTopOf="@+id/QRinfo"
+<!--        android:scaleType="fitCenter"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.762"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@android:drawable/ic_menu_camera" />-->
+
+<!--    Photo Related Start-->
+    <TextView
+        android:id="@id/photo_textView"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Photo:"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:textSize="19sp"
+        android:layout_marginStart="-280dp"
+        android:layout_marginTop="-150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+
+    <Button
+        android:id="@id/cancel_photo_button"
+        android:layout_width="110dp"
+        android:layout_height="48dp"
+
+        android:layout_marginTop="-150dp"
+        android:backgroundTint="@color/red_cancel_button"
+
+        android:gravity="center"
+        android:text="Delete"
+
+        android:textColor="#FFFFFF"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
+        app:layout_constraintEnd_toEndOf="@+id/transparentView"
+        app:layout_constraintStart_toEndOf="@+id/take_photo_button"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+
+    <Button
+        android:id="@id/take_photo_button"
+        android:layout_width="110dp"
+        android:layout_height="48dp"
+
+        android:layout_marginStart="-130dp"
+        android:layout_marginTop="-150dp"
+        android:backgroundTint="#022646"
+
+        android:gravity="center"
+
+        android:text="Capture"
+        android:textColor="#FFFFFF"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/photo_textView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+<!--Photo Related End-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
