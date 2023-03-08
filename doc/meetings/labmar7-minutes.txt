@@ -1,0 +1,18 @@
+Start: 6:05pm
+
+Attendence: Everyone
+
+Notes: 
+    - Discussed User stories completion (need to do half)
+    - Next lab session we will be doing a Demo
+    - Keep the project up to date when projects are done
+    - Discussed what we have done and we are going to do
+        - Notable completions:
+            1. Improving submission system (bitmap of photos), compression, decompression
+            2. Completed the mapping system
+            3. Scoring and Visual system
+    - Tips:
+        1. Can store an image as a string in the database to avoid storeing files
+
+End: pm
+

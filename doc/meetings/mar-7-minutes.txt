@@ -1,0 +1,31 @@
+Begin: 3:57pm
+
+Attendance: Mohammad, Riley, Charlie, Yosri, Mark, Jay
+
+Notes:
+    - Got everyone setup with the MAPS_API_KEY in local.properties
+    - Talked about UI time consumption, save it for last, if nothing to do, do UI
+    - Discussed Monster textures, randomized modules constructed into bitmaps for visual projection
+    - "Fuckin" x1
+
+    Old business:
+        - Riley: Finished the map, fixed some things, created some general filtering, API key
+        - Mark: Worked with Jay on the submission activity, also worked permissions. Github organization, did javadocs
+        - Jay: Worked on more functionality for the submission activity, working on compression and types
+        - Moh: Research and development
+        - Charlie: Worked a bit on the Monster controller and API, and visual system.
+        - Yosri: Finished the scorring system and is worked on the visual system. Planned other systems
+
+    Reflection:
+        - Working on a wide variety of tasks instead of specific focused tasks
+
+    New business:
+        - Riley: Going to do the leaderboard frontend and possibly work on all the functionality.
+        - Mark: Going to work with Jay on submission, also going to help with UI both conversion and design changes.
+        - Jay: Going to keep working on the submission activity.
+        - Moh: Working on backend, controller creation, relations, tables, CRUD
+        - Charlie: Get the visual system done, working on comments for monsters UI for monster viewing.
+        - Yosri: Finish the systems and controllers and work on User class
+        - Group: N/A
+
+Meeting concluded: 4:27pm
