@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Catch Me If You Scan!</string>
 
+    <string name="hello_blank_fragment">Hello im blank</string>
+
     <!-- Log In/Sign Up Strings -->
     <string name="hint_name">Name</string>
     <string name="hint_email">E-mail</string>
