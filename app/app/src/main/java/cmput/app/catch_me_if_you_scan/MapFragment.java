@@ -1,64 +1,182 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MapFragment extends Fragment {
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.sql.Array;
+import java.util.ArrayList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    public MapFragment() {
-        // Required empty public constructor
-    }
+    private MapView mView;
+    private GoogleMap map;
+    private PermissionManager permissions;
+    private Location userLocation;
+    private FusedLocationProviderClient mLocationClient;
+    private ArrayList<Marker> markers = new ArrayList<>();
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
-        MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    //HARDCODED MONSTERS
+    private final Double[][] monsters = {{53.527275, -113.523964, 256.0}, {53.527471, -113.526879, 9237.0}};
+    private ArrayList<Integer> rankings = new ArrayList<>();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private static final float DEFAULT_ZOOM = 15f;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false);
+        View v = inflater.inflate(R.layout.fragment_map, container, false);
+
+        rankings.add(2);
+        rankings.add(5);
+
+        permissions = new PermissionManager(getActivity());
+
+        mView = v.findViewById(R.id.map_view);
+        mView.onCreate(savedInstanceState);
+
+        mView.getMapAsync(this);
+
+        Button filterButton = v.findViewById(R.id.filter_map_button);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                FragmentManager fragMan = getChildFragmentManager();
+                FragmentTransaction fragTrans = fragMan.beginTransaction();
+                FilterMapFragment filterFragment = new FilterMapFragment();
+                fragTrans.add(R.id.map, filterFragment);
+                fragTrans.addToBackStack("FILTER");
+                fragTrans.commit();
+                //Intent i = new Intent(getActivity(), FilterMapFragment.class);
+
+                //ArrayList<Integer> tiers = i.getIntegerArrayListExtra("TIERS");
+                //filterMonsterTier(tiers);
+            }
+        });
+
+        return v;
+    }
+
+    //Suppressed the warning because the permissions for this are checked in the PermissionManager class
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.5461, 113.4937), DEFAULT_ZOOM));
+        loadMonstersInRegion();
+        if (permissions.hasLocationPermissions()) {
+            map.setMyLocationEnabled(true);
+            getCurrentLocation();
+        }
+    }
+
+    //Permissions are checked with the line "if (permissions.hasLocationPermissions())"
+    @SuppressLint("MissingPermission")
+    private void getCurrentLocation() {
+
+        mLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        Task<Location> location = mLocationClient.getLastLocation();
+        location.addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    userLocation = (Location) task.getResult();
+                    if (userLocation != null) {
+                        map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(userLocation.getLatitude(), userLocation.getLongitude())));
+                    }
+                    else {
+                        Toast.makeText(getActivity(), "Unable to get current location", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadMonstersInRegion() {
+        //TEMPORARY CODE FOR SETTING THE MARKER SETTINGS WILL FIX LATER
+        int height = 100;
+        int width = 100;
+        @SuppressLint("UseCompatLoadingForDrawables")
+        BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
+        Bitmap b = bitMapDraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+        int i = 0;
+        for (i = 0; i < monsters.length; i++) {
+            MarkerOptions options = new MarkerOptions()
+                    .position(new LatLng(monsters[i][0], monsters[i][1]))
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                    .title(monsters[i][2].toString());
+            Marker marker = map.addMarker(options);
+            markers.add(marker);
+        }
+
+    }
+
+    private void filterMonsterTier(ArrayList<Integer> tiers) {
+        for (int i = 0; i < markers.size(); i++) {
+            if (!tiers.contains(rankings.get(i))) {
+                markers.get(i).setVisible(false);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mView.onLowMemory();
     }
 }

@@ -26,6 +26,15 @@
     <string name="camera">Camera</string>
     <string name="profile">Profile</string>
 
+    <!-- Map Strings -->
+    <string name="filter">Filter</string>
+    <string name="bronze">Bronze</string>
+    <string name="silver">Silver</string>
+    <string name="gold">Gold</string>
+    <string name="platinum">Platinum</string>
+    <string name="diamond">Diamond</string>
+    <string name="confirm">Confirm</string>
+
 
     <!-- Leaderboard Strings -->
     <string name="search">Search</string>
