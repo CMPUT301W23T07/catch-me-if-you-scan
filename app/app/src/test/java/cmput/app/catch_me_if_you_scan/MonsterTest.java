@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 public class MonsterTest {
     public Monster createMonster(String code){
-        return new Monster(code);
+        return new Monster(code, "1", "2");
     }
 
     @Test
     void testNameSys(){
-        Monster monster = createMonster("test");
-        monster.getName();
+        Monster monster = createMonster("Jay");
+        System.out.println(monster.getName());
     }
 
     @Test
