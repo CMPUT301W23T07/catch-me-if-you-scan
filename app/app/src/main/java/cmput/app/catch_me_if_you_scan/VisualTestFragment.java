@@ -73,8 +73,8 @@ public class VisualTestFragment extends Fragment {
             @Override
             public boolean onPreDraw() {
                 iv.getViewTreeObserver().removeOnPreDrawListener(this);
-                VisualSystem visual = new VisualSystem(iv.getMeasuredHeight(), iv.getMeasuredWidth());
-                iv.setImageBitmap(visual.bmp);
+                VisualSystem visual = new VisualSystem("b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9");
+                iv.setImageBitmap(visual.genVisual(Math.min(iv.getMeasuredHeight(), iv.getMeasuredWidth())));
                 return true;
             }
         });
