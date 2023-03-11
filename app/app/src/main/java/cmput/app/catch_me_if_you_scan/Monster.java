@@ -156,5 +156,7 @@ public class Monster {
     public String[] getLocation(){
         return new String[]{this.latitude, this.longitude};
     }
+
+    public String getHashHex() { return this.hashHex; }
 }
 
