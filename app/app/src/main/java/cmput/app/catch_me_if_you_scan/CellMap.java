@@ -53,7 +53,9 @@ public class CellMap {
 
                 double toCenter = ((this.size - j * 0.5)*2)/this.size;
                 if(i == Math.floor(this.size*0.5) - 1 || i == Math.floor(this.size*0.5) - 2){
-
+                    byte b = this.hash[index/8];
+                    int pseudoRandom = (int) b % this.size;
+                    bitToBool((int) b % this.size);
                 }
 
                 index += 1;
