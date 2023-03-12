@@ -21,7 +21,6 @@
         android:theme="@style/Theme.CatchMeIfYouScan"
         tools:targetApi="31">
 
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -59,7 +58,6 @@
             </intent-filter>
         </activity>
 
-
         <uses-library android:name="com.google.android.maps" />
 
         <meta-data
@@ -71,8 +69,6 @@
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
-
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="cmput.app.catch_me_if_you_scan.fileprovider"
