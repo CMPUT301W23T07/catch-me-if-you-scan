@@ -130,15 +130,27 @@ public class Monster {
         return this.name;
     }
 
+    /**
+     * gets the visual of the monster
+     * @return monster's visual
+     */
     public String[] getVisual(){
         return this.visual;
 
     }
 
+    /**
+     * gets the comments on this monster
+     * @return comments on monster
+     */
     public ArrayList<Comment> getComments(){
         return this.comments;
     }
 
+    /**
+     * adds a new comment to monster
+     * @param comment new comment to be added
+     */
     public void addComment(Comment comment){
         this.comments.add(comment);
     }
@@ -157,11 +169,25 @@ public class Monster {
         bitWords.put(6, new String[]{"da", "chi"});
         bitWords.put(7, new String[]{"sa", "na"});
     }
+
+    /**
+     * gets location of monster
+     * @return a list that has location of monster
+     */
     public String[] getLocation(){
         return new String[]{this.latitude, this.longitude};
     }
 
+    /**
+     * gets HEX representation of monster
+     * @return
+     */
     public String getHashHex() { return this.hashHex; }
+
+    /**
+     * gets code that was hashed
+     * @return ode that was hashed
+     */
     public String getHashedCode() {
         return this.hashedCode;
     }
