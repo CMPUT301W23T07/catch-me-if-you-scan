@@ -2,83 +2,60 @@ package cmput.app.catch_me_if_you_scan;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.Manifest;
-import android.view.View;
-import android.widget.Button;
+import android.renderscript.ScriptGroup;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-////////////////////////////////////// Removed for testing. Jay/////////////////////////////////////
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-////////////////////////////////////////////////////////////////////////////////////////////////////
-import java.io.Console;
-import java.util.ArrayList;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarMenu;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button toScanPage;
+    ScanningManager scanningManager = new ScanningManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-        requestAllPermission();
+        replaceFragment(new ProfileFragment());
 
+        BottomNavigationView navbar = findViewById(R.id.bottom_navigation_bar);
+        navbar.getMenu().getItem(3).setChecked(true);
 
-
-        toScanPage = findViewById(R.id.tempButtonScan);
-        toScanPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                System.out.println("\n\n\nPhase 1\n\n\n");
-                Intent intent = new Intent(MainActivity.this, ScanningActivity.class);
-
-                startActivity(intent);
+        navbar.setOnItemSelectedListener(item -> {
+            switch(item.getItemId()) {
+                case R.id.leaderboard_nav:
+                    replaceFragment(new LeaderboardFragment());
+                    break;
+                case R.id.map_nav:
+                    replaceFragment(new MapFragment());
+                    break;
+                case R.id.camera_nav:
+                    scanningManager.scanCode();
+                    break;
+                case R.id.profile_nav:
+                    replaceFragment(new ProfileFragment());
+                    break;
             }
+            return true;
         });
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Monster mon = new Monster("Timbo");
-        MonsterController controller = new MonsterController(db);
-
-        ArrayList<Boolean> test = controller.create(mon);
-
-
-
-        if(test.get(0) == Boolean.TRUE){
-            System.out.println("nice");
-        } else {
-            System.out.println("not nice");
-        }
-
     }
 
-
-
-
-    private void requestAllPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            String[] permissions = {
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.CAMERA};
-
-            requestPermissions(permissions, 101);
-        }
+    void replaceFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.main_fragment_container, fragment);
+        ft.commit();
     }
-
-
 }

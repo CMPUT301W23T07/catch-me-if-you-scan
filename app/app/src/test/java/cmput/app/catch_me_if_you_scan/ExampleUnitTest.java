@@ -1,7 +1,6 @@
 package cmput.app.catch_me_if_you_scan;
 
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 /**

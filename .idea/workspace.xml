@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cd9c530a-c7e7-4614-b798-6cae3e140afa" name="Changes" comment="" />
+    <list default="true" id="b4508ddb-2f08-4239-8cd5-1739a5169d92" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app/src/main/java/cmput/app/catch_me_if_you_scan/SubmissionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/app/src/main/java/cmput/app/catch_me_if_you_scan/SubmissionActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app/src/main/res/layout/activity_submission.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app/src/main/res/layout/activity_submission.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,28 +20,28 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2MAFKLCsnr3K7tsyEEeaFqGI9h6" />
+  <component name="ProjectId" id="2MAD5o7usARXSFuo8ir0xmjnmJX" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "C:/Users/jstab/OneDrive/Desktop/CMPUT 301/MEGAPROJECT/catch-me-if-you-scan"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mja/catch-me-if-you-scan-repository/catch-me-if-you-scan&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="cd9c530a-c7e7-4614-b798-6cae3e140afa" name="Changes" comment="" />
-      <created>1677202415016</created>
+      <changelist id="b4508ddb-2f08-4239-8cd5-1739a5169d92" name="Changes" comment="" />
+      <created>1677201312343</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1677202415016</updated>
+      <updated>1677201312343</updated>
     </task>
     <servers />
   </component>

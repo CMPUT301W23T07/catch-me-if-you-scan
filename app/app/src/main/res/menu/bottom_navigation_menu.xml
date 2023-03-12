@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/leaderboard_nav"
+        android:icon="@drawable/trophy"
+        android:title="@string/leaderboard" />
+    <item
+        android:id="@+id/map_nav"
+        android:icon="@drawable/map"
+        android:title="@string/map" />
+    <item
+        android:id="@+id/camera_nav"
+        android:icon="@drawable/camera"
+        android:title="@string/camera" />
+    <item
+        android:id="@+id/profile_nav"
+        android:icon="@drawable/person"
+        android:title="@string/profile" />
+
+
+</menu>
