@@ -8,10 +8,10 @@ public class User {
     private String name;
     private String email;
     private String description;
-
     private int scoreSum;
     //    private Region region;
 
+    // sorted from smallest score to biggest score
     private PriorityQueue<Monster> monstersPQ = new PriorityQueue<Monster>(11, new Comparator<Monster>() {
         @Override
         public int compare(Monster t1, Monster t2) {
@@ -55,18 +55,16 @@ public class User {
         return this.scoreSum;
     }
     public int getScoreHighest(){
-        return monstersPQ.peek().getScore();
+        Monster monster = (Monster) monstersPQ.toArray()[monstersPQ.size()-1];
+        return monster.getScore();
     }
 
     public int getScoreLowest(){
-       Monster[] monstersArray = (Monster[]) monstersPQ.toArray();
-       return monstersArray[monstersArray.length - 1].getScore();
+        return monstersPQ.peek().getScore();
     }
     public int getMonstersCount(){
         return monstersPQ.size();
     }
-
-
 
     // setters
     public void setName(String name) {
@@ -85,7 +83,4 @@ public class User {
         monstersPQ.add(monster);
         this.scoreSum += monster.getScore();
     }
-
-
-
 }
