@@ -11,6 +11,7 @@ public class User {
 
     private int scoreSum;
     //    private Region region;
+
     private PriorityQueue<Monster> monstersPQ = new PriorityQueue<Monster>(11, new Comparator<Monster>() {
         @Override
         public int compare(Monster t1, Monster t2) {
