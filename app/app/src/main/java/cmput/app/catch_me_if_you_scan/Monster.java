@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Monster {
-
+    private String hashedCode;
     private String name;
     private int score;
     private int scoreRank;
@@ -26,6 +26,7 @@ public class Monster {
 
 
     Monster(String code, String latitude, String longitude){
+        this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
         this.hashHex = hash.toString();
         this.hashInt = hash.asInt();
@@ -158,5 +159,8 @@ public class Monster {
     }
 
     public String getHashHex() { return this.hashHex; }
+    public String getHashedCode() {
+        return this.hashedCode;
+    }
 }
 
