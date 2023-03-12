@@ -22,11 +22,13 @@ public class User {
         };
     });
 
+//    constructor
     public User(String deviceID, String name, String email) {
         this.deviceID = deviceID;
         this.name = name;
         this.email = email;
     }
+//    constructor
     public User(String deviceID, String name, String email, String description) {
         this.deviceID = deviceID;
         this.name = name;
@@ -35,52 +37,120 @@ public class User {
     }
 
     // getters
+
+    /**
+     * gets name of user
+     * @return name of user
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * gets email of user
+     * @return email of user
+     */
     public String getEmail() {
         return this.email;
     }
 
+    /**
+     * get description of user
+     * @return description of user
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * gets deviceId of user
+     * @return deviceID of user
+     */
     public String getDeviceID() {
         return this.deviceID;
     }
 
+    /**
+     * returns the total sum score of all scanned monsters
+     * @return total score sum
+     */
     public int getScoreSum(){
         return this.scoreSum;
     }
+
+    /**
+     * gets the hgihest scoring monster
+     * @return the score of the highest score monster
+     */
     public int getScoreHighest(){
-        Monster monster = (Monster) monstersPQ.toArray()[monstersPQ.size()-1];
-        return monster.getScore();
+        if(monstersPQ.size()>=1){
+            Monster monster = (Monster) monstersPQ.toArray()[monstersPQ.size()-1];
+            return monster.getScore();
+        }
+        return 0;
     }
 
+    /**
+     * gets the lowest score monster if exists, otherwise 0.
+     * @return lowest score monster
+     */
     public int getScoreLowest(){
-        return monstersPQ.peek().getScore();
+        if(monstersPQ.size()>=1){
+            return monstersPQ.peek().getScore();
+        }
+        return 0;
     }
+
+    /**
+     * count how many monster user scanned
+     * @return number of monster scanned
+     */
     public int getMonstersCount(){
         return monstersPQ.size();
     }
 
     // setters
+
+    /**
+     * sets name of user
+     * @param name new name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * sets email of user
+     * @param email new email to set
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * sets description of user
+     * @param description new description to set
+     */
     public void setDescription(String description){
-        this.description =description;
+        this.description = description;
     }
 
+    /**
+     * adds the monster to user's account, add calculates
+     * the new total score
+     * @param monster the monster to be added
+     */
     public void addMonster(Monster monster) {
         monstersPQ.add(monster);
         this.scoreSum += monster.getScore();
+    }
+
+    /**
+     * delete selected monster from user's acount
+     * @param monster the monster to be deleted
+     */
+    public void removeMonster(Monster monster){
+        this.scoreSum -= monster.getScore();
+        monstersPQ.remove(monster);
     }
 }
