@@ -18,6 +18,7 @@ public class MonsterTest {
         assertEquals(monster2.getName(), "Kunamori Guyodasa");
     }
 
+
     @Test
     public void testScoreSys(){
         System.out.println("\n\n");
