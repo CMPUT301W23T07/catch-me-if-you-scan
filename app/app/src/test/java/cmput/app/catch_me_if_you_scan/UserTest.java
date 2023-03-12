@@ -1,8 +1,7 @@
 package cmput.app.catch_me_if_you_scan;
 
+import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
-
-import org.junit.jupiter.api.Test;
 
 public class UserTest {
     public User createUser(){
