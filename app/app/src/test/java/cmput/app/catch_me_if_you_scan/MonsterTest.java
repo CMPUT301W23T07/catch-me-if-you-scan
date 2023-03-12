@@ -1,6 +1,6 @@
 package cmput.app.catch_me_if_you_scan;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 public class MonsterTest {
     public Monster createMonster(String code){
@@ -8,14 +8,19 @@ public class MonsterTest {
     }
 
     @Test
-    void testNameSys(){
+    public void testNameSys(){
         System.out.println("\n\n");
         Monster monster = createMonster("yosri");
-        System.out.println(monster.getName()  + " FROM MONSTER TEST");
+
+        assertEquals(monster.getName(), "Kusemoyo Wayochisa");
+
+        Monster monster2 = createMonster("jay");
+        assertEquals(monster2.getName(), "Kunamori Guyodasa");
     }
 
+
     @Test
-    void testScoreSys(){
+    public void testScoreSys(){
         System.out.println("\n\n");
         Monster monster1 = createMonster("yosri");
         assertEquals(monster1.getScore(), 18);
