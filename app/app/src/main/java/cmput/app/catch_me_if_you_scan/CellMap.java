@@ -5,24 +5,28 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 public class CellMap {
 
     private boolean[][] map;
     private int size;
-    private byte[] hash;
+    private byte[] hashBytes;
+    private HashCode hash;
 
-    public CellMap(int size, String hash){
+    public CellMap(int size, HashCode hash){
+        this.hash = hash;
         double half = size * Math.ceil(size*0.5);
         double nHashes = Math.ceil(half/256);
         HashCode tempHash;
+        String hashString = hash.toString();
 
         for(int i = 1; i < nHashes; i++){
-            tempHash = Hashing.sha256().hashString(hash, StandardCharsets.UTF_8);
-            hash = hash + tempHash.toString();
+            tempHash = Hashing.sha256().hashString(hashString, StandardCharsets.UTF_8);
+            hashString = hashString + tempHash.toString();
         }
 
-        this.hash = Hex.stringToBytes(hash);
+        this.hashBytes = Hex.stringToBytes(hashString);
         this.map = new boolean[size][size];
         this.size = size;
     }
@@ -32,7 +36,7 @@ public class CellMap {
     }
 
     public boolean bitToBool(int index){
-        byte b = this.hash[index/8];
+        byte b = this.hashBytes[index/8];
         if(((b >> (index%8)) & 1) == 1){
             return true;
         }
@@ -48,18 +52,32 @@ public class CellMap {
 
         for(int i = 0; i < Math.ceil(this.size * 0.5); i++){
             for(int j = 0; j< this.size; j++){
-                map[i][j] = bitToBool(index);
-                map[this.size - i - 1][j] = map[i][j];
+                this.map[i][j] = bitToBool(index);
+                this.map[this.size - i - 1][j] = map[i][j];
 
-                double toCenter = ((this.size - j * 0.5)*2)/this.size;
+                double toCenter = (Math.abs(j-this.size*0.5)*2)/this.size;
                 if(i == Math.floor(this.size*0.5) - 1 || i == Math.floor(this.size*0.5) - 2){
-                    byte b = this.hash[index/8];
-                    int pseudoRandom = (int) b % this.size;
-                    bitToBool((int) b % this.size);
+                    int pseudoRand = (int) this.hashBytes[(i+j)%this.hashBytes.length];
+                    if(pseudoRand/317.5 > toCenter){
+                        this.map[i][j] = true;
+                        this.map[this.size - i - 1][j] = true;
+                    }
                 }
 
                 index += 1;
             }
+        }
+    }
+
+    public void randomWalk(){
+        Random gen = new Random(this.hash.asLong());
+        int x;
+        int y;
+        for(int i = 0; i < 100; i++){
+            x = gen.nextInt(this.size);
+            y = gen.nextInt(this.size);
+            this.map[x][y] = true;
+            
         }
     }
 }
