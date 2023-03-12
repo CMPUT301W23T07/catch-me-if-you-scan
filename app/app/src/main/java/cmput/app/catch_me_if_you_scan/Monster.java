@@ -42,6 +42,9 @@ public class Monster {
      * @return The monster's score
      */
     public int getScore(){
+        if (this.score !=0){
+            return this.score;
+        }
         // Iterate over the characters in the hash string
         for(int i=0; i<this.hashHex.length()-1; i++){
             char currentChar = this.hashHex.charAt(i);
@@ -144,7 +147,7 @@ public class Monster {
      * initializes the hashtables for the visual/naming systems to use
      */
     public void initializedHashTables(){
-        bitWords.put(0, new String[]{"Ko", "ku"});
+        bitWords.put(0, new String[]{"Ko", "Ku"});
         bitWords.put(1, new String[]{"se", "na"});
         bitWords.put(2, new String[]{"mo", "to"});
         bitWords.put(3, new String[]{"yo", "ri"});
