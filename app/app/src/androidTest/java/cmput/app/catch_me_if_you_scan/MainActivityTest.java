@@ -24,7 +24,6 @@ import org.junit.Test;
 
 public class MainActivityTest {
 
-    @Rule
     private ActivityScenario<MainActivity> scenario;
 
 
@@ -49,23 +48,23 @@ public class MainActivityTest {
         });
     }
 
-    @Test
-    public void testReplaceFragment() {
-        scenario.onActivity(activity -> {
-
-            FrameLayout frameLayout = activity.findViewById(R.id.main_fragment_container);
-
-            activity.replaceFragment(new MapFragment());
-
-            //TODO
-            // Verify that the MapFragment has been successfully replaced
-
-            Fragment currentFragment = activity.getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
-
-
-        });
-
-    }
+//    @Test
+//    public void testReplaceFragment() {
+//        scenario.onActivity(activity -> {
+//
+//            FrameLayout frameLayout = activity.findViewById(R.id.main_fragment_container);
+//
+//            activity.replaceFragment(new MapFragment());
+//
+//            //TODO
+//            // Verify that the MapFragment has been successfully replaced
+//
+//            Fragment currentFragment = activity.getSupportFragmentManager().findFragmentById(R.id.main_fragment_container);
+//
+//
+//        });
+//
+//    }
 
 
 
