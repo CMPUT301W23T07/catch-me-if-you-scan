@@ -10,25 +10,37 @@ package cmput.app.catch_me_if_you_scan;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private UserController userController = new UserController(db);
     PermissionManager permissionManager;
+
+    private String deviceId;
+    private EditText usrName;
+    private EditText usrEmail;
 
 
     /**
@@ -40,14 +52,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         isServicesOK();
+
+//        checks if user exist in db
+        if (userController.getUserByDeviceID(deviceId) != null){
+            switchToMain();}
+
 
         Button signUp = findViewById(R.id.sign_up_button);
 
         permissionManager = new PermissionManager(LoginActivity.this);
         permissionManager.requestAllPermissions();
 
+        usrName = findViewById(R.id.editTextName);
+        usrEmail = findViewById(R.id.editTextEmail);
         signUp.setOnClickListener(new View.OnClickListener() {
 
             /**
@@ -59,11 +78,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (permissionManager.hasAllPermissions()) {
-                    switchToMain();
+                    if(userController.getUserByName(usrName.getText().toString()) == null){
+                    User user = new User(deviceId, usrName.getText().toString(), usrEmail.getText().toString());
+                    userController.create(user);
+                    switchToMain();}
+                    else{
+                        Toast.makeText(LoginActivity.this, "This user name is taken", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     permissionManager.requestAllPermissions();
                 }
-
             }
         });
 
