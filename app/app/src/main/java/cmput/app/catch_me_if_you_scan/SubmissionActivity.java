@@ -9,13 +9,12 @@ import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -29,8 +28,8 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.hash.HashCode;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -39,31 +38,50 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ * This class activity is the place where we retrieve the monster attributes (score, name, and monster picture)
+ * This class will retireve the location of the scanned monster.
+ * This class will also able to take pictures and the user will be able to delete pictures if they want to
+ * There is a submit button which will package everything and put it into the database
+ */
 public class SubmissionActivity extends AppCompatActivity {
+    // This locationManager is essential to get the user's location when they scan the monster.
+    // the coordinate is saved into longitude and latitude
     private LocationManager locationManager;
     private double longitude;
     private double latitude;
+
+    // message will contain the message contained in the qr code/ barcode. Not the hash
     private String message;
+
+    // All Buttons and Views
     Button photoButton;
     Button deletePhotoButton;
+    Button submitMonsterButton;
     Switch coordinateSwitch;
-    Bitmap big_image = null;
-    ImageView background_img;
+    ImageView MonsterImageView;
+    ImageView backgroundImg;
+    TextView monsterNameView;
+    TextView monsterScoreView;
+
+
+    // This is the image that the user has taken
+    Bitmap bigImage;
+
+    //
     FileOutputStream fos = null;
     File photoFile = null;
     Uri photoURI;
-    String photoname;
+    String photoName;
     boolean photoIsDeleted;
     FirebaseFirestore storage;
 
     Monster thisMonster;
     MonsterController thisMonsterController;
-
+    VisualSystem submissionVisual;
 
 
     @Override
@@ -78,10 +96,34 @@ public class SubmissionActivity extends AppCompatActivity {
         // Get's the user's location of where they scanned the code
         getCurrentLocation();
 
+        // Monster create
+        thisMonster = new Monster(message, latitude, longitude, null);
+        submissionVisual = new VisualSystem(thisMonster.getHash(), 200, 9);
+
+
         // Find the view IDs
         photoButton = findViewById(R.id.take_photo_button);
         deletePhotoButton = findViewById(R.id.cancel_photo_button);
         coordinateSwitch = findViewById(R.id.geoLocation_switch);
+        MonsterImageView = findViewById(R.id.monsterImageView);
+        monsterScoreView = findViewById(R.id.MonsterScoreTextView);
+        monsterNameView = findViewById(R.id.MonsterNameTextView);
+        submitMonsterButton = findViewById(R.id.SubmitButton);
+
+
+        // Monster Post
+        monsterNameView.setText(thisMonster.getName());
+        monsterScoreView.setText(Integer.toString(thisMonster.getScore()));
+        MonsterImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                MonsterImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                HashCode hash = thisMonster.getHash();
+                submissionVisual.generate(20);
+                MonsterImageView.setImageBitmap(submissionVisual.getBitmap());
+                return true;
+            }
+        });
 
         // Buttons and their onClickListeners
         photoButton.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +144,13 @@ public class SubmissionActivity extends AppCompatActivity {
             }
         });
 
+
+        submitMonsterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submit();
+            }
+        });
 
 
 
@@ -186,7 +235,7 @@ public class SubmissionActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create a unique file name for the image
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        photoname = timeStamp + ".jpg";
+        photoName = timeStamp + ".jpg";
 
         // Get the directory where the image file will be saved
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -207,7 +256,7 @@ public class SubmissionActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK) {
 
                     // this is for the background image
-                    background_img = findViewById(R.id.background_image);
+                    backgroundImg = findViewById(R.id.background_image);
 
                     // this will decode the file which contains the image, but the image is rotated
                     Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
@@ -215,10 +264,10 @@ public class SubmissionActivity extends AppCompatActivity {
                     // This will rotate the image
                     Matrix matrix = new Matrix();
                     matrix.postRotate(90);
-                    big_image = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    bigImage = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
                     // Put the rotated image onto the background
-                    background_img.setImageBitmap(big_image);
+                    backgroundImg.setImageBitmap(bigImage);
                     ////////////////////////////////////////////////////////////////////////////////
                 }
             });
@@ -226,15 +275,15 @@ public class SubmissionActivity extends AppCompatActivity {
     // Code for the delete photo button
     public void deletePhotoButtonOnClick(View view) {
         // Check if the pictureBitmap exists
-        if (big_image != null) {
+        if (bigImage != null) {
             // Delete the picture from the device storage
 
             if (photoFile.exists()) {
                 photoIsDeleted = photoFile.delete();
                 if (photoIsDeleted) {
                     // Set pictureBitmap to null and clear the ImageView or any other view
-                    big_image = null;
-                    background_img.setImageResource(android.R.color.background_light);
+                    bigImage = null;
+                    backgroundImg.setImageResource(android.R.color.background_light);
 
                     // ...
                 } else {
@@ -255,11 +304,28 @@ public class SubmissionActivity extends AppCompatActivity {
     public void submit() {
         // Create the MONSTER
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        big_image.compress(Bitmap.CompressFormat.JPEG, 80, stream); // Compress bitmap using RLE compression
-        byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+        String envString;
+        if (bigImage != null) {
+            // We are resizing the image before we compress
+            int originalWidth = bigImage.getWidth();
+            int originalHeight = bigImage.getHeight();
 
-        String envString = new String(compressedBitmap, StandardCharsets.UTF_8);
+            // Calculate the new dimensions for the resized Bitmap
+            int newWidth = (int) Math.floor(originalWidth * 0.6);
+            int newHeight = (int) Math.floor(originalHeight * 0.6);
+
+            // Resize the original Bitmap by making it smaller by 30%
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bigImage, newWidth, newHeight, true);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream); // Compress bitmap using RLE compression
+            byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+
+            envString = new String(compressedBitmap, StandardCharsets.UTF_8);
+        }
+        else{
+            envString = null;
+        }
 
         if(coordinateSwitch.isChecked()) {
             thisMonster = new Monster(message, latitude, longitude, envString);
@@ -272,46 +338,11 @@ public class SubmissionActivity extends AppCompatActivity {
         // Put the MONSTER INTO THE DATABASE
         thisMonsterController = new MonsterController(storage);
         thisMonsterController.create(thisMonster);
+
+        // Go back to MainActivity
+        finish();
+
     }
 
 
 }
-
-
-//////////////////////////////////////// DO NOT DELETE THIS ////////////////////////////////////////
-//    // This is saved for when the user clicks the submit button
-//    //Now we have to compress the picture and save it into compressedBitmap.
-    // Big image is the Bitmap and it is the very clear picture
-//    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//    big_image.compress(Bitmap.CompressFormat.JPEG, 80, stream); // Compress bitmap using RLE compression
-//    byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
-//
-//    // Upload the compressed image data to Firebase Storage
-//    FirebaseStorage storage = FirebaseStorage.getInstance();
-//    StorageReference storageRef = storage.getReference();
-//    StorageReference imagesRef = storageRef.child("images/compressed.png");
-//    UploadTask uploadTask = imagesRef.putBytes(compressedBitmap);
-//
-//    // Download the compressed image data from Firebase Storage
-//    FirebaseStorage storage = FirebaseStorage.getInstance();
-//    StorageReference storageRef = storage.getReference();
-//    StorageReference imagesRef = storageRef.child("images/compressed.png");
-//    final long ONE_MEGABYTE = 1024 * 1024;
-//    imagesRef.getBytes(ONE_MEGABYTE)
-//    .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//@Override
-//public void onSuccess(byte[] compressedImageData) {
-//        // Convert compressed image data to Bitmap
-//        Bitmap decompressedBitmap = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length);
-//
-//        // Display decompressed image in ImageView
-//        ImageView imageView = findViewById(R.id.imageView);
-//        imageView.setImageBitmap(bitmap);
-//        }
-//        })
-//        .addOnFailureListener(new OnFailureListener() {
-//@Override
-//public void onFailure(@NonNull Exception e) {
-//        // Handle failed download of compressed image data
-//        }
-//        });
