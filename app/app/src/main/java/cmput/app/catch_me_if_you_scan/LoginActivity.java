@@ -38,13 +38,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         isServicesOK();
 
-
-            if (userController.getUserByDeviceID(deviceId) != null){
-                switchToMain();}
+//        checks if user exist in db
+        if (userController.getUserByDeviceID(deviceId) != null){
+            switchToMain();}
 
 
         Button signUp = findViewById(R.id.sign_up_button);

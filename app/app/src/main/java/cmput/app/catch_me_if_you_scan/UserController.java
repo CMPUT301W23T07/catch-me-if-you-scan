@@ -157,7 +157,11 @@ public class UserController {
         return null;
     }
 
-
+    /**
+     * gets the user info from database using the name given by them
+     * @param namePassed the name to be searched
+     * @return null if name doesn't exist, object if name exists
+     */
     public User getUserByName(String namePassed){
         Task<QuerySnapshot> task = collection.whereEqualTo("name", namePassed).get();
         while (!task.isComplete()) {
