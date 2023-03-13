@@ -58,9 +58,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (permissionManager.hasAllPermissions()) {
+                    if(userController.getUserByName(usrName.getText().toString()) == null){
                     User user = new User(deviceId, usrName.getText().toString(), usrEmail.getText().toString());
                     userController.create(user);
-                    switchToMain();
+                    switchToMain();}
+                    else{
+                        Toast.makeText(LoginActivity.this, "This user name is taken", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     permissionManager.requestAllPermissions();
                 }

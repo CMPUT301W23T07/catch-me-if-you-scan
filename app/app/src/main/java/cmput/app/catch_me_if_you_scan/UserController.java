@@ -157,6 +157,25 @@ public class UserController {
         return null;
     }
 
+
+    public User getUserByName(String namePassed){
+        Task<QuerySnapshot> task = collection.whereEqualTo("name", namePassed).get();
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String name = (String) data.get("name");
+                String email = (String) data.get("email");
+                String deviceId = (String) data.get("deviceID");
+                int score = ((Long) data.get("score")).intValue();
+                String description = (String) data.get("description");
+                return new User(deviceId, name, email, description);
+            }
+        }
+        return null;
+    }
     /**
      * Gets user from db that has a certain email
      * @param email email of user
