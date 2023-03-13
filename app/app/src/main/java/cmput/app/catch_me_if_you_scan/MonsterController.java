@@ -147,16 +147,12 @@ public class MonsterController {
         return monster.get(0);
     }
 
-    /*
-    Takes in a Monster object that has its values changed.
-    The ID of the monster cannot be changed and if it cannot be found,
-    the update will not go through. This function will validate the
-    fields of the monster object and will return true on successful update
-    or false if something has gone wrong along with a console log of the error.
-     */
+
     /**
-     * Updates a monster's information in the database.
-     * @return A boolean value correlated with the success of the database update.
+     * Adds user to list in the database.
+     * @param id Monster dbID
+     * @param user DocumentReference of user to add into the list
+     * @return Boolean value corresponding to whether the addition was successful or not
      */
     public boolean addUser(String id, DocumentReference user) {
         ArrayList<Boolean> success = new ArrayList<Boolean>();
@@ -177,13 +173,11 @@ public class MonsterController {
         return success.get(0).booleanValue();
     }
 
-    /*
-    Takes in a Monster ID that must be deleted from the database. If the ID cannot
-    be found, then the delete will fail.
-     */
     /**
-     * Deletes a monster from the database.
-     * @return A boolean value correlated with the success of the database delete.
+     * Deletes user from list in the database.
+     * @param id Monster dbID
+     * @param user DocumentReference of user to delete from the list
+     * @return Boolean value corresponding to whether the deletion was successful or not
      */
     public boolean deleteUser(String id, DocumentReference user) {
         ArrayList<Boolean> success = new ArrayList<Boolean>();
