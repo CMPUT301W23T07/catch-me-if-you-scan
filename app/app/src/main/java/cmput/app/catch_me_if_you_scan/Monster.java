@@ -40,11 +40,11 @@ public class Monster {
         this.envPhoto = envPhoto;
     }
 
-    Monster(String dbID, String name, int score, int hashInt, Double longitude, Double latitude, String envPhoto) {
+    Monster(String dbID, String name, int score, /*int hashInt,*/ Double longitude, Double latitude, String envPhoto) {
         this.dbID = dbID;
         this.score = score;
         this.name = name;
-        this.hashInt = hashInt;
+        //this.hashInt = hashInt;
         this.longitude = longitude;
         this.latitude = latitude;
         this.envPhoto = envPhoto;

@@ -8,7 +8,7 @@ public class UserTest {
         return new User("123", "yosri", "email");
     }
     public Monster createMonster(String code){
-        return new Monster(code, 1.0, 2.0);
+        return new Monster(code, 1.0, 2.0, "");
     }
 
 

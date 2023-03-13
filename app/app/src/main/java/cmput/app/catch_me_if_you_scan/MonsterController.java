@@ -92,11 +92,11 @@ public class MonsterController {
                     if (document.exists()) {
                         Map<String, Object> data = document.getData();
                         String name = (String) data.get("name");
-                        int score = (int) data.get("score");
-                        int intHash = (int) data.get("intHash");
+                        int score = ((Long) data.get("score")).intValue();
+                        //int intHash = (int) data.get("intHash");
                         GeoPoint location = (GeoPoint) data.get("location");
                         String envPhoto = (String) data.get("envPhoto");
-                        Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                        Monster newMonster = new Monster(document.getId(), name, score, /*intHash,*/ location.getLongitude(), location.getLatitude(), envPhoto);
                         monster.add(newMonster);
                         success.add(Boolean.TRUE);
                     } else {
@@ -128,10 +128,11 @@ public class MonsterController {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Map<String, Object> data = document.getData();
                                 String name = (String) data.get("name");
-                                int score = (int) data.get("score");
-                                int intHash = (int) data.get("intHash");
+                                int score = ((Long) data.get("score")).intValue();
+                                //int intHash = (int) data.get("intHash");
                                 GeoPoint location = (GeoPoint) data.get("location");
-                                Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
+                                String envPhoto = (String) data.get("envPhoto");
+                                Monster newMonster = new Monster(document.getId(), name, score, /*intHash,*/ location.getLongitude(), location.getLatitude(), envPhoto);
                                 allMonsters.add(newMonster);
                                 success[0] = true;
                             }
@@ -141,6 +142,7 @@ public class MonsterController {
                     }
                 });
         if (!success[0]) {
+            Log.d("MONSTER-CONTROLLER", "NULL");
             return null;
         }
         return allMonsters;
@@ -163,11 +165,11 @@ public class MonsterController {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Object> data = document.getData();
                             String name = (String) data.get("name");
-                            int score = (int) data.get("score");
-                            int intHash = (int) data.get("intHash");
+                            int score = ((Long) data.get("score")).intValue();
+                            //int intHash = (int) data.get("intHash");
                             GeoPoint location = (GeoPoint) data.get("location");
                             String envPhoto = (String) data.get("envPhoto");
-                            Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                            Monster newMonster = new Monster(document.getId(), name, score, /*intHash,*/ location.getLongitude(), location.getLatitude(), envPhoto);
                             monster.add(newMonster);
                             success.add(Boolean.TRUE);
                             break;
