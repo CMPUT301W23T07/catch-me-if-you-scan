@@ -19,14 +19,19 @@ public class ScanningManager {
     private ComponentActivity activity;
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
+    /**
+     * Constructor for ScanningManager.
+     *
+     * @param activity the activity in which the ScanningManager is used.
+     */
     public ScanningManager(ComponentActivity activity) {
         this.activity = activity;
 
+        // Registering for ScanContract activity result
         this.barLauncher = activity.registerForActivityResult(new ScanContract(), result ->
         {
             // If the capture was successful. We take them to the Submission Activity
-            if ((result.getContents() != null))
-            {
+            if ((result.getContents() != null)) {
                 message = result.getContents();
 
                 Intent intent = new Intent(activity, SubmissionActivity.class);
@@ -36,6 +41,10 @@ public class ScanningManager {
             }
         });
     }
+
+    /**
+     * Launches the barcode scanner using the ScanContract library with custom options.
+     */
     public void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");
