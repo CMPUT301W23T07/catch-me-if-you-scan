@@ -5,16 +5,27 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MonsterController {
 
@@ -36,36 +47,104 @@ public class MonsterController {
      * Adds Monster to Database Collection.
      * @return A boolean value correlated with the success of the database write.
      */
-    public ArrayList<Boolean> create(Monster monster) {
-        ArrayList<Boolean> success = new ArrayList<Boolean>();
-        collection.document(monster.getHexHash())
-                .set(monster)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+    public String create(Monster monster) {
+        String[] monsterID = new String[1];
+        Map<String, Object> monsterData = new HashMap<>();
+        Double[] monsterLocation = monster.getLocation();
+        GeoPoint locationPoint = new GeoPoint(monsterLocation[0], monsterLocation[1]);
+        monsterData.put("name", monster.getName());
+        monsterData.put("score", monster.getScore());
+        monsterData.put("location", locationPoint);
+        collection.add(monsterData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Hi", "DocumentSnapshot successfully written!");
-                        success.add(Boolean.TRUE);
+                    public void onSuccess(DocumentReference documentReference) {
+                        monsterID[0] = (String) documentReference.getId();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("Hi", "Error writing document", e);
-                        success.add(Boolean.FALSE);
+                        monsterID[0] = "FAIL";
                     }
                 });
-
-        return success;
+        return monsterID[0];
     }
 
-    //TODO
+    /**
+     * gets a monster with a specific id
+     * @param id Id of monster in db
+     * @return monster object with given id
+     */
     /*
-    Takes a given monster ID (its hexadecimal hash value)
     Returns the monster object with the given ID if it exists
     Returns null if it does not exist in the database.
      */
-    public Monster read(String id){
-        return null;
+    public Monster getMonster(String id){
+        ArrayList<Monster> monster = new ArrayList<Monster>();
+        ArrayList<Boolean> success = new ArrayList<Boolean>();
+        collection.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> data = document.getData();
+                        String name = (String) data.get("name");
+                        int score = (int) data.get("score");
+                        int intHash = (int) data.get("intHash");
+                        GeoPoint location = (GeoPoint) data.get("location");
+                        Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
+                        monster.add(newMonster);
+                        success.add(Boolean.TRUE);
+                    } else {
+                        success.add(Boolean.FALSE);
+                    }
+                } else {
+                    success.add(Boolean.FALSE);
+                }
+            }
+        });
+        if (success.get(0) == Boolean.FALSE) {
+            return null;
+        }
+        return monster.get(0);
+    }
+
+    /**
+     * Get monster from db by its name
+     * @param name name of the monster
+     * @return monster in db with given name
+     */
+    public Monster getMonsterByName(String name) {
+        ArrayList<Monster> monster = new ArrayList<Monster>();
+        ArrayList<Boolean> success = new ArrayList<Boolean>();
+        collection.whereEqualTo("name", name)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Object> data = document.getData();
+                            String name = (String) data.get("name");
+                            int score = (int) data.get("score");
+                            int intHash = (int) data.get("intHash");
+                            GeoPoint location = (GeoPoint) data.get("location");
+                            Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
+                            monster.add(newMonster);
+                            success.add(Boolean.TRUE);
+                            break;
+                        }
+                    } else {
+                        success.add(Boolean.FALSE);
+                    }
+                }
+            });
+        if (success.get(0) == Boolean.FALSE) {
+            return null;
+        }
+        return monster.get(0);
     }
 
     /*
@@ -79,9 +158,23 @@ public class MonsterController {
      * Updates a monster's information in the database.
      * @return A boolean value correlated with the success of the database update.
      */
-    public boolean update() {
-        //TODO
-        return false;
+    public boolean addUser(String id, DocumentReference user) {
+        ArrayList<Boolean> success = new ArrayList<Boolean>();
+        collection.document(id)
+                .update("usersWhoScanned", FieldValue.arrayUnion(user))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        success.add(Boolean.TRUE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        success.add(Boolean.FALSE);
+                    }
+                });
+        return success.get(0).booleanValue();
     }
 
     /*
@@ -92,8 +185,22 @@ public class MonsterController {
      * Deletes a monster from the database.
      * @return A boolean value correlated with the success of the database delete.
      */
-    public boolean delete() {
-        //TODO
-        return false;
+    public boolean deleteUser(String id, DocumentReference user) {
+        ArrayList<Boolean> success = new ArrayList<Boolean>();
+        collection.document(id)
+                .update("usersWhoScanned", FieldValue.arrayRemove(user))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        success.add(Boolean.TRUE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        success.add(Boolean.FALSE);
+                    }
+                });
+        return success.get(0).booleanValue();
     }
 }
