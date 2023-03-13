@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -69,30 +70,14 @@ public class UserController {
      * @return DocumentReference object
      */
     public DocumentReference getUserDoc(String docID) {
-        DocumentReference[] userDoc = new DocumentReference[1];
-        boolean[] success = new boolean[1];
-
-        collection.document(docID).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                userDoc[0] = document.getReference();
-                                success[0] = true;
-                            } else
-                                success[0] = false;
-                        } else {
-                            success[0] = false;
-                        }
-
-                    }
-                });
-        if (!success[0]) {
-            return null;
+        Task<DocumentSnapshot> task = collection.document(docID).get();
+        while (!task.isComplete()) {
+            continue;
         }
-        return userDoc[0];
+        if (task.isSuccessful()) {
+            return (task.getResult().getReference());
+        }
+        return null;
     }
 
     /**
@@ -289,6 +274,31 @@ public class UserController {
 
         collection.document(docID)
                 .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        success[0] = true;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        success[0] = false;
+                    }
+                });
+        return success[0];
+    }
+
+    /**
+     * Adds Monster Reference to User entry in db
+     * @param docID doc id of user
+     * @param monster DocumentReference of the Monster to add
+     * @return boolean value corresponding to the success of the update
+     */
+    public boolean addMonster(String docID, DocumentReference monster) {
+        boolean[] success = new boolean[1];
+        collection.document(docID)
+                .update("monstersScanned", FieldValue.arrayUnion(monster))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {

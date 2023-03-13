@@ -69,6 +69,22 @@ public class MonsterController {
     }
 
     /**
+     * Fetches the DocumentReference of a Monster
+     * @param docID DB id of the monster
+     * @return DocumentReference type for the monster
+     */
+    public DocumentReference getMonsterDoc(String docID) {
+        Task<DocumentSnapshot> task = collection.document(docID).get();
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            return (task.getResult().getReference());
+        }
+        return null;
+    }
+
+    /**
      * gets a monster with a specific id
      * @param id Id of monster in db
      * @return monster object with given id
@@ -153,22 +169,22 @@ public class MonsterController {
      * @return Boolean value corresponding to whether the addition was successful or not
      */
     public boolean addUser(String id, DocumentReference user) {
-        ArrayList<Boolean> success = new ArrayList<Boolean>();
+        boolean[] success = new boolean[1];
         collection.document(id)
                 .update("usersWhoScanned", FieldValue.arrayUnion(user))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        success.add(Boolean.TRUE);
+                        success[0] = true;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        success.add(Boolean.FALSE);
+                        success[0] = false;
                     }
                 });
-        return success.get(0).booleanValue();
+        return success[0];
     }
 
     /**
