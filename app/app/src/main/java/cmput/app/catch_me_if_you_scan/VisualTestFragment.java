@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
+import java.nio.charset.StandardCharsets;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link VisualTestFragment#newInstance} factory method to
@@ -73,8 +78,10 @@ public class VisualTestFragment extends Fragment {
             @Override
             public boolean onPreDraw() {
                 iv.getViewTreeObserver().removeOnPreDrawListener(this);
-                VisualSystem visual = new VisualSystem("b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9");
-                iv.setImageBitmap(visual.genVisual(Math.min(iv.getMeasuredHeight(), iv.getMeasuredWidth())));
+                HashCode test = Hashing.sha256().hashString("Hello World", StandardCharsets.UTF_8);
+                VisualSystem visual = new VisualSystem(test, 100, 9);
+                visual.generate(10);
+                iv.setImageBitmap(visual.getBitmap());
                 return true;
             }
         });

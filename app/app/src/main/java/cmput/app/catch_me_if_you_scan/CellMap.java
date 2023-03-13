@@ -29,6 +29,10 @@ public class CellMap {
         this.hashBytes = Hex.stringToBytes(hashString);
         this.map = new boolean[size][size];
         this.size = size;
+
+        this.generateMap();
+        randomWalk();
+        randomWalk();
     }
 
     public boolean[][] getMap(){
@@ -73,11 +77,16 @@ public class CellMap {
         Random gen = new Random(this.hash.asLong());
         int x;
         int y;
+        x = gen.nextInt() % this.size;
+        y = gen.nextInt() % this.size;
         for(int i = 0; i < 100; i++){
-            x = gen.nextInt(this.size);
-            y = gen.nextInt(this.size);
-            this.map[x][y] = true;
-            
+            if(x>=0 && x<this.size && y>=0 && y<this.size){
+                this.map[x][y] = true;
+                this.map[this.size - x - 1][y] = true;
+            }
+
+            x += gen.nextInt()%3-1;
+            y += gen.nextInt()%3-1;
         }
     }
 }
