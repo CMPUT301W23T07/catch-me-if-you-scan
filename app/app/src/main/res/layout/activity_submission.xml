@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SubmissionActivity">
-<!--    This is for the background(environment photo), which is displayed after the user takes a photo-->
+    <!--    This is for the background(environment photo), which is displayed after the user takes a photo-->
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="match_parent"
@@ -15,70 +15,40 @@
     <ImageView
         android:id="@+id/transparentView"
         android:layout_width="370dp"
-        android:layout_height="500dp"
-        android:background="#80022646"
+        android:layout_height="300dp"
+        android:layout_marginTop="200dp"
+        android:background="#E6FFFFF1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/QRinfo"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="QR INFO"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.225"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
+    <!--    Photo Related Start-->
     <TextView
-        android:id="@+id/Longitude"
+        android:id="@+id/SaveGeo_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Longitude"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="194dp"
+        android:gravity="center"
+        android:text="Save Coordinate:"
+        android:textColor="#000000"
+        android:textSize="19dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photo_textView" />
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
 
-    <TextView
-        android:id="@+id/Latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Latitude"
-        app:layout_constraintBottom_toTopOf="@+id/Longitude"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photo_textView" />
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/photo_button"-->
-<!--        android:layout_width="87dp"-->
-<!--        android:layout_height="126dp"-->
-<!--        android:layout_marginTop="300dp"-->
-<!--        android:adjustViewBounds="true"-->
-
-<!--        android:scaleType="fitCenter"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.762"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@android:drawable/ic_menu_camera" />-->
-
-<!--    Photo Related Start-->
     <TextView
         android:id="@id/photo_textView"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="-280dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:text="Photo:"
         android:textColor="#000000"
-        android:gravity="center"
-        android:textSize="19sp"
-        android:layout_marginStart="-280dp"
-        android:layout_marginTop="-150dp"
+        android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/transparentView"
@@ -89,7 +59,7 @@
         android:layout_width="110dp"
         android:layout_height="48dp"
 
-        android:layout_marginTop="-150dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/red_cancel_button"
 
         android:gravity="center"
@@ -108,7 +78,7 @@
         android:layout_height="48dp"
 
         android:layout_marginStart="-130dp"
-        android:layout_marginTop="-150dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#022646"
 
         android:gravity="center"
@@ -122,6 +92,74 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/photo_textView"
         app:layout_constraintTop_toTopOf="@+id/transparentView" />
-<!--Photo Related End-->
+
+    <Switch
+        android:id="@+id/geoLocation_switch"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="130dp"
+        android:scaleX="1.7"
+        android:scaleY="1.5"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
+        app:layout_constraintEnd_toEndOf="@+id/transparentView"
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+
+    <TextView
+        android:id="@+id/NameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:text="TTTTTTTTTTTTTTTTTTTT"
+        android:textSize="26dp"
+        app:layout_constraintBottom_toTopOf="@+id/take_photo_button"
+        app:layout_constraintEnd_toEndOf="@+id/transparentView"
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+
+    <TextView
+        android:id="@+id/Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="265dp"
+        android:layout_marginBottom="80dp"
+        android:text="Score:"
+        android:textColor="#000000"
+        android:textSize="19dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
+        app:layout_constraintEnd_toEndOf="@+id/transparentView"
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="90dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
+        app:layout_constraintEnd_toEndOf="@+id/transparentView"
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView" />
+
+    <ImageView
+        android:id="@+id/monsterImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="200dp"
+        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
+        app:layout_constraintEnd_toEndOf="@+id/transparentView"
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/background_image"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <!--Photo Related End-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
