@@ -209,4 +209,12 @@ public class Monster {
     public String getHashedCode() {
         return this.hashedCode;
     }
+
+    /**
+     * gets the HashCode object assiociated with this monster
+     * @return HashCode object
+     */
+    public HashCode getHash(){
+        return this.hash;
+    }
 }
