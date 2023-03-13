@@ -1,3 +1,6 @@
+/*
+ * This class contains a test suite for LoginActivity, which is a class that allows users to sign up.
+ */
 package cmput.app.catch_me_if_you_scan;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -23,18 +26,24 @@ import org.junit.Test;
 public class LoginActivityTest {
 
     private ActivityScenario<LoginActivity> scenario;
+
     @Before
     public void setUp() {
         scenario = ActivityScenario.launch(LoginActivity.class);
     }
 
+    /**
+     * Tests if the LoginActivity activity is created.
+     */
     @Test
     public void testActivityCreation() {
-
         // Verify that the activity is created
         scenario.onActivity(activity -> assertNotNull(activity));
     }
 
+    /**
+     * Tests if the SignUp button switches the LoginActivity activity to the MainActivity activity.
+     */
     @Test
     public void switchToMainActivityUsingSignUpButton(){
 

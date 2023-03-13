@@ -1,3 +1,8 @@
+/**
+ * The MainActivity class is responsible for managing the UI elements and navigation of the app.
+ * It contains methods to replace fragments, switch to the ScanningActivity, and initialize the Bottom Navigation Bar.
+ * The OnMapReadyCallback interface is implemented for the MapFragment to handle the Google Maps API.
+ */
 package cmput.app.catch_me_if_you_scan;
 
 import androidx.annotation.NonNull;
@@ -19,8 +24,19 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * The ScanningManager instance that will be used to start the ScanningActivity.
+     */
     public ScanningManager scanningManager = new ScanningManager(this);
 
+
+    /**
+     * Initializes the UI elements of the activity, such as the Bottom Navigation Bar and the starting fragment.
+     * It also sets up the listeners for the Bottom Navigation Bar items.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +67,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    /**
+     * Replaces the current fragment with a new one.
+     *
+     * @param fragment The fragment to be replaced with.
+     */
     public void replaceFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_fragment_container, fragment);
         ft.commit();
     }
+
+    /**
+     * Switches to the ScanningActivity.
+     */
     public void switchToScanningActivity(){
         scanningManager.scanCode();
     }
