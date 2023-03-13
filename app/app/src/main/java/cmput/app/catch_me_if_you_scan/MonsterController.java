@@ -1,8 +1,5 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,13 +14,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +43,10 @@ public class MonsterController {
         String[] monsterID = new String[1];
         Map<String, Object> monsterData = new HashMap<>();
         Double[] monsterLocation = monster.getLocation();
-        GeoPoint locationPoint = new GeoPoint(monsterLocation[0], monsterLocation[1]);
+        GeoPoint locationPoint = new GeoPoint(0, 0);
+        if (monsterLocation[0] != null && monsterLocation[1] != null) {
+            locationPoint = new GeoPoint(monsterLocation[0], monsterLocation[1]);
+        }
         monsterData.put("name", monster.getName());
         monsterData.put("score", monster.getScore());
         monsterData.put("location", locationPoint);
@@ -83,66 +78,44 @@ public class MonsterController {
     Returns null if it does not exist in the database.
      */
     public Monster getMonster(String id){
-        ArrayList<Monster> monster = new ArrayList<Monster>();
-        ArrayList<Boolean> success = new ArrayList<Boolean>();
-        collection.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Map<String, Object> data = document.getData();
-                        String name = (String) data.get("name");
-                        int score = (int) data.get("score");
-                        String hexHash = (String) data.get("hash");
-                        GeoPoint location = (GeoPoint) data.get("location");
-                        String envPhoto = (String) data.get("envPhoto");
-                        Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
-                        monster.add(newMonster);
-                        success.add(Boolean.TRUE);
-                    } else {
-                        success.add(Boolean.FALSE);
-                    }
-                } else {
-                    success.add(Boolean.FALSE);
-                }
-            }
-        });
-        if (success.get(0) == Boolean.FALSE) {
-            return null;
+        Task<DocumentSnapshot> task = collection.document(id).get();
+        while (!task.isSuccessful()) {
+            continue;
         }
-        return monster.get(0);
+        if (task.isSuccessful()) {
+            DocumentSnapshot document = task.getResult();
+            Map<String, Object> data = document.getData();
+            String name = (String) data.get("name");
+            int score = ((Long) data.get("score")).intValue();
+            String hexHash = (String) data.get("hash");
+            GeoPoint location = (GeoPoint) data.get("location");
+            String envPhoto = (String) data.get("envPhoto");
+            return (new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto));
+        }
+        return null;
     }
 
     /**
      * Fetches all Monsters in the db
-     * @return ArrayList of all Monsters in the db
+     * @return ArrayList of all Monsters in the db on success and empty arraylist on failure
      */
     public ArrayList<Monster> getAllMonsters() {
         ArrayList<Monster> allMonsters = new ArrayList<Monster>();
-        boolean[] success = new boolean[1];
-        collection.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> data = document.getData();
-                                String name = (String) data.get("name");
-                                int score = (int) data.get("score");
-                                int intHash = (int) data.get("intHash");
-                                GeoPoint location = (GeoPoint) data.get("location");
-                                Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
-                                allMonsters.add(newMonster);
-                                success[0] = true;
-                            }
-                        } else {
-                            success[0] = false;
-                        }
-                    }
-                });
-        if (!success[0]) {
-            return null;
+        Task<QuerySnapshot> task = collection.get();
+        while (!task.isSuccessful()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String name = (String) data.get("name");
+                int score = ((Long) data.get("score")).intValue();
+                String hexHash = (String) data.get("hash");
+                GeoPoint location = (GeoPoint) data.get("location");
+                String envPhoto = (String) data.get("envPhoto");
+                Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                allMonsters.add(newMonster);
+            }
         }
         return allMonsters;
     }
@@ -153,35 +126,23 @@ public class MonsterController {
      * @return monster in db with given name
      */
     public Monster getMonsterByName(String name) {
-        ArrayList<Monster> monster = new ArrayList<Monster>();
-        ArrayList<Boolean> success = new ArrayList<Boolean>();
-        collection.whereEqualTo("name", name)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Object> data = document.getData();
-                            String name = (String) data.get("name");
-                            int score = (int) data.get("score");
-                            String hexHash = (String) data.get("hash");
-                            GeoPoint location = (GeoPoint) data.get("location");
-                            String envPhoto = (String) data.get("envPhoto");
-                            Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
-                            monster.add(newMonster);
-                            success.add(Boolean.TRUE);
-                            break;
-                        }
-                    } else {
-                        success.add(Boolean.FALSE);
-                    }
-                }
-            });
-        if (success.get(0) == Boolean.FALSE) {
-            return null;
+        Task<QuerySnapshot> task = collection.whereEqualTo("name", name).get();
+        while (!task.isSuccessful()) {
+            continue;
         }
-        return monster.get(0);
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String monsterName = (String) data.get("name");
+                int score = ((Long) data.get("score")).intValue();
+                String hexHash = (String) data.get("hash");
+                GeoPoint location = (GeoPoint) data.get("location");
+                String envPhoto = (String) data.get("envPhoto");
+                Monster newMonster = new Monster(document.getId(), monsterName, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                return newMonster;
+            }
+        }
+        return null;
     }
 
 

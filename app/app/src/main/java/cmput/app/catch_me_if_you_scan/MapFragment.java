@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,17 +147,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Bitmap b = bitMapDraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-        Monster[] monsters = {};
+        ArrayList<Monster> monsters;
+        monsters = mc.getAllMonsters();
 
         //This loop will cycle through each monster in the array and display it on the map
-        int i = 0;
-        for (i = 0; i < monsters.length; i++) {
-            MarkerOptions options = new MarkerOptions()
-                    .position(new LatLng(monsters[i].getLocation()[0], monsters[i].getLocation()[1]))
-                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                    .title(monsters[i].getName());
-            Marker marker = map.addMarker(options);
-            markers.add(marker);
+        if (monsters != null) {
+            Log.d("MAP", "MONSTERS ARRAY HAS DATA");
+            int i = 0;
+            for (i = 0; i < monsters.size(); i++) {
+                Log.d("MAP", monsters.get(i).getName());
+                MarkerOptions options = new MarkerOptions()
+                        .position(new LatLng(monsters.get(i).getLocation()[0], monsters.get(i).getLocation()[1]))
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                        .title(monsters.get(i).getName());
+                Marker marker = map.addMarker(options);
+                markers.add(marker);
+            }
+        }
+        else {
+            Log.d("MAP", "MONSTERS ARRAY IS NULL");
         }
     }
 
