@@ -56,6 +56,7 @@ public class MonsterController {
         monsterData.put("score", monster.getScore());
         monsterData.put("location", locationPoint);
         monsterData.put("envPhoto", monster.getEnvPhoto());
+        monsterData.put("hash", monster.getHashHex());
         collection.add(monsterData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -93,10 +94,10 @@ public class MonsterController {
                         Map<String, Object> data = document.getData();
                         String name = (String) data.get("name");
                         int score = (int) data.get("score");
-                        int intHash = (int) data.get("intHash");
+                        String hexHash = (String) data.get("hash");
                         GeoPoint location = (GeoPoint) data.get("location");
                         String envPhoto = (String) data.get("envPhoto");
-                        Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                        Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
                         monster.add(newMonster);
                         success.add(Boolean.TRUE);
                     } else {
@@ -131,10 +132,10 @@ public class MonsterController {
                             Map<String, Object> data = document.getData();
                             String name = (String) data.get("name");
                             int score = (int) data.get("score");
-                            int intHash = (int) data.get("intHash");
+                            String hexHash = (String) data.get("hash");
                             GeoPoint location = (GeoPoint) data.get("location");
                             String envPhoto = (String) data.get("envPhoto");
-                            Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                            Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
                             monster.add(newMonster);
                             success.add(Boolean.TRUE);
                             break;
