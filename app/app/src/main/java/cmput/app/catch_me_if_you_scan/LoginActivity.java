@@ -39,8 +39,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (permissionManager.hasAllPermissions()) {
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(i);
+                    switchToMain();
                 } else {
                     permissionManager.requestAllPermissions();
                 }
@@ -49,6 +48,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void switchToMain(){
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(i);
     }
 
     public void isServicesOK() {
@@ -78,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+
 }
 
 
