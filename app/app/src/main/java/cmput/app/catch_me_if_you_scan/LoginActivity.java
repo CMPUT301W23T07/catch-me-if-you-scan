@@ -1,3 +1,10 @@
+/**
+ * The LoginActivity class represents the main entry point of the application and handles the user's
+ * login functionality. It checks if the Google Play Services version is up-to-date and requests all necessary
+ * permissions from the user before switching to the MainActivity.
+ */
+
+
 package cmput.app.catch_me_if_you_scan;
 
 import androidx.annotation.NonNull;
@@ -34,6 +41,13 @@ public class LoginActivity extends AppCompatActivity {
     private String deviceId;
     private EditText usrName;
     private EditText usrEmail;
+
+
+    /**
+     * This method is called when the activity is starting. It initializes the activity, sets the content view,
+     * checks for the Google Play Services version and requests all necessary permissions from the user.
+     * @param savedInstanceState the saved instance state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +68,13 @@ public class LoginActivity extends AppCompatActivity {
         usrName = findViewById(R.id.editTextName);
         usrEmail = findViewById(R.id.editTextEmail);
         signUp.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * This method is called when the sign up button is clicked. It checks if the user has all necessary
+             * permissions and switches to the MainActivity if the user has all permissions. If not, it requests
+             * all necessary permissions from the user.
+             * @param v the view of the clicked button
+             */
             @Override
             public void onClick(View v) {
                 if (permissionManager.hasAllPermissions()) {
@@ -73,11 +94,18 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method switches to the MainActivity.
+     */
     public void switchToMain(){
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
     }
 
+    /**
+     * This method checks if the Google Play Services version is up-to-date. If it is, it prints a log statement that the service is working.
+     * If not, it checks if the error is user resolvable and displays an error dialog if it is. If not, it displays a toast message.
+     */
     public void isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
 
@@ -100,6 +128,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+
+/**
+ * This method is called when the permission request has been completed. It forwards the permission results to
+ * the permission manager.
+ * @param requestCode the request code of the permission request
+ * @param permissions the requested permissions
+ * @param grantResults the grant results of the requested permissions
+ * */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

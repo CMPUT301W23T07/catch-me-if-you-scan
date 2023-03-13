@@ -1,3 +1,7 @@
+/**
+ * A DialogFragment for filtering the map view based on the selected tiers.
+ */
+
 package cmput.app.catch_me_if_you_scan;
 
 import android.app.AlertDialog;
@@ -23,12 +27,24 @@ import java.util.ArrayList;
 
 public class FilterMapFragment extends DialogFragment {
 
+
+    /**
+     * Creates the FilterMapFragment.
+     * @param savedInstanceState The saved instance state of the FilterMapFragment.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Inflates the view for the FilterMapFragment.
+     * @param inflater The LayoutInflater for the FilterMapFragment.
+     * @param container The ViewGroup for the FilterMapFragment.
+     * @param savedInstanceState The saved instance state of the FilterMapFragment.
+     * @return The View for the FilterMapFragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +58,12 @@ public class FilterMapFragment extends DialogFragment {
         RadioButton diamond = v.findViewById(R.id.diamond_radio);
 
         confirm.setOnClickListener(new View.OnClickListener() {
+
+
+            /**
+             * Handles the click event for the confirm filter button.
+             * @param view The View that was clicked.
+             */
             @Override
             public void onClick(View view) {
                 ArrayList<Integer> tiers = new ArrayList<Integer>();

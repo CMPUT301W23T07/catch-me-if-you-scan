@@ -1,3 +1,8 @@
+/*
+ * This class contains a test suite for CaptureAct, which is a class that allows users to scan
+ * QR codes.
+ */
+
 package cmput.app.catch_me_if_you_scan;
 
 import static org.junit.Assert.assertNotNull;
@@ -16,11 +21,18 @@ import org.junit.Test;
 public class CaptureActTest {
 
     private ActivityScenario<CaptureAct> scenario;
+
+    /**
+     * Sets up the testing environment before each test method runs.
+     */
     @Before
     public void setUp() {
         scenario = ActivityScenario.launch(CaptureAct.class);
     }
 
+    /**
+     * Tests that the activity is created properly.
+     */
     @Test
     public void testActivityCreation() {
 
@@ -28,6 +40,10 @@ public class CaptureActTest {
         scenario.onActivity(activity -> assertNotNull(activity));
     }
 
+
+    /**
+     * Cleans up the testing environment after each test method runs.
+     */
     @After
     public void tearDown() {
         scenario.close();
