@@ -31,6 +31,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class SubmissionActivity extends AppCompatActivity {
     private LocationManager locationManager;
@@ -56,6 +58,12 @@ public class SubmissionActivity extends AppCompatActivity {
     Uri photoURI;
     String photoname;
     boolean photoIsDeleted;
+    FirebaseFirestore storage;
+
+    Monster thisMonster;
+    MonsterController thisMonsterController;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // Get the intents and message will hold the string of the decoded qr/code
         message = getIntent().getStringExtra("Code name");
+
 
         // Get's the user's location of where they scanned the code
         getCurrentLocation();
@@ -91,6 +100,11 @@ public class SubmissionActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
 
     }
 
@@ -126,8 +140,6 @@ public class SubmissionActivity extends AppCompatActivity {
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            // Update the latitude and longitude values here
-//                            updateLocationViews();
                         }
                     }
                 });
@@ -166,7 +178,6 @@ public class SubmissionActivity extends AppCompatActivity {
                 // Start the camera app with the intent
                 takePictureLauncher.launch(takePictureIntent);
             }
-
         }
     }
 
@@ -207,6 +218,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
                     // Put the rotated image onto the background
                     background_img.setImageBitmap(big_image);
+                    ////////////////////////////////////////////////////////////////////////////////
                 }
             });
 
@@ -237,4 +249,57 @@ public class SubmissionActivity extends AppCompatActivity {
             Toast.makeText(this, "Please take a picture", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // This is the Submit button function///////////////////////////////////////////////////////////
+    public void submit() {
+        // Create the MONSTER
+        thisMonster = new Monster(message, latitude, longitude);
+
+        storage = FirebaseFirestore.getInstance();
+
+        // Put the MONSTER INTO THE DATABASE
+        thisMonsterController = new MonsterController(storage);
+    }
+
+
+
 }
+
+
+//////////////////////////////////////// DO NOT DELETE THIS ////////////////////////////////////////
+//    // This is saved for when the user clicks the submit button
+//    //Now we have to compress the picture and save it into compressedBitmap.
+    // Big image is the Bitmap and it is the very clear picture
+//    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//    big_image.compress(Bitmap.CompressFormat.JPEG, 80, stream); // Compress bitmap using RLE compression
+//    byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+//
+//    // Upload the compressed image data to Firebase Storage
+//    FirebaseStorage storage = FirebaseStorage.getInstance();
+//    StorageReference storageRef = storage.getReference();
+//    StorageReference imagesRef = storageRef.child("images/compressed.png");
+//    UploadTask uploadTask = imagesRef.putBytes(compressedBitmap);
+//
+//    // Download the compressed image data from Firebase Storage
+//    FirebaseStorage storage = FirebaseStorage.getInstance();
+//    StorageReference storageRef = storage.getReference();
+//    StorageReference imagesRef = storageRef.child("images/compressed.png");
+//    final long ONE_MEGABYTE = 1024 * 1024;
+//    imagesRef.getBytes(ONE_MEGABYTE)
+//    .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//@Override
+//public void onSuccess(byte[] compressedImageData) {
+//        // Convert compressed image data to Bitmap
+//        Bitmap decompressedBitmap = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length);
+//
+//        // Display decompressed image in ImageView
+//        ImageView imageView = findViewById(R.id.imageView);
+//        imageView.setImageBitmap(bitmap);
+//        }
+//        })
+//        .addOnFailureListener(new OnFailureListener() {
+//@Override
+//public void onFailure(@NonNull Exception e) {
+//        // Handle failed download of compressed image data
+//        }
+//        });
