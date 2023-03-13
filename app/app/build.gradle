@@ -62,7 +62,7 @@ dependencies {
     androidTestImplementation('androidx.test:runner:1.4.0')
     androidTestImplementation('androidx.test:rules:1.4.0')
 
-    androidTestImplementation 'androidx.test:core:1.4.1'
+    androidTestImplementation 'androidx.test:core:1.5.0'
 
     androidTestImplementation "com.jayway.android.robotium:robotium-solo:5.2.1"
 

@@ -25,8 +25,10 @@ public class Monster {
     private Double longitude;
     private Double latitude;
 
+    private String envPhoto;
 
-    Monster(String code, Double latitude, Double longitude){
+
+    Monster(String code, Double latitude, Double longitude, String envPhoto){
         this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
         this.hashHex = hash.toString();
@@ -35,15 +37,25 @@ public class Monster {
         this.initializedHashTables();
         this.latitude = latitude;
         this.longitude = longitude;
+        this.envPhoto = envPhoto;
     }
 
-    Monster(String dbID, String name, int score, int hashInt, Double longitude, Double latitude) {
+    Monster(String dbID, String name, int score, int hashInt, Double longitude, Double latitude, String envPhoto) {
         this.dbID = dbID;
         this.score = score;
         this.name = name;
         this.hashInt = hashInt;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.envPhoto = envPhoto;
+    }
+
+    /**
+     * get the environment photo as a string(byte array) for this monster
+     * @return String representing environment photo.
+     */
+    public String getEnvPhoto(){
+        return this.envPhoto;
     }
 
     /**
