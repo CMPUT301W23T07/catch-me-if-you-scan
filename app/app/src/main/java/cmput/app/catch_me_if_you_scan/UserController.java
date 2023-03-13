@@ -115,7 +115,7 @@ public class UserController {
                                 String name = (String) data.get("name");
                                 String email = (String) data.get("email");
                                 String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
+                                int score = ((Long) data.get("score")).intValue();
                                 String description = (String) data.get("description");
                                 user[0] = new User(deviceID, name, email, description);
                                 success[0] = true;
@@ -138,38 +138,48 @@ public class UserController {
      * @param deviceID deviceID
      * @return User object on success and null on failure
      */
-    public User getUserByDeviceID(String deviceID) {
-        User[] user = new User[1];
-        boolean[] success = new boolean[1];
-
-        collection.whereEqualTo("deviceID", deviceID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> data = document.getData();
-                                String name = (String) data.get("name");
-                                String email = (String) data.get("email");
-                                String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
-                                String description = (String) data.get("description");
-                                user[0] = new User(deviceID, name, email, description);
-                                success[0] = true;
-                                break;
-                            }
-                        } else {
-                            success[0] = false;
-                        }
-                    }
-                });
-        if (!success[0]) {
-            return null;
+    public User getUserByDeviceID(String deviceID){
+        Task<QuerySnapshot> task = collection.whereEqualTo("deviceID", deviceID).get();
+        while (!task.isComplete()) {
+            continue;
         }
-        return user[0];
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String name = (String) data.get("name");
+                String email = (String) data.get("email");
+                String deviceId = (String) data.get("deviceID");
+                int score = ((Long) data.get("score")).intValue();
+                String description = (String) data.get("description");
+                return new User(deviceId, name, email, description);
+            }
+        }
+        return null;
     }
 
+    /**
+     * gets the user info from database using the name given by them
+     * @param namePassed the name to be searched
+     * @return null if name doesn't exist, object if name exists
+     */
+    public User getUserByName(String namePassed){
+        Task<QuerySnapshot> task = collection.whereEqualTo("name", namePassed).get();
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String name = (String) data.get("name");
+                String email = (String) data.get("email");
+                String deviceId = (String) data.get("deviceID");
+                int score = ((Long) data.get("score")).intValue();
+                String description = (String) data.get("description");
+                return new User(deviceId, name, email, description);
+            }
+        }
+        return null;
+    }
     /**
      * Gets user from db that has a certain email
      * @param email email of user
