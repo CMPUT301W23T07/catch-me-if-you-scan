@@ -11,6 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is the overhead for the entire monster visual system generation
+ */
 public class VisualSystem {
 
     private HashCode hash;
