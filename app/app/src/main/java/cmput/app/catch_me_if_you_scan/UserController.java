@@ -1,8 +1,10 @@
 package cmput.app.catch_me_if_you_scan;
 
 import android.graphics.Region;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -11,7 +13,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -115,7 +119,7 @@ public class UserController {
                                 String name = (String) data.get("name");
                                 String email = (String) data.get("email");
                                 String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
+//                                int score = (int) data.get("score");
                                 String description = (String) data.get("description");
                                 user[0] = new User(deviceID, name, email, description);
                                 success[0] = true;
@@ -141,29 +145,35 @@ public class UserController {
     public User getUserByDeviceID(String deviceID) {
         User[] user = new User[1];
         boolean[] success = new boolean[1];
-
         collection.whereEqualTo("deviceID", deviceID)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> data = document.getData();
-                                String name = (String) data.get("name");
-                                String email = (String) data.get("email");
-                                String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
-                                String description = (String) data.get("description");
-                                user[0] = new User(deviceID, name, email, description);
-                                success[0] = true;
-                                break;
-                            }
+                            Log.d("MSG", "SUCCESS");
                         } else {
-                            success[0] = false;
+                            Log.d("MSG", "FAILED");
                         }
                     }
                 });
+        collection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                for (QueryDocumentSnapshot document : value) {
+                    Map<String, Object> data = document.getData();
+                    Log.d("DOCUMENT", data.toString());
+                    String name = (String) data.get("name");
+                    String email = (String) data.get("email");
+                    String deviceID = (String) data.get("deviceID");
+//                    int score = (int) data.get("score");
+                    String description = (String) data.get("description");
+                    user[0] = new User(deviceID, name, email, description);
+                    success[0] = true;
+                    break;
+                }
+            }
+        });
         if (!success[0]) {
             return null;
         }
@@ -190,7 +200,7 @@ public class UserController {
                                 String name = (String) data.get("name");
                                 String email = (String) data.get("email");
                                 String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
+//                                int score = (int) data.get("score");
                                 String description = (String) data.get("description");
                                 user[0] = new User(deviceID, name, email, description);
                                 success[0] = true;
@@ -225,7 +235,7 @@ public class UserController {
                                 String name = (String) data.get("name");
                                 String email = (String) data.get("email");
                                 String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
+//                                int score = (int) data.get("score");
                                 String description = (String) data.get("description");
                                 newUser = new User(deviceID, name, email, description);
                                 allUsers.add(newUser);
