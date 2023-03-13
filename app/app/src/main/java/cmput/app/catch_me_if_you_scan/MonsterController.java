@@ -34,7 +34,7 @@ public class MonsterController {
 
     public MonsterController(FirebaseFirestore db){
         this.db = db;
-        this.collection = db.collection("Monsters");
+        this.collection = db.collection("Monster");
     }
 
     /*
