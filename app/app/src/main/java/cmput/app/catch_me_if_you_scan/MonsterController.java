@@ -55,6 +55,7 @@ public class MonsterController {
         monsterData.put("name", monster.getName());
         monsterData.put("score", monster.getScore());
         monsterData.put("location", locationPoint);
+        monsterData.put("envPhoto", monster.getEnvPhoto());
         collection.add(monsterData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -94,7 +95,8 @@ public class MonsterController {
                         int score = (int) data.get("score");
                         int intHash = (int) data.get("intHash");
                         GeoPoint location = (GeoPoint) data.get("location");
-                        Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
+                        String envPhoto = (String) data.get("envPhoto");
+                        Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude(), envPhoto);
                         monster.add(newMonster);
                         success.add(Boolean.TRUE);
                     } else {
@@ -131,7 +133,8 @@ public class MonsterController {
                             int score = (int) data.get("score");
                             int intHash = (int) data.get("intHash");
                             GeoPoint location = (GeoPoint) data.get("location");
-                            Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
+                            String envPhoto = (String) data.get("envPhoto");
+                            Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude(), envPhoto);
                             monster.add(newMonster);
                             success.add(Boolean.TRUE);
                             break;
