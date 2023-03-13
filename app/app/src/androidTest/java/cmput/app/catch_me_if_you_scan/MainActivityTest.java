@@ -77,10 +77,11 @@ public class MainActivityTest {
         Intents.release();
     }
     @Test
-    public void switchLeaderboardUsingNavBar(){
+    public void switchLeaderboardUsingNavBar() throws InterruptedException {
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
+
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()));
 
     }
