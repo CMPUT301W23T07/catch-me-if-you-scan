@@ -6,6 +6,8 @@ buildscript {
 
         mavenCentral()  // Maven Central repository
 
+        jcenter()
+
     }
     dependencies {
         // Add the dependency for the Google services Gradle plugin
