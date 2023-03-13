@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is the controller for the Monster, it communicates to the database in the CRUD format
+ */
 public class MonsterController {
 
     private FirebaseFirestore db;

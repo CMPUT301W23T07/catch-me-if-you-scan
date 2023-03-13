@@ -3,6 +3,9 @@ package cmput.app.catch_me_if_you_scan;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * This class represents the User object
+ */
 public class User {
     private String deviceID;
     private String name;
