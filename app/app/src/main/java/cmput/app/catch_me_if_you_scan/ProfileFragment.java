@@ -35,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private String deviceId;
 
     private TextView userName;
+    private TextView userEmail;
     private TextView bioText;
     private TextView monstersAmount;
     private TextView monsterListAmount;
@@ -82,8 +83,7 @@ public class ProfileFragment extends Fragment {
 
         String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-//        User user = userController.getUserByDeviceID(deviceId);
-        User user = new User(deviceId, "yosri", "23");
+        User user = userController.getUserByDeviceID(deviceId);
         Monster monster1 = new Monster("mark",2.0, 1.0);
         Monster monster2 = new Monster("jay",2.0, 1.0);
         user.addMonster(monster1);
@@ -91,6 +91,7 @@ public class ProfileFragment extends Fragment {
 
 
         userName = view.findViewById(R.id.name_text);
+        userEmail = view.findViewById(R.id.email_text);
         bioText = view.findViewById(R.id.bio_text);
         monstersAmount = view.findViewById(R.id.total_scans_text);
         monsterListAmount = view.findViewById(R.id.num_codes_text);
@@ -99,6 +100,7 @@ public class ProfileFragment extends Fragment {
         lowestScore = view.findViewById(R.id.lowest_score_text);
 
         userName.setText(user.getName());
+        userEmail.setText(user.getEmail());
         bioText.setText(user.getDescription());
         monstersAmount.setText(Integer.toString(user.getMonstersCount()));
         monsterListAmount.setText("Monsters("+Integer.toString(user.getMonstersCount())+")");

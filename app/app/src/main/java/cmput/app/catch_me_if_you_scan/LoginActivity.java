@@ -20,6 +20,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.concurrent.ExecutionException;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -40,9 +42,10 @@ public class LoginActivity extends AppCompatActivity {
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         isServicesOK();
 
-        if (userController.getUserByDeviceID(deviceId) != null){
-            switchToMain();
-        }
+
+            if (userController.getUserByDeviceID(deviceId) != null){
+                switchToMain();}
+
 
         Button signUp = findViewById(R.id.sign_up_button);
 
@@ -61,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     permissionManager.requestAllPermissions();
                 }
-
             }
         });
 
