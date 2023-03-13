@@ -2,11 +2,19 @@ package cmput.app.catch_me_if_you_scan;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,5 +68,21 @@ public class ViewMonsterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_monster, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        ImageView iv = (ImageView) getView().findViewById(R.id.monsterImg);
+        iv.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                iv.getViewTreeObserver().removeOnPreDrawListener(this);
+                HashCode test = Hashing.sha256().hashString("Hello World", StandardCharsets.UTF_8);
+                VisualSystem visual = new VisualSystem(test, 100, 9);
+                visual.generate(10);
+                iv.setImageBitmap(visual.getBitmap());
+                return true;
+            }
+        });
     }
 }
