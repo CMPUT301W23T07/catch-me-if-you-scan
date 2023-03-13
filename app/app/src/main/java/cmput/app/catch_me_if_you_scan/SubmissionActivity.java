@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -253,12 +254,24 @@ public class SubmissionActivity extends AppCompatActivity {
     // This is the Submit button function///////////////////////////////////////////////////////////
     public void submit() {
         // Create the MONSTER
-        thisMonster = new Monster(message, latitude, longitude);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        big_image.compress(Bitmap.CompressFormat.JPEG, 80, stream); // Compress bitmap using RLE compression
+        byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+
+        String envString = new String(compressedBitmap, StandardCharsets.UTF_8);
+
+        if(coordinateSwitch.isChecked()) {
+            thisMonster = new Monster(message, latitude, longitude, envString);
+        } else {
+            thisMonster = new Monster(message, null, null, envString);
+        }
 
         storage = FirebaseFirestore.getInstance();
 
         // Put the MONSTER INTO THE DATABASE
         thisMonsterController = new MonsterController(storage);
+        thisMonsterController.create(thisMonster);
     }
 
 
