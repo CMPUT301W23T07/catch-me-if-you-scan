@@ -17,7 +17,6 @@ public class ScanningManager {
     private Button scan_button;
     private String message;
     private ComponentActivity activity;
-
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
     public ScanningManager(ComponentActivity activity) {
@@ -25,7 +24,7 @@ public class ScanningManager {
 
         this.barLauncher = activity.registerForActivityResult(new ScanContract(), result ->
         {
-            // If the capture was successfull. We take them to the Submission Activity
+            // If the capture was successful. We take them to the Submission Activity
             if ((result.getContents() != null))
             {
                 message = result.getContents();

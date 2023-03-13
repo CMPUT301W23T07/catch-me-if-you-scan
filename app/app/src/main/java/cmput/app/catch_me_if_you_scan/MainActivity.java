@@ -1,5 +1,6 @@
 package cmput.app.catch_me_if_you_scan;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,16 +10,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarMenu;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    ScanningManager scanningManager = new ScanningManager(this);
+    public ScanningManager scanningManager = new ScanningManager(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         replaceFragment(new ProfileFragment());
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new MapFragment());
                     break;
                 case R.id.camera_nav:
-                    scanningManager.scanCode();
+                    switchToScanningActivity();
                     break;
                 case R.id.profile_nav:
                     replaceFragment(new ProfileFragment());
@@ -45,11 +51,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_fragment_container, fragment);
         ft.commit();
     }
+    public void switchToScanningActivity(){
+        scanningManager.scanCode();
+    }
+
 }
