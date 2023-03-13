@@ -84,8 +84,8 @@ public class ProfileFragment extends Fragment {
         String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         User user = userController.getUserByDeviceID(deviceId);
-        Monster monster1 = new Monster("mark",2.0, 1.0);
-        Monster monster2 = new Monster("jay",2.0, 1.0);
+        Monster monster1 = new Monster("mark",2.0, 1.0, "");
+        Monster monster2 = new Monster("jay",2.0, 1.0, "");
         user.addMonster(monster1);
         user.addMonster(monster2);
 
