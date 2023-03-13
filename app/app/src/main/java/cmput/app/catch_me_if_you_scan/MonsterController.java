@@ -114,6 +114,39 @@ public class MonsterController {
     }
 
     /**
+     * Fetches all Monsters in the db
+     * @return ArrayList of all Monsters in the db
+     */
+    public ArrayList<Monster> getAllMonsters() {
+        ArrayList<Monster> allMonsters = new ArrayList<Monster>();
+        boolean[] success = new boolean[1];
+        collection.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> data = document.getData();
+                                String name = (String) data.get("name");
+                                int score = (int) data.get("score");
+                                int intHash = (int) data.get("intHash");
+                                GeoPoint location = (GeoPoint) data.get("location");
+                                Monster newMonster = new Monster(document.getId(), name, score, intHash, location.getLongitude(), location.getLatitude());
+                                allMonsters.add(newMonster);
+                                success[0] = true;
+                            }
+                        } else {
+                            success[0] = false;
+                        }
+                    }
+                });
+        if (!success[0]) {
+            return null;
+        }
+        return allMonsters;
+    }
+
+    /**
      * Get monster from db by its name
      * @param name name of the monster
      * @return monster in db with given name
