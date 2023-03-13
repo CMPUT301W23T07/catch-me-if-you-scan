@@ -64,6 +64,38 @@ public class UserController {
     }
 
     /**
+     * Gets User DocumentReference (to add to Monster's usersWhoScanned field/Comment user field)
+     * @param docID doc id of user
+     * @return DocumentReference object
+     */
+    public DocumentReference getUserDoc(String docID) {
+        DocumentReference[] userDoc = new DocumentReference[1];
+        boolean[] success = new boolean[1];
+
+        collection.document(docID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                userDoc[0] = document.getReference();
+                                success[0] = true;
+                            } else
+                                success[0] = false;
+                        } else {
+                            success[0] = false;
+                        }
+
+                    }
+                });
+        if (!success[0]) {
+            return null;
+        }
+        return userDoc[0];
+    }
+
+    /**
      * gets user given the dbID of the user
      * @param id dbID of the user
      * @return User object with relevant fields filled in on success and null on failure
@@ -111,6 +143,43 @@ public class UserController {
         boolean[] success = new boolean[1];
 
         collection.whereEqualTo("deviceID", deviceID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> data = document.getData();
+                                String name = (String) data.get("name");
+                                String email = (String) data.get("email");
+                                String deviceID = (String) data.get("deviceID");
+                                int score = (int) data.get("score");
+                                String description = (String) data.get("description");
+                                user[0] = new User(deviceID, name, email, description);
+                                success[0] = true;
+                                break;
+                            }
+                        } else {
+                            success[0] = false;
+                        }
+                    }
+                });
+        if (!success[0]) {
+            return null;
+        }
+        return user[0];
+    }
+
+    /**
+     * Gets user from db that has a certain email
+     * @param email email of user
+     * @return User object that has the email given
+     */
+    public User getUserByEmail(String email) {
+        User[] user = new User[1];
+        boolean[] success = new boolean[1];
+
+        collection.whereEqualTo("email", email)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
