@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Monster {
+    private String dbID;
     private String hashedCode;
     private String name;
     private int score;
@@ -21,11 +22,11 @@ public class Monster {
     private String hashHex;
     private int hashInt;
     private Hashtable<Integer,String[]> bitWords = new Hashtable<Integer, String[]>();
-    private String longitude;
-    private String latitude;
+    private Double longitude;
+    private Double latitude;
 
 
-    Monster(String code, String latitude, String longitude){
+    Monster(String code, Double latitude, Double longitude){
         this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
         this.hashHex = hash.toString();
@@ -34,6 +35,15 @@ public class Monster {
         this.initializedHashTables();
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    Monster(String dbID, String name, int score, int hashInt, Double longitude, Double latitude) {
+        this.dbID = dbID;
+        this.score = score;
+        this.name = name;
+        this.hashInt = hashInt;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     /**
@@ -93,6 +103,14 @@ public class Monster {
         }
         // Return the final score
         return this.score;
+    }
+
+    /**
+     * sets a monster's name (for backend use only)
+     * @param name name of monster
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -174,8 +192,8 @@ public class Monster {
      * gets location of monster
      * @return a list that has location of monster
      */
-    public String[] getLocation(){
-        return new String[]{this.latitude, this.longitude};
+    public Double[] getLocation(){
+        return new Double[]{this.latitude, this.longitude};
     }
 
     /**

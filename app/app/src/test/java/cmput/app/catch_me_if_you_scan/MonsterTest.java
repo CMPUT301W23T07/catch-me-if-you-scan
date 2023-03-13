@@ -4,7 +4,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 public class MonsterTest {
     public Monster createMonster(String code){
-        return new Monster(code, "1", "2");
+        return new Monster(code, 1.0, 2.0);
     }
 
     @Test
