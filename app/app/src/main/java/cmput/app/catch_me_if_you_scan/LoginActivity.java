@@ -94,6 +94,13 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (userController.getUserByDeviceID(deviceId) != null){
+            switchToMain();}
+    }
+
     /**
      * This method switches to the MainActivity.
      */
