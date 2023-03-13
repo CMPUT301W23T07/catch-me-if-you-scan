@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,14 +24,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -45,14 +43,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Location userLocation;
     private FusedLocationProviderClient mLocationClient;
     private ArrayList<Marker> markers = new ArrayList<>();
-
-    //HARDCODED MONSTERS
-    private final Double[][] monsters = {{53.527275, -113.523964, 256.0}, {53.527471, -113.526879, 9237.0}};
     private ArrayList<Integer> rankings = new ArrayList<>();
-
+    private MonsterController mc = new MonsterController(FirebaseFirestore.getInstance());
     private static final float DEFAULT_ZOOM = 15f;
 
 
+    /**
+     * This method is called once the view is inflated to implement the rest of the fragments methods
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,23 +80,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                FragmentManager fragMan = getChildFragmentManager();
-                FragmentTransaction fragTrans = fragMan.beginTransaction();
-                FilterMapFragment filterFragment = new FilterMapFragment();
-                fragTrans.add(R.id.map, filterFragment);
-                fragTrans.addToBackStack("FILTER");
-                fragTrans.commit();
-                //Intent i = new Intent(getActivity(), FilterMapFragment.class);
-
-                //ArrayList<Integer> tiers = i.getIntegerArrayListExtra("TIERS");
-                //filterMonsterTier(tiers);
+                getFilters(view);
             }
         });
 
         return v;
     }
 
+
+    /**
+     * This method is called once the map is ready to be initialized and created, it will call the
+     * methods used for updating the maps UI.
+     * @param googleMap
+     */
     //Suppressed the warning because the permissions for this are checked in the PermissionManager class
     @SuppressLint("MissingPermission")
     @Override
@@ -97,13 +100,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map = googleMap;
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.5461, 113.4937), DEFAULT_ZOOM));
-        loadMonstersInRegion();
+        loadMonsters();
         if (permissions.hasLocationPermissions()) {
             map.setMyLocationEnabled(true);
             getCurrentLocation();
         }
     }
 
+    /**
+     * This method will obtain the current location of the user and center the map on it
+     */
     //Permissions are checked with the line "if (permissions.hasLocationPermissions())"
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
@@ -127,27 +133,57 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void loadMonstersInRegion() {
+    /**
+     * This method will use the MonsterController class to obtain the monsters and display them on
+     * the map with an icon
+     */
+    private void loadMonsters() {
         //TEMPORARY CODE FOR SETTING THE MARKER SETTINGS WILL FIX LATER
-        int height = 100;
-        int width = 100;
+        int height = 150;
+        int width = 150;
         @SuppressLint("UseCompatLoadingForDrawables")
         BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
         Bitmap b = bitMapDraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
+        Monster[] monsters = {};
+
+        //This loop will cycle through each monster in the array and display it on the map
         int i = 0;
         for (i = 0; i < monsters.length; i++) {
             MarkerOptions options = new MarkerOptions()
-                    .position(new LatLng(monsters[i][0], monsters[i][1]))
+                    .position(new LatLng(monsters[i].getLocation()[0], monsters[i].getLocation()[1]))
                     .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                    .title(monsters[i][2].toString());
+                    .title(monsters[i].getName());
             Marker marker = map.addMarker(options);
             markers.add(marker);
         }
-
     }
 
+    /**
+     * This function is to display the filter fragment for the map and get the desired filters
+     * and apply them, the filter includes the ranking of each Monster
+     * @param v
+     */
+    private void getFilters(View v) {
+        FragmentManager fragMan = getChildFragmentManager();
+        FragmentTransaction fragTrans = fragMan.beginTransaction();
+        FilterMapFragment filterFragment = new FilterMapFragment();
+        fragTrans.add(R.id.map, filterFragment);
+        fragTrans.addToBackStack("FILTER");
+        fragTrans.commit();
+
+        Intent i = new Intent(getActivity(), FilterMapFragment.class);
+
+        ArrayList<Integer> tiers = i.getIntegerArrayListExtra("TIERS");
+
+        filterMonsterTier(tiers);
+    }
+
+    /**
+     * This method will filter the displayed monsters to match the provided tier filter array
+     * @param tiers
+     */
     private void filterMonsterTier(ArrayList<Integer> tiers) {
         for (int i = 0; i < markers.size(); i++) {
             if (!tiers.contains(rankings.get(i))) {
@@ -156,24 +192,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * This method is for the map implementation
+     */
     @Override
     public void onResume() {
         super.onResume();
         mView.onResume();
     }
 
+    /**
+     * This method is for pausing of the map
+     */
     @Override
     public void onPause() {
         super.onPause();
         mView.onPause();
     }
 
+    /**
+     * This method is for destroying of the map
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mView.onDestroy();
     }
 
+    /**
+     * This method is for when the map gets low on memory
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
