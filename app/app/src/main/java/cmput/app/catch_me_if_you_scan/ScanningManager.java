@@ -17,7 +17,6 @@ public class ScanningManager {
     private Button scan_button;
     private String message;
     private ComponentActivity activity;
-
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
     public ScanningManager(ComponentActivity activity) {
