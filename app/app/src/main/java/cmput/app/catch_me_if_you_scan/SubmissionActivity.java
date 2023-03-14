@@ -335,11 +335,11 @@ public class SubmissionActivity extends AppCompatActivity {
         // This is for storing the compressed image
         String envString;
 
-        storage = FirebaseFirestore.getInstance();
-
-        // Put the MONSTER INTO THE DATABASE
-        thisMonsterController = new MonsterController(storage);
-        thisMonsterController.create(thisMonster);
+//        storage = FirebaseFirestore.getInstance();
+//
+//        // Put the MONSTER INTO THE DATABASE
+//        thisMonsterController = new MonsterController(storage);
+//        thisMonsterController.create(thisMonster);
 
         // If the user did take a picture and we have a picture to compress. we will resize it and
         // compress it. Then put it into the database!!
@@ -350,8 +350,8 @@ public class SubmissionActivity extends AppCompatActivity {
             int originalHeight = bigImage.getHeight();
 
             // Calculate the new dimensions for the resized Bitmap
-            int newWidth = (int) Math.floor(originalWidth * 0.6);
-            int newHeight = (int) Math.floor(originalHeight * 0.6);
+            int newWidth = (int) Math.floor(originalWidth * 0.5);
+            int newHeight = (int) Math.floor(originalHeight * 0.5);
 
             // Resize the original Bitmap by making it smaller by 30%
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bigImage, newWidth, newHeight, true);
