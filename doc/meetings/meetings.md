@@ -59,6 +59,17 @@ Notes:
 
 ***
 
+**Begin: 5:05pm**
+
+Attendence: Everyone
+
+Notes: 
+* Went through the demo
+* Discussed all completed user stories
+* Talked about updating UML, Mockup etc
+
+**End: pm**
+
 # Group Meetings #
 
 ## Febuary 7, 2023 ##
@@ -286,3 +297,46 @@ New business:
 * Group: N/A
 
 **End: 4:27pm**
+
+***
+
+## March 14, 2023 ##
+
+**Begin: 3:00pm**
+
+Attendance: Mohammad, Riley, Charlie, Yosri, Mark, Jay
+
+Notes:
+* Preparing for demo
+    * This weeks work is primarily demo and cleanup
+    * Discussing the bugs we need to know
+    * Did some thorough testing
+* Discussed general work that was done
+* Explored Mockito options
+* Discussed better version control habits than what we have been doing
+
+Old business:
+* Riley: Fixed and semi finished the leaderboard and map, completely redesigned and made the UML, creating testing and docs, for all the classes he created
+* Mark: Did intent testing for most of the classes, created some unit tests, added docs to everything, helped on submission activity, compression for Jays part, helped Yosri with database stuff, helped with UML
+* Jay: Worked on submission activity, connected to DB, got Monster creation finished. Attempted some camera testing but found various issues with that.
+* Moh: Worked on User and Monster controllers, fixed asynchronous data requests issue. Researched CURD and database interaction, helped with javadoc
+* Charlie: Completed a basic visual system, worked on the submission activity. Created the view monster fragment for future work.
+* Yosri: Worked on User and Monster class (comments, tests), connected profile fragment to the user inclduing login functions, worked on database fixes.
+
+Reflection:
+* Do not leave lots of work for the last moment
+* Prioritize all interacting functionalities first
+* Try and meet in person for Group Work
+* Work on better commits for git, better PR reviews.
+* One person works on Gradle at once (most important file)
+
+New business:
+* Riley: Going to try and finish the leaderboard functionalities and hook it up to the database
+* Mark: If we go through the Mockito route, write new tests, buff the testing for all classes, refactor classes that may be too big. Help wherever is needed
+* Jay: Do some finishing touches on submission activity, write tests cases, comments class
+* Moh: Fix the backend controller code (CRUD), finish the connection between Monster and User. Helping all around
+* Charlie: Continue working on the visual system, beef it up, adding comments to the MonsterViewFragment class, integrating monster view fragment.
+* Yosri: Finish up the profile fragment, connect it to the monster view
+* Group: Efficiency
+
+**End: pm**
