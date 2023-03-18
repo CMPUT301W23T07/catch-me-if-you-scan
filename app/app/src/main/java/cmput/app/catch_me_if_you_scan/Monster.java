@@ -9,6 +9,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+/**
+ * This class represents the Monster
+ */
 public class Monster {
     private String dbID;
     private String hashedCode;

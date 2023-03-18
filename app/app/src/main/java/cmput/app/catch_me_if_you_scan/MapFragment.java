@@ -36,6 +36,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.sql.Array;
 import java.util.ArrayList;
 
+
+/**
+ * This class is for the map fragment which appears when the user clicks on the map nav button
+ */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mView;

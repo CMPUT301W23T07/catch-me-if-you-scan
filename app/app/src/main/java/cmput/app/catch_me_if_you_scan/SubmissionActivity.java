@@ -71,19 +71,25 @@ public class SubmissionActivity extends AppCompatActivity {
     // This is the image that the user has taken
     Bitmap bigImage;
 
-    //
+    // This is responsible for making the output stream
     FileOutputStream fos = null;
     File photoFile = null;
     Uri photoURI;
     String photoName;
     boolean photoIsDeleted;
+
+    // Firebase
     FirebaseFirestore storage;
 
+    // Monster and monster controller
     Monster thisMonster;
     MonsterController thisMonsterController;
     VisualSystem submissionVisual;
 
-
+    /**
+     * This will create the initial page. It will contain the Monster picture, score and name.
+     * Then from here the user can take picture, delete picture, turn the geolocation switch on and off.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,11 +138,13 @@ public class SubmissionActivity extends AppCompatActivity {
                 dispatchTakePictureIntent();
             }
         });
+        // Button is will delete the taken photo
         deletePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {deletePhotoButtonOnClick(v);
             }
         });
+        // This switch will is for turning the geolocation on and off
         coordinateSwitch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {onSwitchClick(v);
@@ -144,18 +152,13 @@ public class SubmissionActivity extends AppCompatActivity {
             }
         });
 
-
+        // This button will package all the attributes to the monster database
         submitMonsterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submit();
             }
         });
-
-
-
-
-
     }
 
     // This function is responsible for the geoLocation switch
@@ -168,7 +171,11 @@ public class SubmissionActivity extends AppCompatActivity {
         }
     }
 
-    ////// This is responsible for getting the location/////////////////////////////////////////////
+    /**
+     * This function is responsible for getting the user's coordinate when they enter this activity.
+     * It will check the permission.
+     * It will assign longitude and latitude.
+     */
     private void getCurrentLocation() {
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -195,7 +202,10 @@ public class SubmissionActivity extends AppCompatActivity {
                 });
     }
 
-    ////// This is responsible for taking the environment picture //////////////////////////////////
+    /**
+     * This function is responsible taking the environment picture. It will Create a file to store
+     * and we will put the photo onto the file.Then it will launch the camera
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -206,6 +216,7 @@ public class SubmissionActivity extends AppCompatActivity {
                 // Handle error creating file
             }
 
+            // Attempt to create a new FileOutputStream with the created image file
             try {
                 fos = new FileOutputStream(photoFile);
             } catch (FileNotFoundException e) {
@@ -220,6 +231,8 @@ public class SubmissionActivity extends AppCompatActivity {
                 }
             }
 
+            // This code block is checking if the variable 'photoFile' is not null.
+            // If it is not null, it continues with the following operations to start the camera app and take a picture.
             if (photoFile != null) {
                 // Get the content URI for the file
                 photoURI = FileProvider.getUriForFile(this,"cmput.app.catch_me_if_you_scan.fileprovider", photoFile);
@@ -231,6 +244,10 @@ public class SubmissionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function is responsible for creating the imageFile name and it will return the File type
+     * with the unique file name
+     */
     // This will create the image name based on the time and date
     private File createImageFile() throws IOException {
         // Create a unique file name for the image
@@ -249,8 +266,12 @@ public class SubmissionActivity extends AppCompatActivity {
         return imageFile;
     }
 
-    // This works with the photo taker. Within, the photo converted to a clear image.
-    // Then it will put the adjusted/clear image onto the background.
+
+    /**
+     * This works with the photo taker. Within, the photo converted to a clear image.
+     * Then it will put the adjusted/clear image onto the background.
+     * bigImage contain the clear picture and this will be adjusted
+     */
     private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
@@ -272,7 +293,12 @@ public class SubmissionActivity extends AppCompatActivity {
                 }
             });
 
-    // Code for the delete photo button
+
+    /**
+     * This function is responsible for delete the environment photo that has been taken.
+     * This function will also check if the picture was taken or not as well.
+     * big_image will be null in the end
+     */
     public void deletePhotoButtonOnClick(View view) {
         // Check if the pictureBitmap exists
         if (bigImage != null) {
@@ -300,19 +326,32 @@ public class SubmissionActivity extends AppCompatActivity {
         }
     }
 
-    // This is the Submit button function///////////////////////////////////////////////////////////
-    public void submit() {
-        // Create the MONSTER
 
+    /**
+     * This function is the submit button. Once the user edit their preferences. We will add to the
+     * database and we will exit to the MainActivity
+     */
+    public void submit() {
+        // This is for storing the compressed image
         String envString;
+
+//        storage = FirebaseFirestore.getInstance();
+//
+//        // Put the MONSTER INTO THE DATABASE
+//        thisMonsterController = new MonsterController(storage);
+//        thisMonsterController.create(thisMonster);
+
+        // If the user did take a picture and we have a picture to compress. we will resize it and
+        // compress it. Then put it into the database!!
+        // envString holds the compressed Photo
         if (bigImage != null) {
             // We are resizing the image before we compress
             int originalWidth = bigImage.getWidth();
             int originalHeight = bigImage.getHeight();
 
             // Calculate the new dimensions for the resized Bitmap
-            int newWidth = (int) Math.floor(originalWidth * 0.6);
-            int newHeight = (int) Math.floor(originalHeight * 0.6);
+            int newWidth = (int) Math.floor(originalWidth * 0.5);
+            int newHeight = (int) Math.floor(originalHeight * 0.5);
 
             // Resize the original Bitmap by making it smaller by 30%
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bigImage, newWidth, newHeight, true);
@@ -327,12 +366,14 @@ public class SubmissionActivity extends AppCompatActivity {
             envString = null;
         }
 
+        // We check if the user turned on the geo Location and we will construct the monster here
         if(coordinateSwitch.isChecked()) {
             thisMonster = new Monster(message, latitude, longitude, envString);
         } else {
             thisMonster = new Monster(message, null, null, envString);
         }
 
+        // We need access to the database
         storage = FirebaseFirestore.getInstance();
 
         // Put the MONSTER INTO THE DATABASE

@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is the controller for the User, it communicates to the database in the CRUD format
+ */
 public class UserController {
     private FirebaseFirestore db;
     private CollectionReference collection;

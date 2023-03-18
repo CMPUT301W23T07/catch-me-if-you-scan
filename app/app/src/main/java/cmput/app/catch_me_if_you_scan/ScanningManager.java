@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+/**
+ * This class manages the scanning and functions
+ */
 public class ScanningManager {
     private Button scan_button;
     private String message;
