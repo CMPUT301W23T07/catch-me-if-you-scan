@@ -104,7 +104,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // Monster create
         thisMonster = new Monster(message, latitude, longitude, null);
-        submissionVisual = new VisualSystem(thisMonster.getHash(), 200, 9);
+
 
 
         // Find the view IDs
@@ -123,9 +123,16 @@ public class SubmissionActivity extends AppCompatActivity {
         MonsterImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
+                submissionVisual = new VisualSystem(thisMonster.getHash(), MonsterImageView.getMeasuredHeight(), 9);
+
+
+                Toast.makeText(SubmissionActivity.this, Integer.toString(MonsterImageView.getMeasuredHeight()), Toast.LENGTH_SHORT).show();
                 MonsterImageView.getViewTreeObserver().removeOnPreDrawListener(this);
                 HashCode hash = thisMonster.getHash();
-                submissionVisual.generate(20);
+
+                // TODO
+                // instead of hardcoding 9, use the built in function
+                submissionVisual.generate(MonsterImageView.getMeasuredHeight()/9);
                 MonsterImageView.setImageBitmap(submissionVisual.getBitmap());
                 return true;
             }
@@ -148,7 +155,6 @@ public class SubmissionActivity extends AppCompatActivity {
         coordinateSwitch.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {onSwitchClick(v);
-
             }
         });
 
@@ -289,6 +295,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
                     // Put the rotated image onto the background
                     backgroundImg.setImageBitmap(bigImage);
+                    backgroundImg.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     ////////////////////////////////////////////////////////////////////////////////
                 }
             });
@@ -335,42 +342,45 @@ public class SubmissionActivity extends AppCompatActivity {
         // This is for storing the compressed image
         String envString;
 
-//        storage = FirebaseFirestore.getInstance();
-//
-//        // Put the MONSTER INTO THE DATABASE
-//        thisMonsterController = new MonsterController(storage);
-//        thisMonsterController.create(thisMonster);
+        byte[] compressedBitmap = null;
 
         // If the user did take a picture and we have a picture to compress. we will resize it and
         // compress it. Then put it into the database!!
         // envString holds the compressed Photo
         if (bigImage != null) {
             // We are resizing the image before we compress
-            int originalWidth = bigImage.getWidth();
-            int originalHeight = bigImage.getHeight();
 
             // Calculate the new dimensions for the resized Bitmap
-            int newWidth = (int) Math.floor(originalWidth * 0.5);
-            int newHeight = (int) Math.floor(originalHeight * 0.5);
 
             // Resize the original Bitmap by making it smaller by 30%
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bigImage, newWidth, newHeight, true);
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bigImage, 480, 640, true);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream); // Compress bitmap using RLE compression
-            byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
 
-            envString = new String(compressedBitmap, StandardCharsets.UTF_8);
-        }
-        else{
-            envString = null;
+            int quality = 100;
+
+            do {
+                stream.reset(); // clear the stream
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+                quality -=2; // decrease quality by 5 units
+            } while ((stream.toByteArray().length > (100 * 1024)) && quality > 0);
+
+            compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+
+            // How to decompress and see the decompressed image
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(compressedBitmap, 0, compressedBitmap.length);
+////            backgroundImg.setImageBitmap(bitmap);
+//            backgroundImg.setImageBitmap(bitmap);
+//            backgroundImg.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//
+//            envString = new String(compressedBitmap, StandardCharsets.UTF_8);
         }
 
         // We check if the user turned on the geo Location and we will construct the monster here
         if(coordinateSwitch.isChecked()) {
-            thisMonster = new Monster(message, latitude, longitude, envString);
+            thisMonster = new Monster(message, latitude, longitude, compressedBitmap);
         } else {
-            thisMonster = new Monster(message, null, null, envString);
+            thisMonster = new Monster(message, null, null, compressedBitmap);
         }
 
         // We need access to the database
@@ -382,8 +392,5 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // Go back to MainActivity
         finish();
-
     }
-
-
 }
