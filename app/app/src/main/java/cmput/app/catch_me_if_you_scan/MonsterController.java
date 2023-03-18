@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.primitives.Bytes;
+import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +59,8 @@ public class MonsterController {
         monsterData.put("name", monster.getName());
         monsterData.put("score", monster.getScore());
         monsterData.put("location", locationPoint);
-        monsterData.put("envPhoto", monster.getEnvPhoto());
+        Blob envPhotoBlob = Blob.fromBytes(monster.getEnvPhoto());
+        monsterData.put("envPhoto", envPhotoBlob);
         monsterData.put("hash", monster.getHashHex());
         collection.add(monsterData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -112,7 +115,8 @@ public class MonsterController {
             int score = ((Long) data.get("score")).intValue();
             String hexHash = (String) data.get("hash");
             GeoPoint location = (GeoPoint) data.get("location");
-            byte[] envPhoto = (byte[]) data.get("envPhoto");
+            Blob envPhotoBlob = (Blob) data.get("envPhoto");
+            byte[] envPhoto = envPhotoBlob.toBytes();
             return (new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto));
         }
         return null;
@@ -135,7 +139,8 @@ public class MonsterController {
                 int score = ((Long) data.get("score")).intValue();
                 String hexHash = (String) data.get("hash");
                 GeoPoint location = (GeoPoint) data.get("location");
-                byte[] envPhoto = (byte[]) data.get("envPhoto");
+                Blob envPhotoBlob = (Blob) data.get("envPhoto");
+                byte[] envPhoto = envPhotoBlob.toBytes();
                 Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
                 allMonsters.add(newMonster);
             }
@@ -160,7 +165,8 @@ public class MonsterController {
                 int score = ((Long) data.get("score")).intValue();
                 String hexHash = (String) data.get("hash");
                 GeoPoint location = (GeoPoint) data.get("location");
-                byte[] envPhoto = (byte[]) data.get("envPhoto");
+                Blob envPhotoBlob = (Blob) data.get("envPhoto");
+                byte[] envPhoto = envPhotoBlob.toBytes();
                 Monster newMonster = new Monster(document.getId(), monsterName, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
                 return newMonster;
             }
