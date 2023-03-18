@@ -114,8 +114,8 @@ public class ViewMonsterFragment extends Fragment {
             @Override
             public boolean onPreDraw() {
                 bg.getViewTreeObserver().removeOnPreDrawListener(this);
-                String env = monster.getEnvPhoto();
-                byte[] img = env.getBytes(StandardCharsets.UTF_8);
+                byte[] img = monster.getEnvPhoto();
+//                byte[] img = env.getBytes(StandardCharsets.UTF_8);
                 Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
                 bg.setImageBitmap(bmp);
                 return true;

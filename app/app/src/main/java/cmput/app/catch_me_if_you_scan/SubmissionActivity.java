@@ -333,7 +333,7 @@ public class SubmissionActivity extends AppCompatActivity {
      */
     public void submit() {
         // This is for storing the compressed image
-        String envString;
+        byte[] envString;
 
 //        storage = FirebaseFirestore.getInstance();
 //
@@ -358,9 +358,8 @@ public class SubmissionActivity extends AppCompatActivity {
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream); // Compress bitmap using RLE compression
-            byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+            envString = stream.toByteArray(); // Get the compressed bitmap data as a byte array
 
-            envString = new String(compressedBitmap, StandardCharsets.UTF_8);
         }
         else{
             envString = null;

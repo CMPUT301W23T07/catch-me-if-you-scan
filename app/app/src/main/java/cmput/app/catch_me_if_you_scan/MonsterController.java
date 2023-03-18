@@ -1,11 +1,14 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.primitives.Bytes;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -17,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -108,7 +112,7 @@ public class MonsterController {
             int score = ((Long) data.get("score")).intValue();
             String hexHash = (String) data.get("hash");
             GeoPoint location = (GeoPoint) data.get("location");
-            String envPhoto = (String) data.get("envPhoto");
+            byte[] envPhoto = (byte[]) data.get("envPhoto");
             return (new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto));
         }
         return null;
@@ -131,7 +135,7 @@ public class MonsterController {
                 int score = ((Long) data.get("score")).intValue();
                 String hexHash = (String) data.get("hash");
                 GeoPoint location = (GeoPoint) data.get("location");
-                String envPhoto = (String) data.get("envPhoto");
+                byte[] envPhoto = (byte[]) data.get("envPhoto");
                 Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
                 allMonsters.add(newMonster);
             }
@@ -156,7 +160,7 @@ public class MonsterController {
                 int score = ((Long) data.get("score")).intValue();
                 String hexHash = (String) data.get("hash");
                 GeoPoint location = (GeoPoint) data.get("location");
-                String envPhoto = (String) data.get("envPhoto");
+                byte[] envPhoto = (byte[]) data.get("envPhoto");
                 Monster newMonster = new Monster(document.getId(), monsterName, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
                 return newMonster;
             }
@@ -164,54 +168,54 @@ public class MonsterController {
         return null;
     }
 
+// ************************* CODE BELOW MAY BE USED IN THE FUTURE, LEAVE IT FOR NOW ****************************
+//    /**
+//     * Adds user to list in the database.
+//     * @param id Monster dbID
+//     * @param user DocumentReference of user to add into the list
+//     * @return Boolean value corresponding to whether the addition was successful or not
+//     */
+//    public boolean addUser(String id, DocumentReference user) {
+//        boolean[] success = new boolean[1];
+//        collection.document(id)
+//                .update("usersScanned", FieldValue.arrayUnion(user))
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        success[0] = true;
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        success[0] = false;
+//                    }
+//                });
+//        return success[0];
+//    }
 
-    /**
-     * Adds user to list in the database.
-     * @param id Monster dbID
-     * @param user DocumentReference of user to add into the list
-     * @return Boolean value corresponding to whether the addition was successful or not
-     */
-    public boolean addUser(String id, DocumentReference user) {
-        boolean[] success = new boolean[1];
-        collection.document(id)
-                .update("usersWhoScanned", FieldValue.arrayUnion(user))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        success[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        success[0] = false;
-                    }
-                });
-        return success[0];
-    }
-
-    /**
-     * Deletes user from list in the database.
-     * @param id Monster dbID
-     * @param user DocumentReference of user to delete from the list
-     * @return Boolean value corresponding to whether the deletion was successful or not
-     */
-    public boolean deleteUser(String id, DocumentReference user) {
-        ArrayList<Boolean> success = new ArrayList<Boolean>();
-        collection.document(id)
-                .update("usersWhoScanned", FieldValue.arrayRemove(user))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        success.add(Boolean.TRUE);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        success.add(Boolean.FALSE);
-                    }
-                });
-        return success.get(0).booleanValue();
-    }
+//    /**
+//     * Deletes user from list in the database.
+//     * @param id Monster dbID
+//     * @param user DocumentReference of user to delete from the list
+//     * @return Boolean value corresponding to whether the deletion was successful or not
+//     */
+//    public boolean deleteUser(String id, DocumentReference user) {
+//        ArrayList<Boolean> success = new ArrayList<Boolean>();
+//        collection.document(id)
+//                .update("usersWhoScanned", FieldValue.arrayRemove(user))
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        success.add(Boolean.TRUE);
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        success.add(Boolean.FALSE);
+//                    }
+//                });
+//        return success.get(0).booleanValue();
+//    }
 }

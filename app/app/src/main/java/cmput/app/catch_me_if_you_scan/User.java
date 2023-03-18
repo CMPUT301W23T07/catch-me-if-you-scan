@@ -106,6 +106,7 @@ public class User {
 
     /**
      * count how many monster user scanned
+     *
      * @return number of monster scanned
      */
     public int getMonstersCount(){

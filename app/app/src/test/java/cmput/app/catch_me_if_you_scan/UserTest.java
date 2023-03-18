@@ -20,7 +20,7 @@ public class UserTest {
      * @return a new Monster object.
      */
     public Monster createMonster(String code){
-        return new Monster(code, 1.0, 2.0, "photoString");
+        return new Monster(code, 1.0, 2.0, null);
     }
 
     /**
