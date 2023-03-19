@@ -163,6 +163,36 @@ public class MonsterController {
         return null;
     }
 
+    /**
+     * Updates the environment photo for a monster in the db
+     * @param hex hex hash of the monster to be updated
+     * @param envPhoto new environment photo
+     * @return boolean value corresponding with the success of the update
+     */
+    public boolean updatePhoto(String hex, byte[] envPhoto) {
+        Blob envPhotoBlob = Blob.fromBytes(envPhoto);
+        Task<Void> task = collection.document(hex).update("envPhoto", envPhotoBlob);
+        while (!task.isComplete()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Updates the current location of a monster in the db
+     * @param hex hex hash of the monster to be updated
+     * @param location new location of the monster
+     * @return boolean value corresponding with the success of the update
+     */
+    public boolean updateLocation(String hex, GeoPoint location) {
+        Task<Void> task = collection.document(hex).update("location", location);
+        while (!task.isComplete()) {
+            return true;
+        }
+        return false;
+    }
+
+
 // ************************* CODE BELOW MAY BE USED IN THE FUTURE, LEAVE IT FOR NOW ****************************
 //    /**
 //     * Adds user to list in the database.
