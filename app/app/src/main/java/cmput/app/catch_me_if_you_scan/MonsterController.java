@@ -48,8 +48,8 @@ public class MonsterController {
      * Adds Monster to Database Collection.
      * @return A boolean value correlated with the success of the database write.
      */
-    public String create(Monster monster) {
-        String[] monsterID = new String[1];
+    public void create(Monster monster, @NonNull ControllerCallback<Boolean> returningCallback) {
+        ArrayList<String> monsterID = new ArrayList<String>();
         Map<String, Object> monsterData = new HashMap<>();
         Double[] monsterLocation = monster.getLocation();
         GeoPoint locationPoint = new GeoPoint(0, 0);
@@ -61,21 +61,13 @@ public class MonsterController {
         monsterData.put("location", locationPoint);
         Blob envPhotoBlob = Blob.fromBytes(monster.getEnvPhoto());
         monsterData.put("envPhoto", envPhotoBlob);
-        monsterData.put("hash", monster.getHashHex());
-        collection.add(monsterData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        collection.document(monster.getHashHex()).set(monsterData)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        monsterID[0] = (String) documentReference.getId();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        monsterID[0] = "FAIL";
+                    public void onComplete(@NonNull Task<Void> task) {
+                        returningCallback.callback(task.isSuccessful());
                     }
                 });
-        return monsterID[0];
     }
 
     /**

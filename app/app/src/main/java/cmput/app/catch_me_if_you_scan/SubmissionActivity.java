@@ -37,7 +37,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -377,6 +376,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // Put the MONSTER INTO THE DATABASE
         thisMonsterController = new MonsterController(storage);
+        final boolean[] success = {false};
         thisMonsterController.create(thisMonster);
 
         // Go back to MainActivity

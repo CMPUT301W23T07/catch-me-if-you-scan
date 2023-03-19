@@ -51,7 +51,8 @@ public class UserController {
         userData.put("score", user.getScoreSum());
         userData.put("deviceID", user.getDeviceID());
         userData.put("description", user.getDescription());
-        List<DocumentReference> tempDocs = new ArrayList<DocumentReference>();
+        List<DocumentReference> tempDocs = new List<DocumentReference>() {
+        ;
         userData.put("monstersScanned", tempDocs);
         collection.add(userData)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

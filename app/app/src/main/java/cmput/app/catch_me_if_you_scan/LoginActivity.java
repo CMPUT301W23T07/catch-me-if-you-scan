@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
 
             /**
-Moh              * This method is called when the sign up button is clicked. It checks if the user has all necessary
+             * This method is called when the sign up button is clicked. It checks if the user has all necessary
              * permissions and switches to the MainActivity if the user has all permissions. If not, it requests
              * all necessary permissions from the user.
              * @param v the view of the clicked button
