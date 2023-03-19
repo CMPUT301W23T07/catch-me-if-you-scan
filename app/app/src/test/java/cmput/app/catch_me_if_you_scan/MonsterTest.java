@@ -9,7 +9,8 @@ public class MonsterTest {
      * @return the created Monster object
      */
     public Monster createMonster(String code){
-        return new Monster(code, 1.0, 2.0, "photoString");
+        byte[] photoString = new byte[1];
+        return new Monster(code, 1.0, 2.0, null);
     }
 
     /**
