@@ -13,7 +13,6 @@ import java.util.Hashtable;
  * This class represents the Monster
  */
 public class Monster {
-    private String dbID;
     private String hashedCode;
     private String name;
     private int score;
@@ -42,7 +41,7 @@ public class Monster {
         this.envPhoto = envPhoto;
     }
 
-    Monster(String dbID, String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto) {
+    Monster(String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto) {
         this.hash = HashCode.fromString(hashHex);
         this.hashInt = this.hash.asInt();
         this.hashBinary = Integer.toBinaryString(this.hashInt);
@@ -50,7 +49,6 @@ public class Monster {
 
         this.initializedHashTables();
 
-        this.dbID = dbID;
         this.score = score;
         this.name = name;
 

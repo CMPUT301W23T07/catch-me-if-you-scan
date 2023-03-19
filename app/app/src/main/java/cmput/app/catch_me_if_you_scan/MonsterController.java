@@ -48,8 +48,7 @@ public class MonsterController {
      * Adds Monster to Database Collection.
      * @return A boolean value correlated with the success of the database write.
      */
-    public void create(Monster monster, @NonNull ControllerCallback<Boolean> returningCallback) {
-        ArrayList<String> monsterID = new ArrayList<String>();
+    public boolean create(Monster monster) {
         Map<String, Object> monsterData = new HashMap<>();
         Double[] monsterLocation = monster.getLocation();
         GeoPoint locationPoint = new GeoPoint(0, 0);
@@ -61,22 +60,23 @@ public class MonsterController {
         monsterData.put("location", locationPoint);
         Blob envPhotoBlob = Blob.fromBytes(monster.getEnvPhoto());
         monsterData.put("envPhoto", envPhotoBlob);
-        collection.document(monster.getHashHex()).set(monsterData)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        returningCallback.callback(task.isSuccessful());
-                    }
-                });
+        Task<Void> task = collection.document(monster.getHashHex()).set(monsterData);
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Fetches the DocumentReference of a Monster
-     * @param docID DB id of the monster
+     * @param hex hexcode of the monster to fetch DocumentReference of
      * @return DocumentReference type for the monster
      */
-    public DocumentReference getMonsterDoc(String docID) {
-        Task<DocumentSnapshot> task = collection.document(docID).get();
+    public DocumentReference getMonsterDoc(String hex) {
+        Task<DocumentSnapshot> task = collection.document(hex).get();
         while (!task.isComplete()) {
             continue;
         }
@@ -87,16 +87,16 @@ public class MonsterController {
     }
 
     /**
-     * gets a monster with a specific id
-     * @param id Id of monster in db
-     * @return monster object with given id
+     * gets a monster with a specific hex code
+     * @param hex Hex code of monster
+     * @return monster object with given hex code
      */
     /*
     Returns the monster object with the given ID if it exists
     Returns null if it does not exist in the database.
      */
-    public Monster getMonster(String id){
-        Task<DocumentSnapshot> task = collection.document(id).get();
+    public Monster getMonster(String hex){
+        Task<DocumentSnapshot> task = collection.document(hex).get();
         while (!task.isSuccessful()) {
             continue;
         }
@@ -105,11 +105,10 @@ public class MonsterController {
             Map<String, Object> data = document.getData();
             String name = (String) data.get("name");
             int score = ((Long) data.get("score")).intValue();
-            String hexHash = (String) data.get("hash");
             GeoPoint location = (GeoPoint) data.get("location");
             Blob envPhotoBlob = (Blob) data.get("envPhoto");
             byte[] envPhoto = envPhotoBlob.toBytes();
-            return (new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto));
+            return (new Monster(name, score, document.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
         }
         return null;
     }
@@ -129,11 +128,10 @@ public class MonsterController {
                 Map<String, Object> data = document.getData();
                 String name = (String) data.get("name");
                 int score = ((Long) data.get("score")).intValue();
-                String hexHash = (String) data.get("hash");
                 GeoPoint location = (GeoPoint) data.get("location");
                 Blob envPhotoBlob = (Blob) data.get("envPhoto");
                 byte[] envPhoto = envPhotoBlob.toBytes();
-                Monster newMonster = new Monster(document.getId(), name, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                Monster newMonster = new Monster(name, score, document.getId(), location.getLongitude(), location.getLatitude(), envPhoto);
                 allMonsters.add(newMonster);
             }
         }
@@ -155,11 +153,10 @@ public class MonsterController {
                 Map<String, Object> data = document.getData();
                 String monsterName = (String) data.get("name");
                 int score = ((Long) data.get("score")).intValue();
-                String hexHash = (String) data.get("hash");
                 GeoPoint location = (GeoPoint) data.get("location");
                 Blob envPhotoBlob = (Blob) data.get("envPhoto");
                 byte[] envPhoto = envPhotoBlob.toBytes();
-                Monster newMonster = new Monster(document.getId(), monsterName, score, hexHash, location.getLongitude(), location.getLatitude(), envPhoto);
+                Monster newMonster = new Monster(monsterName, score, document.getId(), location.getLongitude(), location.getLatitude(), envPhoto);
                 return newMonster;
             }
         }
