@@ -343,7 +343,7 @@ public class SubmissionActivity extends AppCompatActivity {
             bigImage = Bitmap.createScaledBitmap(bigImage, 480, 640, true);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bigImage.compress(Bitmap.CompressFormat.JPEG, 100, stream); // Compress bitmap using JPEG compression
+            bigImage.compress(Bitmap.CompressFormat.JPEG, 90, stream); // Compress bitmap using JPEG compression
             envString = stream.toByteArray(); // Get the compressed bitmap data as a byte array
         }
         else{
