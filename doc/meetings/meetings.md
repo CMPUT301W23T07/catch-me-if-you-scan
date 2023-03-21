@@ -339,4 +339,43 @@ New business:
 * Yosri: Finish up the profile fragment, connect it to the monster view
 * Group: Efficiency
 
-**End: pm**
+**End: 4:17pm**
+
+*** 
+
+## March 21, 2023 ##
+
+**Begin: 3:45pm**
+
+Attendance: Mohammad, Riley, Charlie, Yosri, Mark, Jay
+
+Notes:
+* Went over current app status
+* Discussed issues for the week
+* Code and documentation responsibilities
+* Tone down some features, remove others.
+
+Old business:
+* Riley: Worked on the map search, adjusted UML to reflect changes, bug fixed
+* Mark: Refactored some of the tests, added time clauses for different device testing
+* Jay: Coordinated Monster submission with Moh, created comment class, tried to link user and monster on the front end
+* Moh: Created the Monster and User relationship, bug fixed, adjusted controller and db
+* Charlie: Worked to improve the visual system
+* Yosri: Worked with Jay fixing the submission page, discussed database issues and future plans with Moh
+
+Reflection:
+* Better pull request information for the reviewer
+* Better review of the pull request so that unintentional code changes aren't merged
+
+New business:
+* Riley: Going to be working mainly on the leaderboard, tackling the different views to get more user stories done. Establishing real backend connection with users and monsters
+* Mark: Refactoring of the submission activity, write tests for the submission activity.
+* Jay: Add more javadovs to the submission activity, learn some ways to add new comments. Wants to do something pretty
+* Moh: Add locationEnabled to the Monster and controller, working on backend for comments. 
+* Charlie: Working on the visual system, get the comments working on the view monster fragment. Put it into place!
+* Yosri: Finish the profile fragment, connected with monster fragment, showing the list of scanned monsters. Functionality for removing a monster.
+* Group: DOCS!
+
+**End: 4:05pm**
+
+***
