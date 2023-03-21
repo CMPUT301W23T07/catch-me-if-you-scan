@@ -102,6 +102,9 @@ public class MonsterController {
         }
         if (task.isSuccessful()) {
             DocumentSnapshot document = task.getResult();
+            if (!document.exists()) {
+                return null;
+            }
             Map<String, Object> data = document.getData();
             String name = (String) data.get("name");
             int score = ((Long) data.get("score")).intValue();
@@ -144,6 +147,7 @@ public class MonsterController {
      * @return monster in db with given name
      */
     public Monster getMonsterByName(String name) {
+        Monster newMonster = null;
         Task<QuerySnapshot> task = collection.whereEqualTo("name", name).get();
         while (!task.isSuccessful()) {
             continue;
@@ -156,7 +160,7 @@ public class MonsterController {
                 GeoPoint location = (GeoPoint) data.get("location");
                 Blob envPhotoBlob = (Blob) data.get("envPhoto");
                 byte[] envPhoto = envPhotoBlob.toBytes();
-                Monster newMonster = new Monster(monsterName, score, document.getId(), location.getLongitude(), location.getLatitude(), envPhoto);
+                newMonster = new Monster(monsterName, score, document.getId(), location.getLongitude(), location.getLatitude(), envPhoto);
                 return newMonster;
             }
         }

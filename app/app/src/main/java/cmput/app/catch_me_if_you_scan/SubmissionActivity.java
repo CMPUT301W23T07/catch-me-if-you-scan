@@ -288,6 +288,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
                     // Put the rotated image onto the background
                     backgroundImg.setImageBitmap(bigImage);
+                    backgroundImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     ////////////////////////////////////////////////////////////////////////////////
                 }
             });
@@ -308,7 +309,7 @@ public class SubmissionActivity extends AppCompatActivity {
                 if (photoIsDeleted) {
                     // Set pictureBitmap to null and clear the ImageView or any other view
                     bigImage = null;
-                    backgroundImg.setImageResource(android.R.color.background_light);
+                    backgroundImg.setImageResource(R.color.off_white);
 
                     // ...
                 } else {
@@ -334,31 +335,16 @@ public class SubmissionActivity extends AppCompatActivity {
         // This is for storing the compressed image
         byte[] envString;
 
-//        storage = FirebaseFirestore.getInstance();
-//
-//        // Put the MONSTER INTO THE DATABASE
-//        thisMonsterController = new MonsterController(storage);
-//        thisMonsterController.create(thisMonster);
-
         // If the user did take a picture and we have a picture to compress. we will resize it and
         // compress it. Then put it into the database!!
         // envString holds the compressed Photo
         if (bigImage != null) {
             // We are resizing the image before we compress
-            int originalWidth = bigImage.getWidth();
-            int originalHeight = bigImage.getHeight();
-
-            // Calculate the new dimensions for the resized Bitmap
-            int newWidth = (int) Math.floor(originalWidth * 0.5);
-            int newHeight = (int) Math.floor(originalHeight * 0.5);
-
-            // Resize the original Bitmap by making it smaller by 30%
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bigImage, newWidth, newHeight, true);
+            bigImage = Bitmap.createScaledBitmap(bigImage, 480, 640, true);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream); // Compress bitmap using RLE compression
+            bigImage.compress(Bitmap.CompressFormat.JPEG, 90, stream); // Compress bitmap using JPEG compression
             envString = stream.toByteArray(); // Get the compressed bitmap data as a byte array
-
         }
         else{
             envString = null;
