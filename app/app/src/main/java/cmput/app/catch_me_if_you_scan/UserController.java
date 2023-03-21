@@ -1,6 +1,7 @@
 package cmput.app.catch_me_if_you_scan;
 
 import android.graphics.Region;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -8,15 +9,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,103 +42,64 @@ public class UserController {
      * @return
      * On success, the User's db ID. On failure, null
      */
-    public String create(User user) {
-        String[] userDbID = new String[1];
-        boolean[] success = new boolean[1];
+    public boolean create(User user) {
         Map<String, Object> userData = new HashMap<>();
         userData.put("email", user.getEmail());
-        userData.put("name", user.getName());
         userData.put("score", user.getScoreSum());
         userData.put("deviceID", user.getDeviceID());
         userData.put("description", user.getDescription());
-        collection.add(userData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        userDbID[0] = documentReference.getId();
-                        success[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        success[0] = false;
-                    }
-                });
-        if (!success[0]) {
-            return null;
+        List<DocumentReference> tempDocs = new ArrayList<DocumentReference>();
+        Task<Void> task = collection.document(user.getName()).set(userData);
+        while (!task.isComplete()) {
+            continue;
         }
-        return userDbID[0];
+        if (task.isSuccessful()) {
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Gets User DocumentReference (to add to Monster's usersWhoScanned field/Comment user field)
-     * @param docID doc id of user
-     * @return DocumentReference object
-     */
-    public DocumentReference getUserDoc(String docID) {
-        DocumentReference[] userDoc = new DocumentReference[1];
-        boolean[] success = new boolean[1];
-
-        collection.document(docID).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                userDoc[0] = document.getReference();
-                                success[0] = true;
-                            } else
-                                success[0] = false;
-                        } else {
-                            success[0] = false;
-                        }
-
-                    }
-                });
-        if (!success[0]) {
-            return null;
-        }
-        return userDoc[0];
-    }
-
-    /**
-     * gets user given the dbID of the user
-     * @param id dbID of the user
+     * gets user given the username of the user
+     * @param username username of user to getch
      * @return User object with relevant fields filled in on success and null on failure
      */
-    public User getUser(String id) {
-        User[] user = new User[1];
-        boolean[] success = new boolean[1];
-
-        collection.document(id).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Map<String, Object> data = document.getData();
-                                String name = (String) data.get("name");
-                                String email = (String) data.get("email");
-                                String deviceID = (String) data.get("deviceID");
-                                int score = ((Long) data.get("score")).intValue();
-                                String description = (String) data.get("description");
-                                user[0] = new User(deviceID, name, email, description);
-                                success[0] = true;
-                            } else
-                                success[0] = false;
-                        } else {
-                            success[0] = false;
-                        }
-
-                    }
-                });
-        if (!success[0]) {
-            return null;
+    public User getUser(String username) {
+        Task<DocumentSnapshot> task = collection.document(username).get();
+        while (!task.isComplete()) {
+            continue;
         }
-        return user[0];
+        if (task.isSuccessful()) {
+            DocumentSnapshot document = task.getResult();
+            Map<String, Object> data = document.getData();
+            String email = (String) data.get("email");
+            String deviceId = (String) data.get("deviceID");
+            int score = ((Long) data.get("score")).intValue();
+            String description = (String) data.get("description");
+            User fetchedUser = new User(deviceId, document.getId(), email, description);
+            List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
+
+        /*
+            For each monster in the user's list, we create a new monster object for it
+            and add it to the user object created.
+        */
+            for (DocumentReference doc : monsters) {
+                Task<DocumentSnapshot> task1 = doc.get();
+                while (!task1.isComplete()) {
+                    continue;
+                }
+                if (task1.isSuccessful()) {
+                    Map<String, Object> monsterData = task1.getResult().getData();
+                    String monsterName = (String) monsterData.get("name");
+                    int monsterScore = ((Long) monsterData.get("score")).intValue();
+                    GeoPoint location = (GeoPoint) monsterData.get("location");
+                    byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
+                    fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                }
+            }
+            return fetchedUser;
+        }
+        return null;
     }
 
     /**
@@ -149,75 +115,80 @@ public class UserController {
         if (task.isSuccessful()) {
             for (QueryDocumentSnapshot document : task.getResult()) {
                 Map<String, Object> data = document.getData();
-                String name = (String) data.get("name");
                 String email = (String) data.get("email");
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                return new User(deviceId, name, email, description);
+                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
+
+            /*
+                For each monster in the user's list, we create a new monster object for it
+                and add it to the user object created.
+            */
+                for (DocumentReference doc : monsters) {
+                    Task<DocumentSnapshot> task1 = doc.get();
+                    while (!task1.isComplete()) {
+                        continue;
+                    }
+                    if (task1.isSuccessful()) {
+                        Map<String, Object> monsterData = task1.getResult().getData();
+                        String monsterName = (String) monsterData.get("name");
+                        int monsterScore = ((Long) monsterData.get("score")).intValue();
+                        GeoPoint location = (GeoPoint) monsterData.get("location");
+                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                    }
+                }
+                return fetchedUser;
             }
         }
         return null;
     }
 
     /**
-     * gets the user info from database using the name given by them
-     * @param namePassed the name to be searched
-     * @return null if name doesn't exist, object if name exists
+     * Gets user from db that has a certain email
+     * @param passedEmail email of user
+     * @return User object that has the email given
      */
-    public User getUserByName(String namePassed){
-        Task<QuerySnapshot> task = collection.whereEqualTo("name", namePassed).get();
+    public User getUserByEmail(String passedEmail) {
+        Task<QuerySnapshot> task = collection.whereEqualTo("email", passedEmail).get();
         while (!task.isComplete()) {
             continue;
         }
         if (task.isSuccessful()) {
+
             for (QueryDocumentSnapshot document : task.getResult()) {
                 Map<String, Object> data = document.getData();
-                String name = (String) data.get("name");
                 String email = (String) data.get("email");
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                return new User(deviceId, name, email, description);
+                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
+
+            /*
+                For each monster in the user's list, we create a new monster object for it
+                and add it to the user object created.
+            */
+                for (DocumentReference doc : monsters) {
+                    Task<DocumentSnapshot> task1 = doc.get();
+                    while (!task1.isComplete()) {
+                        continue;
+                    }
+                    if (task1.isSuccessful()) {
+                        Map<String, Object> monsterData = task1.getResult().getData();
+                        String monsterName = (String) monsterData.get("name");
+                        int monsterScore = ((Long) monsterData.get("score")).intValue();
+                        GeoPoint location = (GeoPoint) monsterData.get("location");
+                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                    }
+                }
+                return fetchedUser;
             }
         }
         return null;
-    }
-    /**
-     * Gets user from db that has a certain email
-     * @param email email of user
-     * @return User object that has the email given
-     */
-    public User getUserByEmail(String email) {
-        User[] user = new User[1];
-        boolean[] success = new boolean[1];
-
-        collection.whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> data = document.getData();
-                                String name = (String) data.get("name");
-                                String email = (String) data.get("email");
-                                String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
-                                String description = (String) data.get("description");
-                                user[0] = new User(deviceID, name, email, description);
-                                success[0] = true;
-                                break;
-                            }
-                        } else {
-                            success[0] = false;
-                        }
-                    }
-                });
-        if (!success[0]) {
-            return null;
-        }
-        return user[0];
     }
 
     /**
@@ -225,85 +196,142 @@ public class UserController {
      * @return ArrayList of all users in the database (User objects)
      */
     public ArrayList<User> getAllUsers() {
-        ArrayList<User> allUsers = new ArrayList<User>();
-        boolean[] success = new boolean[1];
-        collection.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User newUser;
-                                Map<String, Object> data = document.getData();
-                                String name = (String) data.get("name");
-                                String email = (String) data.get("email");
-                                String deviceID = (String) data.get("deviceID");
-                                int score = (int) data.get("score");
-                                String description = (String) data.get("description");
-                                newUser = new User(deviceID, name, email, description);
-                                allUsers.add(newUser);
-                                success[0] = true;
-                            }
-                        } else {
-                            success[0] = false;
-                        }
-                    }
-                });
-        if (!success[0]) {
-            return null;
+        Task<QuerySnapshot> task = collection.get();
+        while (!task.isComplete()) {
+            continue;
         }
-        return allUsers;
+        if (task.isSuccessful()) {
+            ArrayList<User> allUsers = new ArrayList<User>();
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String email = (String) data.get("email");
+                String deviceId = (String) data.get("deviceID");
+                int score = ((Long) data.get("score")).intValue();
+                String description = (String) data.get("description");
+                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
+
+            /*
+                For each monster in the user's list, we create a new monster object for it
+                and add it to the user object created.
+            */
+                for (DocumentReference doc : monsters) {
+                    Task<DocumentSnapshot> task1 = doc.get();
+                    while (!task1.isComplete()) {
+                        continue;
+                    }
+                    if (task1.isSuccessful()) {
+                        Map<String, Object> monsterData = task1.getResult().getData();
+                        String monsterName = (String) monsterData.get("name");
+                        int monsterScore = ((Long) monsterData.get("score")).intValue();
+                        GeoPoint location = (GeoPoint) monsterData.get("location");
+                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                    }
+                }
+                allUsers.add(fetchedUser);
+            }
+            return allUsers;
+        }
+        return null;
+    }
+
+    /**
+     * Gets all users that have scanned a monster
+     * @param monster DocumentReference of monster
+     * @return an array list of users who have scanned the monster
+     */
+    public ArrayList<User> getAllUsersForMonster(DocumentReference monster) {
+        Task<QuerySnapshot> task = collection.whereArrayContains("monstersScanned", monster).get();
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            ArrayList<User> allUsers = new ArrayList<User>();
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Map<String, Object> data = document.getData();
+                String email = (String) data.get("email");
+                String deviceId = (String) data.get("deviceID");
+                int score = ((Long) data.get("score")).intValue();
+                String description = (String) data.get("description");
+                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
+
+            /*
+                For each monster in the user's list, we create a new monster object for it
+                and add it to the user object created.
+            */
+                for (DocumentReference doc : monsters) {
+                    Task<DocumentSnapshot> task1 = doc.get();
+                    while (!task1.isComplete()) {
+                        continue;
+                    }
+                    if (task1.isSuccessful()) {
+                        Map<String, Object> monsterData = task1.getResult().getData();
+                        String monsterName = (String) monsterData.get("name");
+                        int monsterScore = ((Long) monsterData.get("score")).intValue();
+                        GeoPoint location = (GeoPoint) monsterData.get("location");
+                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                    }
+                }
+                allUsers.add(fetchedUser);
+            }
+            return allUsers;
+        }
+        return null;
     }
 
     /**
      * Updates a user's attributes in the db
-     * @param docID doc id of the user to update
+     * @param username username of the user to update
      * @param attributes map of the fields to be updated (as Strings) and the values to update to
      * @return boolean value corresponding with the success of the update
      */
-    public boolean updateUser(String docID, Map<String, Object> attributes) {
-        boolean[] success = new boolean[1];
-
-        collection.document(docID)
-                .update(attributes)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        success[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        success[0] = false;
-                    }
-                });
-
-        return success[0];
+    public boolean updateUser(String username, Map<String, Object> attributes) {
+        Task<Void> task = collection.document(username)
+                        .update(attributes);
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Deletes user from db
-     * @param docID doc id of the user to be deleted
+     * @param username username of user to be deleted
      * @return boolean value corresponding to the success of the deletion
      */
-    public boolean deleteUser(String docID) {
-        boolean[] success = new boolean[1];
+    public boolean deleteUser(String username) {
+        Task<Void> task = collection.document(username)
+                        .delete();
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            return true;
+        }
+        return false;
+    }
 
-        collection.document(docID)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        success[0] = true;
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        success[0] = false;
-                    }
-                });
-        return success[0];
+    /**
+     * Adds Monster Reference to User entry in db
+     * @param username username of the user
+     * @param monster DocumentReference of the Monster to add
+     * @return boolean value corresponding to the success of the update
+     */
+    public boolean addMonster(String username, DocumentReference monster) {
+        Task<Void> task = collection.document(username)
+                        .update("monstersScanned", FieldValue.arrayUnion(monster));
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            return true;
+        }
+        return false;
     }
 }

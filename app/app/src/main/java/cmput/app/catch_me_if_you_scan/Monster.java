@@ -13,7 +13,6 @@ import java.util.Hashtable;
  * This class represents the Monster
  */
 public class Monster {
-    private String dbID;
     private String hashedCode;
     private String name;
     private int score;
@@ -27,11 +26,10 @@ public class Monster {
     private Hashtable<Integer,String[]> bitWords = new Hashtable<Integer, String[]>();
     private Double longitude;
     private Double latitude;
+    private byte[] envPhoto;
 
-    private String envPhoto;
 
-
-    Monster(String code, Double latitude, Double longitude, String envPhoto){
+    Monster(String code, Double latitude, Double longitude, byte[] envPhoto){
         this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
         this.hashHex = hash.toString();
@@ -43,7 +41,7 @@ public class Monster {
         this.envPhoto = envPhoto;
     }
 
-    Monster(String dbID, String name, int score, String hashHex, Double longitude, Double latitude, String envPhoto) {
+    Monster(String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto) {
         this.hash = HashCode.fromString(hashHex);
         this.hashInt = this.hash.asInt();
         this.hashBinary = Integer.toBinaryString(this.hashInt);
@@ -51,7 +49,6 @@ public class Monster {
 
         this.initializedHashTables();
 
-        this.dbID = dbID;
         this.score = score;
         this.name = name;
 
@@ -64,7 +61,7 @@ public class Monster {
      * get the environment photo as a string(byte array) for this monster
      * @return String representing environment photo.
      */
-    public String getEnvPhoto(){
+    public byte[] getEnvPhoto(){
         return this.envPhoto;
     }
 

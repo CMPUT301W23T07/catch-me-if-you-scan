@@ -37,7 +37,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -333,7 +332,7 @@ public class SubmissionActivity extends AppCompatActivity {
      */
     public void submit() {
         // This is for storing the compressed image
-        String envString;
+        byte[] envString;
 
 //        storage = FirebaseFirestore.getInstance();
 //
@@ -358,9 +357,8 @@ public class SubmissionActivity extends AppCompatActivity {
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream); // Compress bitmap using RLE compression
-            byte[] compressedBitmap = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+            envString = stream.toByteArray(); // Get the compressed bitmap data as a byte array
 
-            envString = new String(compressedBitmap, StandardCharsets.UTF_8);
         }
         else{
             envString = null;
@@ -378,6 +376,7 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // Put the MONSTER INTO THE DATABASE
         thisMonsterController = new MonsterController(storage);
+        final boolean[] success = {false};
         thisMonsterController.create(thisMonster);
 
         // Go back to MainActivity
