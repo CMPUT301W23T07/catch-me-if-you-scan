@@ -3,7 +3,10 @@ package cmput.app.catch_me_if_you_scan;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -16,7 +19,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,8 +39,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -81,11 +90,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mView.getMapAsync(this);
 
+        initSearchBar(v);
+
         Button filterButton = v.findViewById(R.id.filter_map_button);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getFilters(view);
+
             }
         });
 
@@ -151,8 +162,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Bitmap b = bitMapDraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-        ArrayList<Monster> monsters;
+        ArrayList<Monster> monsters = new ArrayList<Monster>();
+        Log.d("MAP", "BEFORE CONTROLLER REQUEST");
         monsters = mc.getAllMonsters();
+        Log.d("MAP", "AFTER CONTROLLER REQUEST");
 
         //This loop will cycle through each monster in the array and display it on the map
         if (monsters != null) {
@@ -204,6 +217,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
     }
+
+
+    /**
+     * This function is for creating the async search function for the map, it will take the
+     * text entered into the search bar and move the camera to the area that was searched
+     *
+     * @param v
+     *      Takes in an object v of type View
+     */
+    private void initSearchBar(View v) {
+        SearchView search = (SearchView) v.findViewById(R.id.map_search_bar);
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                Geocoder coder = new Geocoder(getActivity(), Locale.getDefault());
+                try {
+                    List<Address> listAddress = coder.getFromLocationName(s, 1);
+                    if (listAddress.size() > 0) {
+                        LatLng coords = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coords, DEFAULT_ZOOM));
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) { return false; }
+        });
+    }
+
+
 
     /**
      * This method is for the map implementation
