@@ -79,12 +79,20 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (permissionManager.hasAllPermissions()) {
                     if (!usrName.getText().toString().equals("") && !usrEmail.getText().toString().equals("")) {
-                        if (userController.getUser(usrName.getText().toString()) == null) {
-                            User user = new User(deviceId, usrName.getText().toString(), usrEmail.getText().toString());
-                            userController.create(user);
-                            switchToMain();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "This user name is taken", Toast.LENGTH_SHORT).show();
+                        if (usrName.getText().toString().matches("[^A-Za-z0-9-_]{5,30}")) {
+                            Toast.makeText(LoginActivity.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (usrEmail.getText().toString().matches("[^a-zA-Z0-9@.]{7,30}")) {
+                            Toast.makeText(LoginActivity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            if (userController.getUser(usrName.getText().toString()) == null) {
+                                User user = new User(deviceId, usrName.getText().toString(), usrEmail.getText().toString());
+                                userController.create(user);
+                                switchToMain();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "This user name is taken", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     else{
