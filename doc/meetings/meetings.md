@@ -59,6 +59,8 @@ Notes:
 
 ***
 
+## March 14, 2023 ##
+
 **Begin: 5:05pm**
 
 Attendence: Everyone
@@ -68,7 +70,22 @@ Notes:
 * Discussed all completed user stories
 * Talked about updating UML, Mockup etc
 
-**End: pm**
+**End: 5:35pm**
+
+## March 21, 2023 ##
+
+**Begin: 5:10pm**
+
+Attendence: Everyone
+
+Notes: 
+* Went over old business and new business
+* Went over completed user stories
+* Discussed testing and code coverage techniques
+    * Working on more testing before using github actions
+* Talked about class separation
+
+**End: 5:pm**
 
 # Group Meetings #
 
