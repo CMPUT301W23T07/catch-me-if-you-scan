@@ -111,6 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
+        android:layout_marginTop="dp"
         android:gravity="center"
         android:text="TTTTTTTTTTTTTTTTTTTT"
         android:textSize="26dp"
