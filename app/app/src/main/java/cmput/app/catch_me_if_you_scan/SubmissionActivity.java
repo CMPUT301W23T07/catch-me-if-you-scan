@@ -117,10 +117,10 @@ public class SubmissionActivity extends AppCompatActivity {
         thisMonster = new Monster(message, latitude, longitude, null);
 
         boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
-        if (exist)
-            Toast.makeText(this, "It already exists", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "It has not been scanned", Toast.LENGTH_SHORT).show();
+        if (exist) {
+            Toast.makeText(this, "This was already scanned before", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         submissionVisual = new VisualSystem(thisMonster.getHash(), 200, 9);
 
