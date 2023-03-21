@@ -35,12 +35,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class MainActivityTest {
+public class SubmissionActivityTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<SubmissionActivity> scenarioRule = new ActivityScenarioRule<>(SubmissionActivity.class);
 
-    public ActivityScenario<MainActivity> scenario;
+    public ActivityScenario<SubmissionActivity> scenario;
 
     /**
      * Sets up the test scenario.

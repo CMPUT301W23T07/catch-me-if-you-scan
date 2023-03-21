@@ -35,7 +35,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class MainActivityTest {
+public class MainActivityProfileTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -69,6 +69,48 @@ public class MainActivityTest {
             View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
             assertNotNull(fragmentContainer);
         });
+    }
+
+    /**
+     * Tests if the app can navigate to the scanning activity using the navigation bar.
+     */
+    @Test
+    public void switchToScanningActivityTestUsingNavBar(){
+
+        Intents.init();
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+
+        scenario.onActivity(activity -> {
+        });
+
+        onView(withId(R.id.camera_nav)).perform(click());
+
+        Intents.intended(hasComponent(CaptureAct.class.getCanonicalName()));
+        Intents.release();
+    }
+
+    /**
+     * Tests if the app can navigate to the profile activity using the navigation bar.
+     */
+    @Test
+    public void switchProfileUsingNavBar(){
+        scenario.onActivity(activity -> {
+        });
+        onView(withId(R.id.profile_nav)).perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
+
+    }
+
+    /**
+     * Tests if the app displays the profile after launch.
+     */
+    @Test
+    public void ProfileInViewAfterLaunch(){
+        scenario.onActivity(activity -> {
+        });
+        onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
     }
 
     /**

@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -20,6 +21,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -44,14 +46,29 @@ public class LeaderboardFragmentTest {
         scenario = scenarioRule.getScenario();
     }
 
+    /**
+     * Tests if the app can navigate to the leaderboard activity using the navigation bar.
+     */
     @Test
-    public void switchToLeaderboard() {
+    public void switchLeaderboardUsingNavBar() throws InterruptedException {
         scenario.onActivity(activity -> {
-
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
 
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Tests if the leaderboard is not displayed in the activity layout after the activity is launched.
+     */
+    @Test
+    public void leaderboardNotInViewAfterLaunch(){
+        scenario.onActivity(activity -> {
+        });
+        onView(withId(R.id.leaderboard_nav)).perform(click());
+        onView(withId(R.id.map)).check(doesNotExist());
+
     }
 
     @Test
