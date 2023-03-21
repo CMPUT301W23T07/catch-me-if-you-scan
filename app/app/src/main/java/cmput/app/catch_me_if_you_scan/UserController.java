@@ -101,7 +101,7 @@ public class UserController {
                     GeoPoint location = (GeoPoint) monsterData.get("location");
                     Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
                     byte[] envPhoto = envPhotoBlob.toBytes();
-                    boolean locationEnabled = (boolean) data.get("locationEnabled");
+                    boolean locationEnabled = (boolean) monsterData.get("locationEnabled");
                     fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled));
                 }
             }
@@ -147,7 +147,7 @@ public class UserController {
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
                         byte[] envPhoto = envPhotoBlob.toBytes();
-                        boolean locationEnabled = (boolean) data.get("locationEnabled");
+                        boolean locationEnabled = (boolean) monsterData.get("locationEnabled");
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled));
                     }
                 }
@@ -195,7 +195,7 @@ public class UserController {
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
                         byte[] envPhoto = envPhotoBlob.toBytes();
-                        boolean locationEnabled = (boolean) data.get("locationEnabled");
+                        boolean locationEnabled = (boolean) monsterData.get("locationEnabled");
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled));
                     }
                 }
@@ -241,7 +241,7 @@ public class UserController {
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
                         byte[] envPhoto = envPhotoBlob.toBytes();
-                        boolean locationEnabled = (boolean) data.get("locationEnabled");
+                        boolean locationEnabled = (boolean) monsterData.get("locationEnabled");
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled));
                     }
                 }
@@ -289,7 +289,7 @@ public class UserController {
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
                         byte[] envPhoto = envPhotoBlob.toBytes();
-                        boolean locationEnabled = (boolean) data.get("locationEnabled");
+                        boolean locationEnabled = (boolean) monsterData.get("locationEnabled");
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled));
                     }
                 }
