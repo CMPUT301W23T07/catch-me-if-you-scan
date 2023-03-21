@@ -17,11 +17,15 @@
         android:id="@+id/transparentView"
         android:layout_width="370dp"
         android:layout_height="300dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="200dp"
+        android:layout_marginEnd="10dp"
         android:background="#E6FFFFF1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--    Photo Related Start-->
@@ -115,6 +119,7 @@
         android:gravity="center"
         android:text="TTTTTTTTTTTTTTTTTTTT"
         android:textSize="26dp"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/take_photo_button"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
         app:layout_constraintStart_toStartOf="@+id/transparentView"
