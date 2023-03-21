@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -81,7 +82,7 @@ public class UserController {
             String deviceId = (String) data.get("deviceID");
             int score = ((Long) data.get("score")).intValue();
             String description = (String) data.get("description");
-            User fetchedUser = new User(deviceId, document.getId(), email, description);
+            User fetchedUser = new User(deviceId, document.getId().toString(), email, description);
             List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
         /*
@@ -98,8 +99,9 @@ public class UserController {
                     String monsterName = (String) monsterData.get("name");
                     int monsterScore = ((Long) monsterData.get("score")).intValue();
                     GeoPoint location = (GeoPoint) monsterData.get("location");
-                    byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
-                    fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                    Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
+                    byte[] envPhoto = envPhotoBlob.toBytes();
+                    fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                 }
             }
             return fetchedUser;
@@ -125,7 +127,7 @@ public class UserController {
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                fetchedUser = new User(deviceId, document.getId(), email, description);
+                fetchedUser = new User(deviceId, document.getId().toString(), email, description);
                 List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
             /*
@@ -142,8 +144,9 @@ public class UserController {
                         String monsterName = (String) monsterData.get("name");
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
-                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
-                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                        Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
+                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
                 return fetchedUser;
@@ -171,7 +174,7 @@ public class UserController {
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                fetchedUser = new User(deviceId, document.getId(), email, description);
+                fetchedUser = new User(deviceId, document.getId().toString(), email, description);
                 List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
             /*
@@ -188,8 +191,9 @@ public class UserController {
                         String monsterName = (String) monsterData.get("name");
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
-                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
-                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                        Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
+                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
                 return fetchedUser;
@@ -215,7 +219,7 @@ public class UserController {
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                User fetchedUser = new User(deviceId, document.getId().toString(), email, description);
                 List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
             /*
@@ -232,8 +236,9 @@ public class UserController {
                         String monsterName = (String) monsterData.get("name");
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
-                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
-                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                        Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
+                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
                 allUsers.add(fetchedUser);
@@ -261,7 +266,7 @@ public class UserController {
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                User fetchedUser = new User(deviceId, document.getId().toString(), email, description);
                 List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
             /*
@@ -278,8 +283,9 @@ public class UserController {
                         String monsterName = (String) monsterData.get("name");
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
-                        byte[] envPhoto = (byte[]) monsterData.get("envPhoto");
-                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId(), location.getLongitude(), location.getLatitude(), envPhoto));
+                        Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
+                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
                 allUsers.add(fetchedUser);
