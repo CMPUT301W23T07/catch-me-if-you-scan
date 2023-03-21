@@ -114,7 +114,7 @@ public class SubmissionActivity extends AppCompatActivity {
         currentUser = userController.getUserByDeviceID(deviceId);
 
         // Monster create
-        thisMonster = new Monster(message, latitude, longitude, null);
+        thisMonster = new Monster(message, latitude, longitude, null, false);
 
         boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
         if (exist) {
@@ -371,9 +371,9 @@ public class SubmissionActivity extends AppCompatActivity {
 
         // We check if the user turned on the geo Location and we will construct the monster here
         if(coordinateSwitch.isChecked()) {
-            thisMonster = new Monster(message, latitude, longitude, envString);
+            thisMonster = new Monster(message, latitude, longitude, envString, true);
         } else {
-            thisMonster = new Monster(message, null, null, envString);
+            thisMonster = new Monster(message, 0.0, 0.0, envString, false);
         }
 
         // We need access to the database

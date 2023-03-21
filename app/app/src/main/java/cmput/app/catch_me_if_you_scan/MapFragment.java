@@ -172,13 +172,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Log.d("MAP", "MONSTERS ARRAY HAS DATA");
             int i = 0;
             for (i = 0; i < monsters.size(); i++) {
-                Log.d("MAP", monsters.get(i).getName());
-                MarkerOptions options = new MarkerOptions()
-                        .position(new LatLng(monsters.get(i).getLocation()[0], monsters.get(i).getLocation()[1]))
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                        .title(monsters.get(i).getName());
-                Marker marker = map.addMarker(options);
-                markers.add(marker);
+                if (monsters.get(i).getLocationEnabled()) {
+                    MarkerOptions options = new MarkerOptions()
+                            .position(new LatLng(monsters.get(i).getLocation()[0], monsters.get(i).getLocation()[1]))
+                            .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                            .title(monsters.get(i).getName());
+                    Marker marker = map.addMarker(options);
+                    markers.add(marker);
+                }
             }
         }
         else {
