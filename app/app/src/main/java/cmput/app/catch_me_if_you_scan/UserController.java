@@ -49,6 +49,7 @@ public class UserController {
         userData.put("deviceID", user.getDeviceID());
         userData.put("description", user.getDescription());
         List<DocumentReference> tempDocs = new ArrayList<DocumentReference>();
+        userData.put("monstersScanned", tempDocs);
         Task<Void> task = collection.document(user.getName()).set(userData);
         while (!task.isComplete()) {
             continue;
@@ -71,6 +72,10 @@ public class UserController {
         }
         if (task.isSuccessful()) {
             DocumentSnapshot document = task.getResult();
+            if (!document.exists()) {
+                return null;
+            }
+            Log.d("USER", document.getData().toString());
             Map<String, Object> data = document.getData();
             String email = (String) data.get("email");
             String deviceId = (String) data.get("deviceID");
@@ -108,6 +113,7 @@ public class UserController {
      * @return User object on success and null on failure
      */
     public User getUserByDeviceID(String deviceID){
+        User fetchedUser = null;
         Task<QuerySnapshot> task = collection.whereEqualTo("deviceID", deviceID).get();
         while (!task.isComplete()) {
             continue;
@@ -119,7 +125,7 @@ public class UserController {
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                fetchedUser = new User(deviceId, document.getId(), email, description);
                 List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
             /*
@@ -152,6 +158,7 @@ public class UserController {
      * @return User object that has the email given
      */
     public User getUserByEmail(String passedEmail) {
+        User fetchedUser = null;
         Task<QuerySnapshot> task = collection.whereEqualTo("email", passedEmail).get();
         while (!task.isComplete()) {
             continue;
@@ -164,7 +171,7 @@ public class UserController {
                 String deviceId = (String) data.get("deviceID");
                 int score = ((Long) data.get("score")).intValue();
                 String description = (String) data.get("description");
-                User fetchedUser = new User(deviceId, document.getId(), email, description);
+                fetchedUser = new User(deviceId, document.getId(), email, description);
                 List<DocumentReference> monsters = (List<DocumentReference>) data.get("monstersScanned");
 
             /*
