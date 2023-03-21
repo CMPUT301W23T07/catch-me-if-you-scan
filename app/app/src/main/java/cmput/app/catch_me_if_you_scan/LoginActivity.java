@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (permissionManager.hasAllPermissions()) {
-                    if(userController.getUserByName(usrName.getText().toString()) == null){
+                    if(userController.getUser(usrName.getText().toString()) == null){
                     User user = new User(deviceId, usrName.getText().toString(), usrEmail.getText().toString());
                     userController.create(user);
                     switchToMain();}
