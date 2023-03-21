@@ -100,7 +100,10 @@ public class UserController {
                     int monsterScore = ((Long) monsterData.get("score")).intValue();
                     GeoPoint location = (GeoPoint) monsterData.get("location");
                     Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
-                    byte[] envPhoto = envPhotoBlob.toBytes();
+                    byte[] envPhoto = null;
+                    if (envPhotoBlob != null) {
+                        envPhoto = envPhotoBlob.toBytes();
+                    }
                     fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                 }
             }
@@ -145,7 +148,10 @@ public class UserController {
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
-                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        byte[] envPhoto = null;
+                        if (envPhotoBlob != null) {
+                            envPhoto = envPhotoBlob.toBytes();
+                        }
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
@@ -192,7 +198,10 @@ public class UserController {
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
-                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        byte[] envPhoto = null;
+                        if (envPhotoBlob != null) {
+                            envPhoto = envPhotoBlob.toBytes();
+                        }
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
@@ -237,7 +246,10 @@ public class UserController {
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
-                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        byte[] envPhoto = null;
+                        if (envPhotoBlob != null) {
+                            envPhoto = envPhotoBlob.toBytes();
+                        }
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
@@ -284,7 +296,10 @@ public class UserController {
                         int monsterScore = ((Long) monsterData.get("score")).intValue();
                         GeoPoint location = (GeoPoint) monsterData.get("location");
                         Blob envPhotoBlob = (Blob) monsterData.get("envPhoto");
-                        byte[] envPhoto = envPhotoBlob.toBytes();
+                        byte[] envPhoto = null;
+                        if (envPhotoBlob != null) {
+                            envPhoto = envPhotoBlob.toBytes();
+                        }
                         fetchedUser.addMonster(new Monster(monsterName, monsterScore, doc.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
                     }
                 }
