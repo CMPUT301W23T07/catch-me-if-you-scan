@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -78,12 +79,17 @@ public class SubmissionActivity extends AppCompatActivity {
     boolean photoIsDeleted;
 
     // Firebase
-    FirebaseFirestore storage;
+    FirebaseFirestore storage = FirebaseFirestore.getInstance();
 
     // Monster and monster controller
     Monster thisMonster;
     MonsterController thisMonsterController;
     VisualSystem submissionVisual;
+
+    // Getting the device ID This is to check if the code has already been scanned
+    private String deviceId;
+    private UserController userController = new UserController(storage);
+    private User currentUser;
 
     /**
      * This will create the initial page. It will contain the Monster picture, score and name.
@@ -94,15 +100,28 @@ public class SubmissionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submission);
 
+
         // Get the intents and message will hold the string of the decoded qr/code
         message = getIntent().getStringExtra("Code name");
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
 
 
         // Get's the user's location of where they scanned the code
         getCurrentLocation();
 
+        // Getting the user based on the devide ID
+        currentUser = userController.getUserByDeviceID(deviceId);
+
         // Monster create
-        thisMonster = new Monster(message, latitude, longitude, null);
+        thisMonster = new Monster(message, latitude, longitude, null, false);
+
+        boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
+        if (exist) {
+            Toast.makeText(this, "This was already scanned before", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         submissionVisual = new VisualSystem(thisMonster.getHash(), 200, 9);
 
 
@@ -333,7 +352,7 @@ public class SubmissionActivity extends AppCompatActivity {
      */
     public void submit() {
         // This is for storing the compressed image
-        byte[] envString;
+        byte[] envString = new byte[0];
 
         // If the user did take a picture and we have a picture to compress. we will resize it and
         // compress it. Then put it into the database!!
@@ -346,24 +365,25 @@ public class SubmissionActivity extends AppCompatActivity {
             bigImage.compress(Bitmap.CompressFormat.JPEG, 90, stream); // Compress bitmap using JPEG compression
             envString = stream.toByteArray(); // Get the compressed bitmap data as a byte array
         }
-        else{
-            envString = null;
-        }
+//        else{
+//            envString = null;
+//        }
 
         // We check if the user turned on the geo Location and we will construct the monster here
         if(coordinateSwitch.isChecked()) {
-            thisMonster = new Monster(message, latitude, longitude, envString);
+            thisMonster = new Monster(message, latitude, longitude, envString, true);
         } else {
-            thisMonster = new Monster(message, null, null, envString);
+            thisMonster = new Monster(message, 0.0, 0.0, envString, false);
         }
 
         // We need access to the database
-        storage = FirebaseFirestore.getInstance();
+//        storage = FirebaseFirestore.getInstance();
 
         // Put the MONSTER INTO THE DATABASE
         thisMonsterController = new MonsterController(storage);
         final boolean[] success = {false};
         thisMonsterController.create(thisMonster);
+        userController.addMonster(currentUser.getName(), thisMonsterController.getMonsterDoc(thisMonster.getHashHex()));
 
         // Go back to MainActivity
         finish();

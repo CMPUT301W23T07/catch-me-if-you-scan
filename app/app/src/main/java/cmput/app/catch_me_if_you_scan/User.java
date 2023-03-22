@@ -1,6 +1,8 @@
 package cmput.app.catch_me_if_you_scan;
 
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 /**
@@ -25,6 +27,7 @@ public class User {
         };
     });
 
+
 //    constructor
     public User(String deviceID, String name, String email) {
         this.deviceID = deviceID;
@@ -40,6 +43,21 @@ public class User {
     }
 
     // getters
+    /**
+     * It takes a string has the hash, the function will see if the hash is already contained within the user.
+     *
+     * @return Boolean; true if the hash already exists or false if the hash does not exist
+     */
+    public boolean checkIfHashExist(String monsterHash){
+        Iterator loop = monstersPQ.iterator();
+        while (loop.hasNext()){
+            Monster next = (Monster) loop.next();
+            if (Objects.equals(next.getHashHex(), monsterHash)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * gets name of user
@@ -113,6 +131,8 @@ public class User {
         return monstersPQ.size();
     }
 
+
+
     // setters
 
     /**
@@ -157,4 +177,6 @@ public class User {
         this.scoreSum -= monster.getScore();
         monstersPQ.remove(monster);
     }
+
+
 }

@@ -60,6 +60,7 @@ public class MonsterController {
         monsterData.put("location", locationPoint);
         Blob envPhotoBlob = Blob.fromBytes(monster.getEnvPhoto());
         monsterData.put("envPhoto", envPhotoBlob);
+        monsterData.put("locationEnabled", monster.getLocationEnabled());
         Task<Void> task = collection.document(monster.getHashHex()).set(monsterData);
         while (!task.isComplete()) {
             continue;
@@ -111,7 +112,8 @@ public class MonsterController {
             GeoPoint location = (GeoPoint) data.get("location");
             Blob envPhotoBlob = (Blob) data.get("envPhoto");
             byte[] envPhoto = envPhotoBlob.toBytes();
-            return (new Monster(name, score, document.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto));
+            boolean locationEnabled = (boolean) data.get("locationEnabled");
+            return (new Monster(name, score, document.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled));
         }
         return null;
     }
@@ -134,7 +136,8 @@ public class MonsterController {
                 GeoPoint location = (GeoPoint) data.get("location");
                 Blob envPhotoBlob = (Blob) data.get("envPhoto");
                 byte[] envPhoto = envPhotoBlob.toBytes();
-                Monster newMonster = new Monster(name, score, document.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto);
+                boolean locationEnabled = (boolean) data.get("locationEnabled");
+                Monster newMonster = new Monster(name, score, document.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled);
                 allMonsters.add(newMonster);
             }
         }
@@ -160,7 +163,8 @@ public class MonsterController {
                 GeoPoint location = (GeoPoint) data.get("location");
                 Blob envPhotoBlob = (Blob) data.get("envPhoto");
                 byte[] envPhoto = envPhotoBlob.toBytes();
-                newMonster = new Monster(monsterName, score, document.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto);
+                boolean locationEnabled = (boolean) data.get("locationEnabled");
+                newMonster = new Monster(monsterName, score, document.getId().toString(), location.getLongitude(), location.getLatitude(), envPhoto, locationEnabled);
                 return newMonster;
             }
         }
