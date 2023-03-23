@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class LeaderboardFragment extends Fragment {
     private ArrayAdapter<MockLeaderboardUserClass> filteredAdapter;
     private ArrayList<MockLeaderboardUserClass> dataList = new ArrayList<>();
     private ListView leaderboard;
+    private ArrayList<User> users = new ArrayList<User>();
+    private UserController uc = new UserController(FirebaseFirestore.getInstance());
 
     /**
      * Creates the fragment
@@ -60,27 +64,29 @@ public class LeaderboardFragment extends Fragment {
         leaderboard = v.findViewById(R.id.leaderboard_list_view);
 
         initSearchBar(v);
-        createMockData();
 
+        users = uc.getAllUsers();
 
-        //Set the mock first place data
+        sortUsers();
+
+        //Set the first place user
         TextView filterType = v.findViewById(R.id.filter_title_text_view);
         filterType.setText("Highest Scoring Monsters");
         TextView userName = v.findViewById(R.id.first_place_username_text_view);
-        userName.setText("rileyzilka01");
+        userName.setText(users.get(0).getName());
         TextView points = v.findViewById(R.id.first_place_points_text_view);
-        points.setText("9999 points");
+        points.setText(users.get(0).getScoreHighest());
 
         //Create the custom adapter for the list view
-        leaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, dataList) {
+        leaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, users) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView user = (TextView) view.findViewById(R.id.username_text_view);
                 TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
                 TextView pos = (TextView) view.findViewById(R.id.position_text_view);
-                user.setText(dataList.get(position).user);
-                points.setText(dataList.get(position).subtitle);
-                pos.setText(dataList.get(position).position);
+                user.setText(users.get(position+1).getName());
+                points.setText(users.get(position+1).getScoreHighest());
+                pos.setText(position+1);
                 return view;
             }
         };
@@ -104,6 +110,14 @@ public class LeaderboardFragment extends Fragment {
         dataList.add(item3);
         dataList.add(item4);
         dataList.add(item5);
+    }
+
+    /**
+     * This method will sort the users returned by the database for leaderboard display
+     * purposes
+     */
+    public void sortUsers() {
+
     }
 
     /**
