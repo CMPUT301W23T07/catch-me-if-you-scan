@@ -35,7 +35,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class MainActivityTest {
+public class MainActivityScanningTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -47,6 +47,7 @@ public class MainActivityTest {
      */
     @Before
     public void setUp() {
+        Intents.init();
         scenario = scenarioRule.getScenario();
     }
     /**
@@ -58,17 +59,37 @@ public class MainActivityTest {
         // Verify that the activity is created
         scenario.onActivity(activity -> assertNotNull(activity));
     }
-
     /**
-     * Tests if the fragment container is present in the activity layout.
+     * Tests if the app can navigate to the scanning activity using the navigation bar.
      */
+
     @Test
-    public void fragment_container_exists() {
-        // Verify that the activity layout contains a fragment container
+    public void scanningNotInViewAfterLaunch(){
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+
+        scenario.onActivity(activity -> {
+            assertEquals(activity.getClass(),MainActivity.class);
+
+        });
+    }
+
+    @Test
+    public void switchToScanningActivityUsingNavBar(){
+
+
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+
         scenario.onActivity(activity -> {
             View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
             assertNotNull(fragmentContainer);
         });
+
+        onView(withId(R.id.camera_nav)).perform(click());
+
+        Intents.intended(hasComponent(CaptureAct.class.getCanonicalName()));
+
     }
 
     /**
@@ -76,6 +97,7 @@ public class MainActivityTest {
      */
     @After
     public void tearDown() {
+        Intents.release();
         scenario.close();
     }
 

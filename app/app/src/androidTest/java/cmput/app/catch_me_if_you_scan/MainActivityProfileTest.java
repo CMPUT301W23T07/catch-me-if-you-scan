@@ -35,7 +35,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class MainActivityTest {
+public class MainActivityProfileTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -50,6 +50,15 @@ public class MainActivityTest {
         scenario = scenarioRule.getScenario();
     }
     /**
+     * Tests if the activity properly closes.
+     */
+    @After
+    public void tearDown() {
+
+        scenario.close();
+    }
+
+    /**
      * Tests if the MainActivity is created properly.
      */
     @Test
@@ -60,23 +69,30 @@ public class MainActivityTest {
     }
 
     /**
-     * Tests if the fragment container is present in the activity layout.
+     * Tests if the app can navigate to the profile activity using the navigation bar.
      */
     @Test
-    public void fragment_container_exists() {
-        // Verify that the activity layout contains a fragment container
+    public void switchProfileUsingNavBar(){
         scenario.onActivity(activity -> {
             View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
             assertNotNull(fragmentContainer);
         });
+        onView(withId(R.id.leaderboard_nav)).perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        onView(withId(R.id.profile_nav)).perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
+
     }
 
     /**
-     * Tests if the activity properly closes.
+     * Tests if the app displays the profile after launch.
      */
-    @After
-    public void tearDown() {
-        scenario.close();
+    @Test
+    public void ProfileInViewAfterLaunch(){
+        scenario.onActivity(activity -> {
+        });
+        onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
     }
 
 }

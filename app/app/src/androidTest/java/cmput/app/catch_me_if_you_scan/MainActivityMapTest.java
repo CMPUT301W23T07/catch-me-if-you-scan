@@ -35,11 +35,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class MainActivityTest {
+public class MainActivityMapTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
-
     public ActivityScenario<MainActivity> scenario;
 
     /**
@@ -58,17 +57,27 @@ public class MainActivityTest {
         // Verify that the activity is created
         scenario.onActivity(activity -> assertNotNull(activity));
     }
-
     /**
-     * Tests if the fragment container is present in the activity layout.
+     * Tests if the switches to the Map using the navigation bar.
      */
     @Test
-    public void fragment_container_exists() {
-        // Verify that the activity layout contains a fragment container
+    public void switchMapUsingNavBar(){
+
         scenario.onActivity(activity -> {
-            View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
-            assertNotNull(fragmentContainer);
         });
+        onView(withId(R.id.map_nav)).perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        onView(withId(R.id.map)).check(matches(isDisplayed()));
+
+    }
+    /**
+     * Tests if the map is not displayed immediately after launch.
+     */
+    @Test
+    public void mapNotInViewAfterLaunch(){
+        scenario.onActivity(activity -> {
+        });
+        onView(withId(R.id.map)).check(doesNotExist());
     }
 
     /**
