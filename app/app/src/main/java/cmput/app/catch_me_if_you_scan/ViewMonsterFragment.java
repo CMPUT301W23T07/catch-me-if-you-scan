@@ -133,7 +133,11 @@ public class ViewMonsterFragment extends Fragment {
         comment.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                new EditCommentDialog().show(getActivity().getSupportFragmentManager(), "Make a comment");
+                Bundle commentBundle = new Bundle();
+                commentBundle.putString("hex", bundle.getString("id", "0"));
+                EditCommentDialog commentDialog = new EditCommentDialog();
+                commentDialog.setArguments(commentBundle);
+                commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
 
 //                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), androidx.appcompat.R.style.AlertDialog_AppCompat_Light);
 //                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_comment, null);
