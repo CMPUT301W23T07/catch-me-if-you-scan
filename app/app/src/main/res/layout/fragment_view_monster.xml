@@ -17,7 +17,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            tools:src="@tools:sample/backgrounds/scenic"
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/monsterImg"
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:text="My Monster"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/monsterImg" />
@@ -45,8 +47,8 @@
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="100"
+            android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,8 +79,8 @@
 
         <ListView
             android:id="@+id/commentListView"
-            android:layout_width="410dp"
-            android:layout_height="261dp"
+            android:layout_width="416dp"
+            android:layout_height="241dp"
             android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
