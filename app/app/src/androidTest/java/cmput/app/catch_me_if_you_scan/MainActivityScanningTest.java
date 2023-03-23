@@ -47,6 +47,7 @@ public class MainActivityScanningTest {
      */
     @Before
     public void setUp() {
+        Intents.init();
         scenario = scenarioRule.getScenario();
     }
     /**
@@ -74,19 +75,21 @@ public class MainActivityScanningTest {
     }
 
     @Test
-    public void switchToScanningActivityTestUsingNavBar(){
+    public void switchToScanningActivityUsingNavBar(){
 
-        Intents.init();
+
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 
         scenario.onActivity(activity -> {
+            View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
+            assertNotNull(fragmentContainer);
         });
 
         onView(withId(R.id.camera_nav)).perform(click());
 
         Intents.intended(hasComponent(CaptureAct.class.getCanonicalName()));
-        Intents.release();
+
     }
 
     /**
@@ -94,6 +97,7 @@ public class MainActivityScanningTest {
      */
     @After
     public void tearDown() {
+        Intents.release();
         scenario.close();
     }
 

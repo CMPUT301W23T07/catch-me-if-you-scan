@@ -3,29 +3,51 @@
  */
 package cmput.app.catch_me_if_you_scan;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertNotNull;
+
+import android.util.Log;
+
+import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 
 public class LoginActivityTest {
 
-    private ActivityScenario<LoginActivity> scenario;
+
+
+    @Rule
+    public ActivityScenarioRule<LoginActivity> scenarioRule = new ActivityScenarioRule<>(LoginActivity.class);
+
+    public ActivityScenario<LoginActivity> scenario;
 
     @Before
     public void setUp() {
-        scenario = ActivityScenario.launch(LoginActivity.class);
+        Intents.init();
+        scenario = scenarioRule.getScenario();
+    }
+    @After
+    public void tearDown() {
+        Intents.release();
+        scenario.close();
     }
 
     /**
@@ -43,23 +65,33 @@ public class LoginActivityTest {
     @Test
     public void switchToMainActivityUsingSignUpButton(){
 
-        //Intents.init();
 
-//        getInstrumentation().waitForIdleSync();
-//
-//        scenario.onActivity(activity -> {
-//        });
-//
-//        onView(withId(R.id.sign_up_button)).perform(click());
-//        onView(withId(R.id.profile_nav)).check(matches(isDisplayed()));
 
-        //Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
-        //Intents.release();
-    }
+        getInstrumentation().waitForIdleSync();
 
-    @After
-    public void tearDown() {
-        scenario.close();
+        scenario.onActivity(activity -> {
+        });
+
+        onView(withId(R.id.editTextName)).perform(click());
+        onView(withId(R.id.editTextName)).perform(typeText("TestAccount"));
+        onView(withId(R.id.editTextName))
+                .perform(pressImeActionButton());
+
+        onView(withId(R.id.editTextEmail)).perform(click());
+        onView(withId(R.id.editTextEmail)).perform(typeText("AccountEmail@example.com"));
+        onView(withId(R.id.editTextName))
+                .perform(pressImeActionButton());
+
+        onView(withId(R.id.sign_up_button)).perform(click());
+        onView(withId(R.id.profile_nav)).check(matches(isDisplayed()));
+
+        Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
+
+        scenario.onActivity(activity -> {
+        });
+
+        Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
+
     }
 
 }

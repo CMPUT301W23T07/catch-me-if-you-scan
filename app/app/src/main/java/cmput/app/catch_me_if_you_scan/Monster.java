@@ -251,4 +251,15 @@ public class Monster {
      * @param locationEnabled new status of location
      */
     public void setLocationEnabled(boolean locationEnabled) { this.locationEnabled = locationEnabled; }
+
+
+    public void setLocations(Double latitude_param, Double longitude_param){
+        latitude = latitude_param;
+        longitude = longitude_param;
+    }
+
+    public void setEnvPhoto(byte[] envString){
+        envPhoto = envString;
+    }
+
 }

@@ -37,7 +37,6 @@ import org.junit.Test;
 public class LeaderboardFragmentTest {
 
     public ActivityScenario<MainActivity> scenario;
-
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
@@ -54,7 +53,6 @@ public class LeaderboardFragmentTest {
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
-
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()));
     }
@@ -63,13 +61,15 @@ public class LeaderboardFragmentTest {
      * Tests if the leaderboard is not displayed in the activity layout after the activity is launched.
      */
     @Test
-    public void leaderboardNotInViewAfterLaunch(){
+    public void leaderBoardNotInViewAfterLaunch(){
         scenario.onActivity(activity -> {
         });
-        onView(withId(R.id.leaderboard_nav)).perform(click());
-        onView(withId(R.id.map)).check(doesNotExist());
 
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+        onView(withId(R.id.fragment_leaderboard)).check(doesNotExist());
     }
+
+
 
     @Test
     public void checkFilter() {

@@ -50,6 +50,15 @@ public class MainActivityProfileTest {
         scenario = scenarioRule.getScenario();
     }
     /**
+     * Tests if the activity properly closes.
+     */
+    @After
+    public void tearDown() {
+
+        scenario.close();
+    }
+
+    /**
      * Tests if the MainActivity is created properly.
      */
     @Test
@@ -60,43 +69,16 @@ public class MainActivityProfileTest {
     }
 
     /**
-     * Tests if the fragment container is present in the activity layout.
-     */
-    @Test
-    public void fragment_container_exists() {
-        // Verify that the activity layout contains a fragment container
-        scenario.onActivity(activity -> {
-            View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
-            assertNotNull(fragmentContainer);
-        });
-    }
-
-    /**
-     * Tests if the app can navigate to the scanning activity using the navigation bar.
-     */
-    @Test
-    public void switchToScanningActivityTestUsingNavBar(){
-
-        Intents.init();
-
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
-
-        scenario.onActivity(activity -> {
-        });
-
-        onView(withId(R.id.camera_nav)).perform(click());
-
-        Intents.intended(hasComponent(CaptureAct.class.getCanonicalName()));
-        Intents.release();
-    }
-
-    /**
      * Tests if the app can navigate to the profile activity using the navigation bar.
      */
     @Test
     public void switchProfileUsingNavBar(){
         scenario.onActivity(activity -> {
+            View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
+            assertNotNull(fragmentContainer);
         });
+        onView(withId(R.id.leaderboard_nav)).perform(click());
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.profile_nav)).perform(click());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
@@ -111,14 +93,6 @@ public class MainActivityProfileTest {
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
-    }
-
-    /**
-     * Tests if the activity properly closes.
-     */
-    @After
-    public void tearDown() {
-        scenario.close();
     }
 
 }
