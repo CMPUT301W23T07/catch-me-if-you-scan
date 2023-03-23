@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:text="My Monster"
-            android:textSize="24sp"
+            android:textSize="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/monsterImg" />
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="100"
-            android:textSize="36sp"
+            android:textSize="36dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,20 +62,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/score" />
-
-        <EditText
-            android:id="@+id/editComment"
-            android:layout_width="362dp"
-            android:layout_height="57dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Write a comment..."
-            app:layout_constraintBottom_toTopOf="@+id/commentListView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.489"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/points"
-            app:layout_constraintVertical_bias="1.0" />
 
         <ListView
             android:id="@+id/commentListView"
@@ -91,11 +77,26 @@
             android:id="@+id/userScans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="See who scanned me"
-            app:layout_constraintBottom_toTopOf="@+id/editComment"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/points" />
+
+        <EditText
+            android:id="@+id/editComment"
+            android:layout_width="279dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userScans" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
