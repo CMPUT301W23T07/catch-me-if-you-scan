@@ -51,7 +51,11 @@ public class MainActivity extends AppCompatActivity {
         navbar.setOnItemSelectedListener(item -> {
             switch(item.getItemId()) {
                 case R.id.leaderboard_nav:
-                    replaceFragment(new LeaderboardFragment());
+                    ViewMonsterFragment f = new ViewMonsterFragment();
+                    Bundle b = new Bundle();
+                    b.putString("id", "06388d4ff367b3bfaecb890322f0f9c6b33f5a31ec3198606cd2199fb30f5fbe");
+                    f.setArguments(b);
+                    replaceFragment(f);
                     break;
                 case R.id.map_nav:
                     replaceFragment(new MapFragment());
