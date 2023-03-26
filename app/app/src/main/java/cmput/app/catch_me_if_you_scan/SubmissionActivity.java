@@ -48,14 +48,9 @@ import java.util.Date;
  * There is a submit button which will package everything and put it into the database
  */
 public class SubmissionActivity extends AppCompatActivity {
-    // This locationManager is essential to get the user's location when they scan the monster.
-    // the coordinate is saved into longitude and latitude
-    private LocationManager locationManager;
+
     private double longitude;
     private double latitude;
-
-    // message will contain the message contained in the qr code/ barcode. Not the hash
-    private String message;
 
     // All Buttons and Views
     Button photoButton;
@@ -67,17 +62,12 @@ public class SubmissionActivity extends AppCompatActivity {
     TextView monsterNameView;
     TextView monsterScoreView;
 
-
     // This is the image that the user has taken
     Bitmap bigImage;
-
     // This is responsible for making the output stream
     FileOutputStream fos = null;
     File photoFile = null;
     Uri photoURI;
-    String photoName;
-    boolean photoIsDeleted;
-
     // Firebase
     FirebaseFirestore storage = FirebaseFirestore.getInstance();
 
@@ -92,6 +82,33 @@ public class SubmissionActivity extends AppCompatActivity {
     private User currentUser;
 
     /**
+     * This works with the photo taker. Within, the photo converted to a clear image.
+     * Then it will put the adjusted/clear image onto the background.
+     * bigImage contain the clear picture and this will be adjusted
+     */
+    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+
+                    // this is for the background image
+                    backgroundImg = findViewById(R.id.background_image);
+
+                    // this will decode the file which contains the image, but the image is rotated
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
+                    // This will rotate the image
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(90);
+                    bigImage = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                    // Put the rotated image onto the background
+                    backgroundImg.setImageBitmap(bigImage);
+                    backgroundImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    ////////////////////////////////////////////////////////////////////////////////
+                }
+            });
+
+    /**
      * This will create the initial page. It will contain the Monster picture, score and name.
      * Then from here the user can take picture, delete picture, turn the geolocation switch on and off.
      */
@@ -100,130 +117,27 @@ public class SubmissionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submission);
 
+        // Initializes the user's location of where they scanned the code
+        InitializeCurrentLocation();
 
-        // Get the intents and message will hold the string of the decoded qr/code
-        message = getIntent().getStringExtra("Code name");
-        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-
-
-
-        // Get's the user's location of where they scanned the code
-        getCurrentLocation();
-
-        // Getting the user based on the devide ID
-        currentUser = userController.getUserByDeviceID(deviceId);
-
-        // Monster create
-        thisMonster = new Monster(message, latitude, longitude, null, false);
-
-        boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
-        if (exist) {
-            Toast.makeText(this, "This was already scanned before", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        submissionVisual = new VisualSystem(thisMonster.getHash(), 200, 9);
-
+        // Create the monster based on current info. Ends activity if monster has been scanned before
+        InitializeMonster();
 
         // Find the view IDs
-        photoButton = findViewById(R.id.take_photo_button);
-        deletePhotoButton = findViewById(R.id.cancel_photo_button);
-        coordinateSwitch = findViewById(R.id.geoLocation_switch);
-        MonsterImageView = findViewById(R.id.monsterImageView);
-        monsterScoreView = findViewById(R.id.MonsterScoreTextView);
-        monsterNameView = findViewById(R.id.MonsterNameTextView);
-        submitMonsterButton = findViewById(R.id.SubmitButton);
+        InitializeViews();
 
+        // Display Monster Information On Screen
+        UpdateViews();
 
-        // Monster Post
-        monsterNameView.setText(thisMonster.getName());
-        monsterScoreView.setText(Integer.toString(thisMonster.getScore()));
-        MonsterImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                MonsterImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                HashCode hash = thisMonster.getHash();
-                submissionVisual.generate(20);
-                MonsterImageView.setImageBitmap(submissionVisual.getBitmap());
-                return true;
-            }
-        });
-
-        // Buttons and their onClickListeners
-        photoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
-        // Button is will delete the taken photo
-        deletePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {deletePhotoButtonOnClick(v);
-            }
-        });
-        // This switch will is for turning the geolocation on and off
-        coordinateSwitch.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {onSwitchClick(v);
-
-            }
-        });
-
-        // This button will package all the attributes to the monster database
-        submitMonsterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submit();
-            }
-        });
-    }
-
-    // This function is responsible for the geoLocation switch
-    public void onSwitchClick(View view){
-        if (coordinateSwitch.isChecked()){
-            Toast.makeText(this, "COORDINATE ON", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this, "COORDINATE OFF", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * This function is responsible for getting the user's coordinate when they enter this activity.
-     * It will check the permission.
-     * It will assign longitude and latitude.
-     */
-    private void getCurrentLocation() {
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        // This will double check the permission
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
-        }
-
-        // This will get the user's coordinate location and save the location onto latitude and longitude
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                });
+        // Waits for any user interaction
+        StartListeners();
     }
 
     /**
      * This function is responsible taking the environment picture. It will Create a file to store
      * and we will put the photo onto the file.Then it will launch the camera
      */
+    // This will create the image name based on the time and date
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -266,11 +180,10 @@ public class SubmissionActivity extends AppCompatActivity {
      * This function is responsible for creating the imageFile name and it will return the File type
      * with the unique file name
      */
-    // This will create the image name based on the time and date
+    // Used in conjunction with dispatchTakePictureIntent
     private File createImageFile() throws IOException {
         // Create a unique file name for the image
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        photoName = timeStamp + ".jpg";
 
         // Get the directory where the image file will be saved
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -284,35 +197,6 @@ public class SubmissionActivity extends AppCompatActivity {
         return imageFile;
     }
 
-
-    /**
-     * This works with the photo taker. Within, the photo converted to a clear image.
-     * Then it will put the adjusted/clear image onto the background.
-     * bigImage contain the clear picture and this will be adjusted
-     */
-    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-
-                    // this is for the background image
-                    backgroundImg = findViewById(R.id.background_image);
-
-                    // this will decode the file which contains the image, but the image is rotated
-                    Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-
-                    // This will rotate the image
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
-                    bigImage = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
-                    // Put the rotated image onto the background
-                    backgroundImg.setImageBitmap(bigImage);
-                    backgroundImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    ////////////////////////////////////////////////////////////////////////////////
-                }
-            });
-
-
     /**
      * This function is responsible for delete the environment photo that has been taken.
      * This function will also check if the picture was taken or not as well.
@@ -324,7 +208,7 @@ public class SubmissionActivity extends AppCompatActivity {
             // Delete the picture from the device storage
 
             if (photoFile.exists()) {
-                photoIsDeleted = photoFile.delete();
+                boolean photoIsDeleted = photoFile.delete();
                 if (photoIsDeleted) {
                     // Set pictureBitmap to null and clear the ImageView or any other view
                     bigImage = null;
@@ -345,12 +229,39 @@ public class SubmissionActivity extends AppCompatActivity {
         }
     }
 
+    // This function is responsible for the geoLocation switch
+    public void onSwitchClick(View view){
+        // We check if the user turned on the geo Location and we will construct the monster here
+        if (coordinateSwitch.isChecked()){
+            thisMonster.setLocations(latitude,longitude);
+            thisMonster.setLocationEnabled(true);
+            Toast.makeText(this, "COORDINATE ON", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            thisMonster.setLocations(0.0,0.0);
+            thisMonster.setLocationEnabled(false);
+            Toast.makeText(this, "COORDINATE OFF", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
-     * This function is the submit button. Once the user edit their preferences. We will add to the
+     * This function is the submit button. Once the user has finished editing their preferences. We will add to the
      * database and we will exit to the MainActivity
      */
     public void submit() {
+
+        PostProcess();
+        // Put the MONSTER INTO THE DATABASE
+        thisMonsterController = new MonsterController(storage);
+        final boolean[] success = {false};
+        thisMonsterController.create(thisMonster);
+        userController.addMonster(currentUser.getName(), thisMonsterController.getMonsterDoc(thisMonster.getHashHex()));
+        // Go back to MainActivity
+        finish();
+    }
+    /**
+     * This function processes any photo used prior to submission*/
+    public void PostProcess(){
         // This is for storing the compressed image
         byte[] envString = new byte[0];
 
@@ -364,31 +275,125 @@ public class SubmissionActivity extends AppCompatActivity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bigImage.compress(Bitmap.CompressFormat.JPEG, 90, stream); // Compress bitmap using JPEG compression
             envString = stream.toByteArray(); // Get the compressed bitmap data as a byte array
+
         }
-//        else{
-//            envString = null;
-//        }
-
-        // We check if the user turned on the geo Location and we will construct the monster here
-        if(coordinateSwitch.isChecked()) {
-            thisMonster = new Monster(message, latitude, longitude, envString, true);
-        } else {
-            thisMonster = new Monster(message, 0.0, 0.0, envString, false);
-        }
-
-        // We need access to the database
-//        storage = FirebaseFirestore.getInstance();
-
-        // Put the MONSTER INTO THE DATABASE
-        thisMonsterController = new MonsterController(storage);
-        final boolean[] success = {false};
-        thisMonsterController.create(thisMonster);
-        userController.addMonster(currentUser.getName(), thisMonsterController.getMonsterDoc(thisMonster.getHashHex()));
-
-        // Go back to MainActivity
-        finish();
-
+        thisMonster.setEnvPhoto(envString);
     }
 
+    /**
+     * Starts all the necessary listeners for user interactions
+     */
+    private void StartListeners(){
+        // Buttons and their onClickListeners
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
+        // Button is will delete the taken photo
+        deletePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {deletePhotoButtonOnClick(v);
+            }
+        });
+        // This switch will is for turning the geolocation on and off
+        coordinateSwitch.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {onSwitchClick(v);
+
+            }
+        });
+
+        // This button will package all the attributes to the monster database
+        submitMonsterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submit();
+            }
+        });
+    }
+
+    /**
+     * Updates all the views using monster object information
+     */
+    private void UpdateViews(){
+        submissionVisual = new VisualSystem(thisMonster.getHash(), 200, 9);
+        monsterNameView.setText(thisMonster.getName());
+        monsterScoreView.setText(Integer.toString(thisMonster.getScore()));
+        MonsterImageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                MonsterImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                HashCode hash = thisMonster.getHash();
+                submissionVisual.generate(20);
+                MonsterImageView.setImageBitmap(submissionVisual.getBitmap());
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Initializes the monster object that will be used throughout the process
+     * Also includes the check for duplicate scans
+     */
+    private void InitializeMonster(){
+        // Get the intents and message will hold the string of the decoded qr/code
+        String message = getIntent().getStringExtra("Code name");
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        // Getting the user based on the devide ID
+        currentUser = userController.getUserByDeviceID(deviceId);
+        // Monster create
+        thisMonster = new Monster(message, latitude, longitude, null, false);
+        boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
+        if (exist) {
+            Toast.makeText(this, "This was already scanned before", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    /**
+     * This function is responsible for getting the user's coordinate when they enter this activity.
+     * It will check the permission.
+     * It will assign longitude and latitude.
+     */
+    private void InitializeCurrentLocation() {
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // This will double check the permission
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+
+        // This will get the user's coordinate location and save the location onto latitude and longitude
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location
+                        if (location != null) {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Starts all the views.
+     */
+    private void InitializeViews(){
+        photoButton = findViewById(R.id.take_photo_button);
+        deletePhotoButton = findViewById(R.id.cancel_photo_button);
+        coordinateSwitch = findViewById(R.id.geoLocation_switch);
+        MonsterImageView = findViewById(R.id.monsterImageView);
+        monsterScoreView = findViewById(R.id.MonsterScoreTextView);
+        monsterNameView = findViewById(R.id.MonsterNameTextView);
+        submitMonsterButton = findViewById(R.id.SubmitButton);
+    }
 
 }
