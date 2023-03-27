@@ -48,10 +48,8 @@ import java.util.Date;
  * There is a submit button which will package everything and put it into the database
  */
 public class SubmissionActivity extends AppCompatActivity {
-
     private double longitude;
     private double latitude;
-
     // All Buttons and Views
     Button photoButton;
     Button deletePhotoButton;
@@ -202,7 +200,7 @@ public class SubmissionActivity extends AppCompatActivity {
      * This function will also check if the picture was taken or not as well.
      * big_image will be null in the end
      */
-    public void deletePhotoButtonOnClick(View view) {
+    private void deletePhotoButtonOnClick(View view) {
         // Check if the pictureBitmap exists
         if (bigImage != null) {
             // Delete the picture from the device storage
@@ -230,7 +228,7 @@ public class SubmissionActivity extends AppCompatActivity {
     }
 
     // This function is responsible for the geoLocation switch
-    public void onSwitchClick(View view){
+    private void onSwitchClick(View view){
         // We check if the user turned on the geo Location and we will construct the monster here
         if (coordinateSwitch.isChecked()){
             thisMonster.setLocations(latitude,longitude);
@@ -248,7 +246,7 @@ public class SubmissionActivity extends AppCompatActivity {
      * This function is the submit button. Once the user has finished editing their preferences. We will add to the
      * database and we will exit to the MainActivity
      */
-    public void submit() {
+    private void submit() {
 
         PostProcess();
         // Put the MONSTER INTO THE DATABASE
@@ -261,7 +259,7 @@ public class SubmissionActivity extends AppCompatActivity {
     }
     /**
      * This function processes any photo used prior to submission*/
-    public void PostProcess(){
+    private void PostProcess(){
         // This is for storing the compressed image
         byte[] envString = new byte[0];
 
