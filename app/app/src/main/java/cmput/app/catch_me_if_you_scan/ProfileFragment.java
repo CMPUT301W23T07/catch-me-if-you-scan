@@ -99,14 +99,16 @@ public class ProfileFragment extends Fragment {
         highestScore = view.findViewById(R.id.highest_score_text);
         lowestScore = view.findViewById(R.id.lowest_score_text);
 
-        userName.setText(user.getName());
-        userEmail.setText(user.getEmail());
-        bioText.setText(user.getDescription());
-        monstersAmount.setText(Integer.toString(user.getMonstersCount()));
-        monsterListAmount.setText("Monsters("+Integer.toString(user.getMonstersCount())+")");
-        totalScoreSum.setText(Integer.toString(user.getScoreSum()));
-        highestScore.setText(Integer.toString(user.getScoreHighest()));
-        lowestScore.setText(Integer.toString(user.getScoreLowest()));
+        if(user!=null) {
+            userName.setText(user.getName());
+            userEmail.setText(user.getEmail());
+            bioText.setText(user.getDescription());
+            monstersAmount.setText(Integer.toString(user.getMonstersCount()));
+            monsterListAmount.setText("Monsters(" + Integer.toString(user.getMonstersCount()) + ")");
+            totalScoreSum.setText(Integer.toString(user.getScoreSum()));
+            highestScore.setText(Integer.toString(user.getScoreHighest()));
+            lowestScore.setText(Integer.toString(user.getScoreLowest()));
+        }
 
         return view;
     }
