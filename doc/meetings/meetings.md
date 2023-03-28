@@ -85,7 +85,24 @@ Notes:
     * Working on more testing before using github actions
 * Talked about class separation
 
-**End: 5:pm**
+**End: 5:25pm**
+
+***
+
+## March 28, 2023 ##
+
+**Begin: 4:55pm**
+
+Attendence: Everyone
+
+Notes: 
+* Discussed github actions
+    * Got help figuring out how to make the action
+    * Issues with gradle
+* Discussed user story work division
+* Discussed Old business and new business.
+
+**End: 5:30pm**
 
 # Group Meetings #
 
@@ -394,5 +411,39 @@ New business:
 * Group: DOCS!
 
 **End: 4:05pm**
+
+***
+
+## March 28, 2023 ##
+
+**Begin: 2:45pm**
+
+Attendance: Mohammad, Riley, Charlie, Yosri, Mark, Jay
+
+Notes:
+* Talked about the Deployment target dropdown file messing up builds and getting pushed accidentally
+* Discussed division of remaining user stories
+
+Old business:
+* Riley: Worked on the leaderboard, added the Monster filter, added the functionality to click on User and working on Monster implementation. Made user and Monster parcelable for fragment data transfer
+* Mark: Helped Charlie and Jay do the dialog fragment for the comment functionality, including class, logic, confirmation. Set up the tests to properly work using a mock user, worked on github action
+* Jay: Worked with mark and charlie on the comment functionality, doing some front end touch ups now, made an app logo. Vectorized logo
+* Moh: Worked on the comment controller, and database stuff including fixing issues, reviewed pull requests.
+* Charlie: Worked on monster fragment including comment class and the visual system.
+* Yosri: Worked on the profile page adding the list and the UI, added the search functionality for the monsters.
+
+Reflection:
+* Bad pushes including files that shouldnt be there
+
+New business:
+* Riley: Completely finish leaderboard including all related user stories and functionalities, kill all bugs, also finish the map and clean it up for proper functionality. IF time permits, assign rankings to the monsters. Also implement clicking on a monster on the map.
+* Mark: Work on developing Unit tests for the majoriyt of the App, also edit the intent testings using a try and except.
+* Jay: Setup the emulator to use the laptop camera for testing. Assist with comments if needed. Continue working on front end, also update UML
+* Moh: Write tests for controller classes, make sure documentation is up to standard. Bug fix.
+* Charlie: Complete the monster fragment after comment controller is done. Finish the visual system.
+* Yosri: Finish the profile fragment, add delete functionality. Work on the wiki, to update and finish deliverables.
+* Group: General documentation, testing and deliverable checks.
+
+**End: 3:10pm**
 
 ***
