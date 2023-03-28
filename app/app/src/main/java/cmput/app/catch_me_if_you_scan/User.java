@@ -1,5 +1,10 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
@@ -8,7 +13,7 @@ import java.util.PriorityQueue;
 /**
  * This class represents the User object
  */
-public class User {
+public class User implements Parcelable {
     private String deviceID;
     private String name;
     private String email;
@@ -179,4 +184,13 @@ public class User {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+
+    }
 }

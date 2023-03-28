@@ -1,5 +1,10 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
@@ -12,7 +17,7 @@ import java.util.Hashtable;
 /**
  * This class represents the Monster
  */
-public class Monster {
+public class Monster implements Parcelable {
     private String hashedCode;
     private String name;
     private int score;
@@ -262,4 +267,13 @@ public class Monster {
         envPhoto = envString;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+
+    }
 }
