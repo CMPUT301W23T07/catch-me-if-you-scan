@@ -124,10 +124,14 @@ public class ProfileFragment extends Fragment {
         viewListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getBaseContext(),
-                        MonsterProfileListActivity.class);
-                intent.putExtra("key", deviceId);
-                getActivity().startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("key",deviceId);
+                MonsterProfileListFragment fragment = new MonsterProfileListFragment();
+                fragment.setArguments(bundle);
+                FragmentManager fm = getParentFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(R.id.main_fragment_container, fragment);
+                ft.commit();
 
             }
         });
@@ -142,7 +146,7 @@ public class ProfileFragment extends Fragment {
 
                 FragmentManager fm = getParentFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.ProfileLayout, fragment);
+                ft.add(R.id.main_fragment_container, fragment);
                 ft.commit();
             }
         });
