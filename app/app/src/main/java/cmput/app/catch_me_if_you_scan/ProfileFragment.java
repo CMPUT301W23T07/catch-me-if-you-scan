@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -126,6 +129,21 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("key", deviceId);
                 getActivity().startActivity(intent);
 
+            }
+        });
+        monstersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Monster monster = monstersListData.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", monster.getHashHex());
+                ViewMonsterFragment fragment = new ViewMonsterFragment();
+                fragment.setArguments(bundle);
+
+                FragmentManager fm = getParentFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.ProfileLayout, fragment);
+                ft.commit();
             }
         });
 

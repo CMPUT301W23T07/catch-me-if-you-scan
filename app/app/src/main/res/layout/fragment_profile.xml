@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:visibility="visible"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileFragment"
+    >
 
     <FrameLayout
         android:id="@+id/frameLayout2"

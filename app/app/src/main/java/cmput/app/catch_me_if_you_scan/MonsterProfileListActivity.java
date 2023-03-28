@@ -1,10 +1,13 @@
 package cmput.app.catch_me_if_you_scan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -44,10 +47,21 @@ public class MonsterProfileListActivity extends AppCompatActivity {
             }
         });
 
+        monsterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Monster monster = monstersListData.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", monster.getHashHex());
+                ViewMonsterFragment fragment = new ViewMonsterFragment();
+                fragment.setArguments(bundle);
 
-
-
-
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.listActivityLayout, fragment);
+                ft.commit();
+            }
+        });
 
     }
 }
