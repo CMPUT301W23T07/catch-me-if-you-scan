@@ -22,11 +22,11 @@ jobs:
 
 
     - name: Touch local properties
-      working-directory: ./app/app
+      working-directory: ./app
       run: touch local.properties
 
     - name: Add Api Key
-      working-directory: ./app/app
+      working-directory: ./app
       run: echo "apiKey=""" >> local.properties
 
     - name: Grant execute permission for gradlew
