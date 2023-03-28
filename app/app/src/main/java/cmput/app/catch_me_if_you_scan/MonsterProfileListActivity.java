@@ -6,11 +6,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,9 +22,10 @@ public class MonsterProfileListActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
     private ListView monsterList;
-    private EditText searchbtn;
+    private SearchView searchbtn;
     private Button backbtn;
     private MonsterListActivityAdapter adapter;
+    private  MonsterListActivityAdapter filteredAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,7 @@ public class MonsterProfileListActivity extends AppCompatActivity {
 
         monsterList = findViewById(R.id.monsterListActivity);
         backbtn = findViewById(R.id.backbtn);
-
+        searchbtn = (SearchView) findViewById(R.id.searchBtnMonsterList);
         monsterList.setAdapter(adapter);
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +65,30 @@ public class MonsterProfileListActivity extends AppCompatActivity {
                 ft.commit();
             }
         });
+
+        searchbtn.setQueryHint("Search");
+        searchbtn.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Monster> filtered = new ArrayList<>();
+
+                for (Monster item : monstersListData) {
+                    if (item.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filtered.add(item);
+                    }
+                }
+                filteredAdapter = new MonsterListActivityAdapter(getBaseContext(), filtered);
+                monsterList.setAdapter(filteredAdapter);
+                return false;
+            }
+        });
+
 
     }
 }
