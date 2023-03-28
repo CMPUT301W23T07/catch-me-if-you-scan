@@ -12,7 +12,7 @@ import java.util.Hashtable;
 /**
  * This class represents the Monster
  */
-public class Monster {
+public class Monster implements Comparable<Monster>  {
     private String hashedCode;
     private String name;
     private int score;
@@ -262,4 +262,8 @@ public class Monster {
         envPhoto = envString;
     }
 
+    @Override
+    public int compareTo(Monster monster) {
+        return this.score - monster.score;
+    }
 }

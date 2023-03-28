@@ -10,7 +10,7 @@ public class MonsterTest {
      */
     public Monster createMonster(String code){
         byte[] photoString = new byte[1];
-        return new Monster(code, 1.0, 2.0, null);
+        return new Monster(code, 1.0, 2.0, null, false);
     }
 
     /**

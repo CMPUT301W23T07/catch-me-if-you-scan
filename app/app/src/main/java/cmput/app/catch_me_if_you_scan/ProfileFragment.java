@@ -1,6 +1,6 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,8 +33,6 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String deviceId;
-
     private TextView userName;
     private TextView userEmail;
     private TextView bioText;
@@ -42,8 +41,12 @@ public class ProfileFragment extends Fragment {
     private TextView totalScoreSum;
     private TextView highestScore;
     private TextView lowestScore;
+    private ListView monstersList;
+    private MonsterListAdapter monsterListAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
+    private Button viewListBtn;
+
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -84,11 +87,7 @@ public class ProfileFragment extends Fragment {
         String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         User user = userController.getUserByDeviceID(deviceId);
-//        Monster monster1 = new Monster("mark",2.0, 1.0, "");
-//        Monster monster2 = new Monster("jay",2.0, 1.0, "");
-//        user.addMonster(monster1);
-//        user.addMonster(monster2);
-
+        user.setDescription("Hey I'm "+ user.getName());
 
         userName = view.findViewById(R.id.name_text);
         userEmail = view.findViewById(R.id.email_text);
@@ -98,6 +97,9 @@ public class ProfileFragment extends Fragment {
         totalScoreSum = view.findViewById(R.id.scores_sum_text);
         highestScore = view.findViewById(R.id.highest_score_text);
         lowestScore = view.findViewById(R.id.lowest_score_text);
+        monstersList = view.findViewById(R.id.MonstersList);
+        viewListBtn = view.findViewById(R.id.viewListBtn);
+
 
         userName.setText(user.getName());
         userEmail.setText(user.getEmail());
@@ -107,6 +109,26 @@ public class ProfileFragment extends Fragment {
         totalScoreSum.setText(Integer.toString(user.getScoreSum()));
         highestScore.setText(Integer.toString(user.getScoreHighest()));
         lowestScore.setText(Integer.toString(user.getScoreLowest()));
+
+       ArrayList<Monster> monstersListData =  user.getMonsters();
+
+       if(monstersListData.size()>0){
+           monsterListAdapter = new MonsterListAdapter(this.getContext(), monstersListData.subList(monstersListData.size()-1, monstersListData.size()));
+           monstersList.setAdapter(monsterListAdapter);
+       }
+
+
+        viewListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getBaseContext(),
+                        MonsterProfileListActivity.class);
+                intent.putExtra("key", deviceId);
+                getActivity().startActivity(intent);
+
+            }
+        });
+
 
         return view;
     }
