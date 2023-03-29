@@ -9,11 +9,13 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,6 +29,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
@@ -34,11 +37,15 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
+import  android.content.ContentResolver;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +61,6 @@ public class SubmissionActivityTest {
         bundle.putString("Code name", "codedMessage");
         intent.putExtras(bundle);
     }
-
     @Rule
     public ActivityScenarioRule<SubmissionActivity> scenarioRule = new ActivityScenarioRule<>(intent);
 
@@ -63,10 +69,22 @@ public class SubmissionActivityTest {
     /**
      * Sets up the test scenario.
      */
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+        }
+
+        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
     @Before
     public void setUp() {
-        Intents.init();
 
+        Intents.init();
         scenario = scenarioRule.getScenario();
     }
     /**
@@ -74,8 +92,16 @@ public class SubmissionActivityTest {
      */
     @After
     public void tearDown() {
+
         Intents.release();
         scenario.close();
+    }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
     }
 
     /**
@@ -84,13 +110,13 @@ public class SubmissionActivityTest {
 
     @Test
     public void testActivityCreation() {
+
         // Verify that the activity is created
         scenario.onActivity(activity -> {
             assertNotNull(activity);
                 }
         );
     }
-
 
     /**
      * Tests if clicking "capture" correctly opens a capture activity
@@ -104,9 +130,6 @@ public class SubmissionActivityTest {
 
         onView(withId(R.id.take_photo_button)).perform(click());
 
-        Thread.sleep(2000);
-
-        Intents.intended(hasAction(MediaStore.ACTION_IMAGE_CAPTURE));
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE));
     }
-
 }

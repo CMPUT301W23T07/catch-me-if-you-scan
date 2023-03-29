@@ -16,7 +16,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 /**
  * This class manages the scanning and functions
  */
-public class ScanningManager {
+public class ScanningManager extends AppCompatActivity{
     private Button scan_button;
     private String message;
     private ComponentActivity activity;
@@ -44,6 +44,11 @@ public class ScanningManager {
             }
         });
     }
+    
+    public ScanningManager() {
+    // default constructor code here
+    }
+    
 
     /**
      * Launches the barcode scanner using the ScanContract library with custom options.

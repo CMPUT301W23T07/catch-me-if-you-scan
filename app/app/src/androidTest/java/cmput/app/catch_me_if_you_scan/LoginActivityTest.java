@@ -24,30 +24,60 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 
 public class LoginActivityTest {
 
-
-
     @Rule
     public ActivityScenarioRule<LoginActivity> scenarioRule = new ActivityScenarioRule<>(LoginActivity.class);
 
     public ActivityScenario<LoginActivity> scenario;
 
+    private static TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());
+
+    private static UserController userController = new UserController(FirebaseFirestore.getInstance());
+
+    @BeforeClass
+    public static void setUpBeforeClass() {
+
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+        }
+
+        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
     @Before
     public void setUp() {
+
         Intents.init();
         scenario = scenarioRule.getScenario();
+        mock = TestDetails.getInstance(getInstrumentation().getContext());
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+//            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+            System.out.println(userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName()));
+        }
+
+
     }
     @After
     public void tearDown() {
         Intents.release();
         scenario.close();
+    }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
     }
 
     /**
@@ -65,32 +95,29 @@ public class LoginActivityTest {
     @Test
     public void switchToMainActivityUsingSignUpButton(){
 
-
-
         getInstrumentation().waitForIdleSync();
 
         scenario.onActivity(activity -> {
         });
 
+        onView(withId(R.id.editTextName)).check(matches(isDisplayed()));
         onView(withId(R.id.editTextName)).perform(click());
-        onView(withId(R.id.editTextName)).perform(typeText("TestAccount"));
+        onView(withId(R.id.editTextName)).perform(typeText(mock.getTestUser()));
         onView(withId(R.id.editTextName))
                 .perform(pressImeActionButton());
 
+        onView(withId(R.id.editTextEmail)).check(matches(isDisplayed()));
         onView(withId(R.id.editTextEmail)).perform(click());
-        onView(withId(R.id.editTextEmail)).perform(typeText("AccountEmail@example.com"));
+        onView(withId(R.id.editTextEmail)).perform(typeText(mock.getTestEmail()));
         onView(withId(R.id.editTextName))
                 .perform(pressImeActionButton());
 
+        onView(withId(R.id.sign_up_button)).check(matches(isDisplayed()));
         onView(withId(R.id.sign_up_button)).perform(click());
         onView(withId(R.id.profile_nav)).check(matches(isDisplayed()));
 
         Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
 
-        scenario.onActivity(activity -> {
-        });
-
-        Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
 
     }
 
