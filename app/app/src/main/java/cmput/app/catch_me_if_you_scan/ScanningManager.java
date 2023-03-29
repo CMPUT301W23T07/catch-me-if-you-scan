@@ -44,6 +44,11 @@ public class ScanningManager {
             }
         });
     }
+    
+    public ScanningManager() {
+    // default constructor code here
+    }
+    
 
     /**
      * Launches the barcode scanner using the ScanContract library with custom options.
