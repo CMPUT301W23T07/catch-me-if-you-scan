@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
@@ -23,8 +24,11 @@ import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.hamcrest.Matcher;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +47,19 @@ public class LeaderboardFragmentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
+    private static TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());
+
+    private static UserController userController = new UserController(FirebaseFirestore.getInstance());
+
+    @BeforeClass
+    public static void setUpBeforeClass() {
+
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+        }
+
+        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
     @Before
     public void setUp() throws Exception {
         scenario = scenarioRule.getScenario();
@@ -79,14 +96,14 @@ public class LeaderboardFragmentTest {
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
-        onView(withId(R.id.search_bar)).perform(typeSearchViewText("Mr."));
+        onView(withId(R.id.search_bar)).perform(typeSearchViewText("TestAccount"));
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
-                .check(matches(withText("Mr. Snowden")));
-        onView(withId(R.id.search_bar)).perform(typeSearchViewText("Krist"));
+                .check(matches(withText("TestAccount912384")));
+        onView(withId(R.id.search_bar)).perform(typeSearchViewText("912384"));
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
-                .check(matches(withText("Kristen")));
+                .check(matches(withText("TestAccount912384")));
     }
 
 

@@ -38,6 +38,7 @@
 
     <!-- Leaderboard Strings -->
     <string name="search">Search</string>
+    <string name="back">Back</string>
 
 
 </resources>
