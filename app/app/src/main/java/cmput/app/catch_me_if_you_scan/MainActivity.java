@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The ScanningManager instance that will be used to start the ScanningActivity.
      */
-    public ScanningManager scanningManager = new ScanningManager(this);
+    private ScanningManager scanningManager = new ScanningManager(this);
 
 
     /**
