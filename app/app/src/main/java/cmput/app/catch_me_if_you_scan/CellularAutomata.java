@@ -34,7 +34,7 @@ public class CellularAutomata {
         this.size = size;
 
         for(int i= 0; i<this.stepCount; i++){
-            //this.step();
+//            this.step();
         }
     }
 
@@ -75,7 +75,7 @@ public class CellularAutomata {
      * @param y the y-coordinate of the cell
      * @return the number of live neighbors for the specified cell
      */
-    public int getNeighbours(int x, int y){
+    private int getNeighbours(int x, int y){
         int count = 0;
         for(int i = -1; i<2; i++){
             for(int j = -1; j<2; j++){

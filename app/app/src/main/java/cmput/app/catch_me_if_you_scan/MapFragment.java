@@ -251,8 +251,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-
-
     /**
      * This method is for the map implementation
      */
