@@ -87,4 +87,9 @@ public class MainActivity extends AppCompatActivity {
         scanningManager.scanCode();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        replaceFragment(new ProfileFragment());
+    }
 }

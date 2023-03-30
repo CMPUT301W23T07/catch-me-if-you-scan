@@ -1,4 +1,4 @@
- package cmput.app.catch_me_if_you_scan;
+package cmput.app.catch_me_if_you_scan;
 
  import org.junit.After;
  import org.junit.Assert;

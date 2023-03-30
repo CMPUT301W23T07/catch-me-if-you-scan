@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -352,4 +353,23 @@ public class UserController {
         }
         return false;
     }
+
+    /**
+     * Deletes Monster Reference to User entry in db
+     * @param username username of the user
+     * @param monster DocumentReference of the Monster to delete
+     * @return boolean value corresponding to the success of the update
+     */
+    public boolean deleteMonster(String username, DocumentReference monster) {
+        Task<Void> task = collection.document(username).update("monstersScanned", FieldValue.arrayRemove(monster));
+
+        while (!task.isComplete()) {
+            continue;
+        }
+        if (task.isSuccessful()) {
+            return true;
+        }
+        return false;
+    }
+
 }
