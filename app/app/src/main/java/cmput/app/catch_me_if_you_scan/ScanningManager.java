@@ -46,7 +46,7 @@ public class ScanningManager extends AppCompatActivity{
     }
     
     public ScanningManager() {
-    // default constructor code here
+        // Github Actions does not work when this empty constructor is not here
     }
     
 
