@@ -1,6 +1,5 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -26,16 +25,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private TextView userName;
     private TextView userEmail;
     private TextView bioText;
@@ -49,47 +38,45 @@ public class ProfileFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
     private Button viewListBtn;
-
-
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    private User user;
+    private String deviceId;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * This method will create the fragment
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
+    /**
+     * This method will inflate the view with the necessary objects and visual items
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        Bundle incoming = this.getArguments();
+        if (incoming != null) {
+            user = incoming.getParcelable("USER");
+        }
+        else {
+            deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            user = userController.getUserByDeviceID(deviceId);
+        }
 
-        User user = userController.getUserByDeviceID(deviceId);
         user.setDescription("Hey I'm "+ user.getName());
 
         userName = view.findViewById(R.id.name_text);
@@ -127,14 +114,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("key",deviceId);
-                MonsterProfileListFragment fragment = new MonsterProfileListFragment();
-                fragment.setArguments(bundle);
-                FragmentManager fm = getParentFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.main_fragment_container, fragment);
-                ft.commit();
-
+                bundle.putString("key", user.getDeviceID());
+                MonsterProfileListFragment nextFrag = new MonsterProfileListFragment();
+                nextFrag.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         monstersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -142,7 +128,7 @@ public class ProfileFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Monster monster = monstersListData.get(position);
                 Bundle bundle = new Bundle();
-                bundle.putString("key",deviceId);
+                bundle.putString("key", user.getDeviceID());
                 bundle.putString("id", monster.getHashHex());
                 ViewMonsterFragment fragment = new ViewMonsterFragment();
                 fragment.setArguments(bundle);

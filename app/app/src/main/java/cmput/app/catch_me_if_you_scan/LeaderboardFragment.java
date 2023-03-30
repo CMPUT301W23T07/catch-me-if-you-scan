@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,6 @@ public class LeaderboardFragment extends Fragment {
     private int current;
     private UserController uc = new UserController(FirebaseFirestore.getInstance());
     private MonsterController mc = new MonsterController(FirebaseFirestore.getInstance());
-
     private TextView filterType;
     private TextView userName;
     private TextView points;
@@ -267,7 +267,7 @@ public class LeaderboardFragment extends Fragment {
                         }
                     }
 
-                    usersFilteredAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.position_text_view, filtered) {
+                    monstersFilteredAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.position_text_view, filtered) {
                         @SuppressLint("DefaultLocale")
                         public View getView(int position, View convertView, ViewGroup parent) {
                             View view = super.getView(position, convertView, parent);
@@ -281,7 +281,7 @@ public class LeaderboardFragment extends Fragment {
                         }
                     };
 
-                    leaderboard.setAdapter(usersFilteredAdapter);
+                    leaderboard.setAdapter(monstersFilteredAdapter);
                 }
                 return false;
             }
@@ -293,7 +293,7 @@ public class LeaderboardFragment extends Fragment {
      * @param user
      */
     private void launchFragmentWithUser(User user) {
-        LeaderboardProfileFragment nextFrag = new LeaderboardProfileFragment();
+        ProfileFragment nextFrag = new ProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("USER", user);
         nextFrag.setArguments(bundle);
@@ -311,6 +311,9 @@ public class LeaderboardFragment extends Fragment {
         ViewMonsterFragment nextFrag = new ViewMonsterFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("USER", monster);
+        String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        bundle.putString("key", deviceId);
+        bundle.putString("id", monster.getHashHex());
         nextFrag.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
