@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,10 +47,8 @@ import java.util.Date;
  * There is a submit button which will package everything and put it into the database
  */
 public class SubmissionActivity extends AppCompatActivity {
-
     private double longitude;
     private double latitude;
-
     // All Buttons and Views
     Button photoButton;
     Button deletePhotoButton;
@@ -202,7 +199,7 @@ public class SubmissionActivity extends AppCompatActivity {
      * This function will also check if the picture was taken or not as well.
      * big_image will be null in the end
      */
-    public void deletePhotoButtonOnClick(View view) {
+    private void deletePhotoButtonOnClick(View view) {
         // Check if the pictureBitmap exists
         if (bigImage != null) {
             // Delete the picture from the device storage
@@ -230,7 +227,7 @@ public class SubmissionActivity extends AppCompatActivity {
     }
 
     // This function is responsible for the geoLocation switch
-    public void onSwitchClick(View view){
+    private void onSwitchClick(View view){
         // We check if the user turned on the geo Location and we will construct the monster here
         if (coordinateSwitch.isChecked()){
             thisMonster.setLocations(latitude,longitude);
@@ -248,7 +245,7 @@ public class SubmissionActivity extends AppCompatActivity {
      * This function is the submit button. Once the user has finished editing their preferences. We will add to the
      * database and we will exit to the MainActivity
      */
-    public void submit() {
+    private void submit() {
 
         PostProcess();
         // Put the MONSTER INTO THE DATABASE
@@ -261,7 +258,7 @@ public class SubmissionActivity extends AppCompatActivity {
     }
     /**
      * This function processes any photo used prior to submission*/
-    public void PostProcess(){
+    private void PostProcess(){
         // This is for storing the compressed image
         byte[] envString = new byte[0];
 
@@ -344,7 +341,7 @@ public class SubmissionActivity extends AppCompatActivity {
         // Getting the user based on the devide ID
         currentUser = userController.getUserByDeviceID(deviceId);
         // Monster create
-        thisMonster = new Monster(message, latitude, longitude, null, false);
+        thisMonster = new Monster(message, latitude, longitude, null);
         boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
         if (exist) {
             Toast.makeText(this, "This was already scanned before", Toast.LENGTH_SHORT).show();

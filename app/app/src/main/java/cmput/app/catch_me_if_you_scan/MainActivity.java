@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The ScanningManager instance that will be used to start the ScanningActivity.
      */
-    public ScanningManager scanningManager = new ScanningManager(this);
+    private ScanningManager scanningManager = new ScanningManager(this);
 
 
     /**
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param fragment The fragment to be replaced with.
      */
-    public void replaceFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_fragment_container, fragment);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Switches to the ScanningActivity.
      */
-    public void switchToScanningActivity(){
+    private void switchToScanningActivity(){
         scanningManager.scanCode();
     }
 

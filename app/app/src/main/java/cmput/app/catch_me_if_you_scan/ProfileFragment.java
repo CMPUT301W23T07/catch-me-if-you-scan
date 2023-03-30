@@ -104,14 +104,16 @@ public class ProfileFragment extends Fragment {
         viewListBtn = view.findViewById(R.id.viewListBtn);
 
 
-        userName.setText(user.getName());
-        userEmail.setText(user.getEmail());
-        bioText.setText(user.getDescription());
-        monstersAmount.setText(Integer.toString(user.getMonstersCount()));
-        monsterListAmount.setText("Monsters("+Integer.toString(user.getMonstersCount())+")");
-        totalScoreSum.setText(Integer.toString(user.getScoreSum()));
-        highestScore.setText(Integer.toString(user.getScoreHighest()));
-        lowestScore.setText(Integer.toString(user.getScoreLowest()));
+        if(user!=null) {
+            userName.setText(user.getName());
+            userEmail.setText(user.getEmail());
+            bioText.setText(user.getDescription());
+            monstersAmount.setText(Integer.toString(user.getMonstersCount()));
+            monsterListAmount.setText("Monsters(" + Integer.toString(user.getMonstersCount()) + ")");
+            totalScoreSum.setText(Integer.toString(user.getScoreSum()));
+            highestScore.setText(Integer.toString(user.getScoreHighest()));
+            lowestScore.setText(Integer.toString(user.getScoreLowest()));
+        }
 
        ArrayList<Monster> monstersListData =  user.getMonsters();
 
