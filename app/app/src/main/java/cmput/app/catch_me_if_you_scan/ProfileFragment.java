@@ -126,7 +126,7 @@ public class ProfileFragment extends Fragment {
         monstersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Monster monster = monstersListData.get(position);
+                Monster monster = monstersListData.get(monstersListData.size()-1);
                 Bundle bundle = new Bundle();
                 bundle.putString("key", user.getDeviceID());
                 bundle.putString("id", monster.getHashHex());
