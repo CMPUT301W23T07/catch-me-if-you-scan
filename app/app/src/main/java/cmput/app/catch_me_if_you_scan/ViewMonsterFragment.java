@@ -9,14 +9,17 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,10 @@ import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +39,11 @@ import java.nio.charset.StandardCharsets;
 public class ViewMonsterFragment extends Fragment {
 
     private Monster monster;
+    private ListView commentListView;
+    private CommentArrayAdapter commentArrayAdapter;
+    private CommentController commentController;
+    private FirebaseFirestore db;
+    private Bundle bundle;
 
     public ViewMonsterFragment() {
         // Required empty public constructor
@@ -39,9 +51,12 @@ public class ViewMonsterFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // TODO:
+        // delete own comments
+        // delete monster from user if they have it
+        // view who scanned monster
+
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -50,44 +65,37 @@ public class ViewMonsterFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_view_monster, container, false);
-//        TextView commentButton = (TextView) getView().findViewById(R.id.editComment);
-//
-//        commentButton.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), androidx.appcompat.R.style.AlertDialog_AppCompat_Light);
-//                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_comment, null);
-//                builder.setView(customLayout);
-//
-//                builder.setTitle("Comment This Code");
-//
-//                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        EditText editText = customLayout.findViewById(R.id.editCommentText);
-//                        Toast.makeText(getContext(), editText.getText().toString(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//                builder.setNegativeButton("Cancel", ((dialog, which) -> Toast.makeText(getContext(), "We exited the upload comment", Toast.LENGTH_SHORT).show()));
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//            }
-//        });
         return view;
 
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         MonsterController mc = new MonsterController(db);
 
-        Bundle bundle = this.getArguments();
+        bundle = this.getArguments();
 
-        this.monster = mc.getMonster(bundle.getString("id", "0"));
+        monster = mc.getMonster(bundle.getString("id", "0"));
+
+        commentController = new CommentController(db);
+        ArrayList<Comment> comments = commentController.getCommentForMonster(monster.getHashHex());
+
+        Collections.sort(comments, new Comparator<Comment>() {
+            @Override
+            public int compare(Comment o1, Comment o2) {
+                return o1.getCommentDate().compareTo(o2.getCommentDate());
+            }
+        });
+
+        commentListView = getView().findViewById(R.id.commentListView);
+        commentArrayAdapter = new CommentArrayAdapter(this.getContext(), comments);
+
+        commentListView.setAdapter(commentArrayAdapter);
+
+        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        UserController userController = new UserController(db);
+        User currentUser = userController.getUserByDeviceID(deviceId);
 
         TextView score = (TextView) getView().findViewById(R.id.score);
         TextView name = (TextView) getView().findViewById(R.id.name);
@@ -138,33 +146,6 @@ public class ViewMonsterFragment extends Fragment {
                 EditCommentDialog commentDialog = new EditCommentDialog();
                 commentDialog.setArguments(commentBundle);
                 commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), androidx.appcompat.R.style.AlertDialog_AppCompat_Light);
-//                final View customLayout = getLayoutInflater().inflate(R.layout.dialog_comment, null);
-//                builder.setView(customLayout);
-//
-//                builder.setTitle("Comment This Code");
-//
-//                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        EditText editText = customLayout.findViewById(R.id.editCommentText);
-//                        Toast.makeText(getContext(), editText.getText().toString(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//                builder.setNegativeButton("Cancel", ((dialog, which) -> Toast.makeText(getContext(), "We exited the upload comment", Toast.LENGTH_SHORT).show()));
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//                // Set the dialog window size
-//                Window window = dialog.getWindow();
-//                if (window != null) {
-//                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-//                    layoutParams.copyFrom(window.getAttributes());
-//                    layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-//                    layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                    window.setAttributes(layoutParams);
-//                }
             }
         });
     }

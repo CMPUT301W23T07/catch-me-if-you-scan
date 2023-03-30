@@ -58,7 +58,9 @@ public class EditCommentDialog extends DialogFragment {
                             String hex = getArguments().getString("hex", "0");
                             Comment comment = new Comment(commentEditText.getText().toString(), new Timestamp(new Date()), hex, username);
 
-                            // commentcontroller.create(comment);
+                            CommentController cc = new CommentController(db);
+                            cc.create(comment);
+
                             dismiss();
                         }
 
