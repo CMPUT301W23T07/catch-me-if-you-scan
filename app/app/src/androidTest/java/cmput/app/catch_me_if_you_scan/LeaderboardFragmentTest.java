@@ -27,6 +27,8 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 //Set Query for Search View
 //Author: MiguelSlv
@@ -34,6 +36,7 @@ import org.junit.Test;
 //License: CC BY-SA
 //URL: https://stackoverflow.com/questions/48037060/how-to-type-text-on-a-searchview-using-espresso
 
+@RunWith(JUnit4.class)
 public class LeaderboardFragmentTest {
 
     public ActivityScenario<MainActivity> scenario;

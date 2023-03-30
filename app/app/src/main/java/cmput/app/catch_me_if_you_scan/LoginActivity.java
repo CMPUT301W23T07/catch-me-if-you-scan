@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method switches to the MainActivity.
      */
-    public void switchToMain(){
+    private void switchToMain(){
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
     }
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
      * This method checks if the Google Play Services version is up-to-date. If it is, it prints a log statement that the service is working.
      * If not, it checks if the error is user resolvable and displays an error dialog if it is. If not, it displays a toast message.
      */
-    public void isServicesOK() {
+    private void isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);

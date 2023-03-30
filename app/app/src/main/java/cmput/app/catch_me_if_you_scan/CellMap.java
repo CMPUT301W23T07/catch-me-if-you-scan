@@ -78,7 +78,7 @@ public class CellMap {
     /**
      * Generates the boolean matrix using the hash code.
      */
-    public void generateMap(){
+    private void generateMap(){
         for(int i = 0; i < this.size; i++){
             this.map[i] = new boolean[this.size];
         }

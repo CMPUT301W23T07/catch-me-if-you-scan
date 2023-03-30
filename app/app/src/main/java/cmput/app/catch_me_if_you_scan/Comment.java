@@ -10,6 +10,8 @@ public class Comment {
 //    private User commentingUser;
     private String username;
 
+    private String dbId;
+
     public Comment(String commentMessage, Timestamp commentDate, String monsterHashCode, String username) {
         this.commentMessage = commentMessage;
         this.commentDate = commentDate;
@@ -33,10 +35,6 @@ public class Comment {
         return commentDate;
     }
 
-    public void setCommentDate(Timestamp commentDate) {
-        this.commentDate = commentDate;
-    }
-
     public String getMonsterHashCode() {
         return monsterHashCode;
     }
@@ -52,4 +50,8 @@ public class Comment {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void setDbId(String dbID) { this.dbId = dbID; }
+
+    public String getDbId() { return this.dbId; }
 }

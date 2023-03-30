@@ -132,4 +132,6 @@ public class SubmissionActivityTest {
 
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE));
     }
+
+
 }
