@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -342,7 +341,7 @@ public class SubmissionActivity extends AppCompatActivity {
         // Getting the user based on the devide ID
         currentUser = userController.getUserByDeviceID(deviceId);
         // Monster create
-        thisMonster = new Monster(message, latitude, longitude, null, false);
+        thisMonster = new Monster(message, latitude, longitude, null);
         boolean exist = currentUser.checkIfHashExist(thisMonster.getHashHex());
         if (exist) {
             Toast.makeText(this, "This was already scanned before", Toast.LENGTH_SHORT).show();

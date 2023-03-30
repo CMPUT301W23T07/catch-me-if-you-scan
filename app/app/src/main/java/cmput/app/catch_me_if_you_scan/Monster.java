@@ -30,7 +30,7 @@ public class Monster {
     private boolean locationEnabled;
 
 
-    Monster(String code, Double latitude, Double longitude, byte[] envPhoto, boolean locationEnabled){
+    public Monster(String code, Double latitude, Double longitude, byte[] envPhoto){
         this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
         this.hashHex = hash.toString();
@@ -43,7 +43,7 @@ public class Monster {
         this.locationEnabled = locationEnabled;
     }
 
-    Monster(String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto, boolean locationEnabled) {
+    public Monster(String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto, boolean locationEnabled) {
         this.hash = HashCode.fromString(hashHex);
         this.hashInt = this.hash.asInt();
         this.hashBinary = Integer.toBinaryString(this.hashInt);
@@ -251,7 +251,6 @@ public class Monster {
      * @param locationEnabled new status of location
      */
     public void setLocationEnabled(boolean locationEnabled) { this.locationEnabled = locationEnabled; }
-
 
     public void setLocations(Double latitude_param, Double longitude_param){
         latitude = latitude_param;
