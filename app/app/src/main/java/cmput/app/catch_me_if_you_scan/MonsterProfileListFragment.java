@@ -1,6 +1,5 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -35,8 +33,8 @@ public class MonsterProfileListFragment extends Fragment {
     private UserController userController = new UserController(db);
     private ListView monsterList;
     private SearchView searchbtn;
-    private MonsterListActivityAdapter adapter;
-    private  MonsterListActivityAdapter filteredAdapter;
+    private MonsterListfragmentAdapter adapter;
+    private MonsterListfragmentAdapter filteredAdapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -63,6 +61,11 @@ public class MonsterProfileListFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * creates the fragment
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,18 +75,30 @@ public class MonsterProfileListFragment extends Fragment {
         }
     }
 
+    /**
+     * creates the view
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_monster_profile_list, container, false);
         Bundle bundle = this.getArguments();
 
-        String deviceId =bundle.getString("key");
+        String deviceId = bundle.getString("key");
 
         User user = userController.getUserByDeviceID(deviceId);
         ArrayList<Monster> monstersListData =  user.getMonsters();
 
-        adapter = new MonsterListActivityAdapter(getActivity(), monstersListData);
+        adapter = new MonsterListfragmentAdapter(getActivity(), monstersListData);
 
         monsterList = view.findViewById(R.id.monsterListFragment);
         searchbtn = (SearchView) view.findViewById(R.id.searchBtnMonsterList);
@@ -95,6 +110,7 @@ public class MonsterProfileListFragment extends Fragment {
                 Monster monster = monstersListData.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", monster.getHashHex());
+                bundle.putString("key",deviceId);
                 ViewMonsterFragment fragment = new ViewMonsterFragment();
                 fragment.setArguments(bundle);
 
@@ -122,7 +138,7 @@ public class MonsterProfileListFragment extends Fragment {
                         filtered.add(item);
                     }
                 }
-                filteredAdapter = new MonsterListActivityAdapter(getActivity(), filtered);
+                filteredAdapter = new MonsterListfragmentAdapter(getActivity(), filtered);
                 monsterList.setAdapter(filteredAdapter);
                 return false;
             }

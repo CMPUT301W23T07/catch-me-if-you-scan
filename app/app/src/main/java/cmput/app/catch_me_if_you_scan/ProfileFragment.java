@@ -140,6 +140,7 @@ public class ProfileFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Monster monster = monstersListData.get(position);
                 Bundle bundle = new Bundle();
+                bundle.putString("key",deviceId);
                 bundle.putString("id", monster.getHashHex());
                 ViewMonsterFragment fragment = new ViewMonsterFragment();
                 fragment.setArguments(bundle);

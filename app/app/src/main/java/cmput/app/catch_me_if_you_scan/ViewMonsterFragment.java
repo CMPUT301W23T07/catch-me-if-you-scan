@@ -6,11 +6,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +29,9 @@ import java.nio.charset.StandardCharsets;
 public class ViewMonsterFragment extends Fragment {
 
     private Monster monster;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private UserController userController = new UserController(db);
+
 
     public ViewMonsterFragment() {
         // Required empty public constructor
@@ -45,15 +51,18 @@ public class ViewMonsterFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         MonsterController mc = new MonsterController(db);
 
         Bundle bundle = this.getArguments();
+        String deviceId = bundle.getString("key");
+
+        User currentUser = userController.getUserByDeviceID(deviceId);
 
         this.monster = mc.getMonster(bundle.getString("id", "0"));
 
         TextView score = (TextView) getView().findViewById(R.id.score);
         TextView name = (TextView) getView().findViewById(R.id.name);
+        Button delBtn = (Button) getView().findViewById(R.id.deleteMonsterBtn);
 
         ImageView mv = (ImageView) getView().findViewById(R.id.monsterImg);
         ImageView bg = (ImageView) getView().findViewById(R.id.environment);
@@ -89,5 +98,32 @@ public class ViewMonsterFragment extends Fragment {
                 return true;
             }
         });
+
+        if (currentUser.checkIfHashExist(this.monster.getHashHex())){
+            delBtn.setVisibility(View.VISIBLE);
+            delBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userController.deleteMonster(currentUser.getName(), mc.getMonsterDoc(monster.getHashHex()));
+                    currentUser.removeMonster(monster);
+                    if(currentUser.getMonstersCount()>1){
+                        bundle.putString("key",deviceId);
+                        MonsterProfileListFragment fragment = new MonsterProfileListFragment();
+                        fragment.setArguments(bundle);
+                        FragmentManager fm = getParentFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        ft.add(R.id.main_fragment_container, fragment);
+                        ft.commit();
+                    }
+                    else{
+                        ProfileFragment fragment = new ProfileFragment();
+                        FragmentManager fm = getParentFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        ft.add(R.id.main_fragment_container, fragment);
+                        ft.commit();
+                    }
+                }
+            });
+        }
     }
 }
