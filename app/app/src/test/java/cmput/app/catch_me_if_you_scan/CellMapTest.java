@@ -80,11 +80,6 @@ public class CellMapTest {
 
 
     }
-
-
-    /**
-     * Tests if the fragment container is present in the activity layout.
-     */
     @Test
     public void testBitToBool() {
 

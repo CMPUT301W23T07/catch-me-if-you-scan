@@ -35,10 +35,6 @@ public class Comment {
         return commentDate;
     }
 
-    public void setCommentDate(Timestamp commentDate) {
-        this.commentDate = commentDate;
-    }
-
     public String getMonsterHashCode() {
         return monsterHashCode;
     }
