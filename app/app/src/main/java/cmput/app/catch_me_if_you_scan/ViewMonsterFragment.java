@@ -36,10 +36,11 @@ import java.util.Comparator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewMonsterFragment extends Fragment {
+public class ViewMonsterFragment extends Fragment{
 
     private Monster monster;
     private ListView commentListView;
+    private ArrayList<Comment> comments;
     private CommentArrayAdapter commentArrayAdapter;
     private CommentController commentController;
     private FirebaseFirestore db;
@@ -54,6 +55,7 @@ public class ViewMonsterFragment extends Fragment {
         // TODO:
         // delete own comments
         // delete monster from user if they have it
+        // see other users when comment clicked
         // view who scanned monster
 
         super.onCreate(savedInstanceState);
@@ -79,7 +81,7 @@ public class ViewMonsterFragment extends Fragment {
         monster = mc.getMonster(bundle.getString("id", "0"));
 
         commentController = new CommentController(db);
-        ArrayList<Comment> comments = commentController.getCommentForMonster(monster.getHashHex());
+        comments = commentController.getCommentForMonster(monster.getHashHex());
 
         Collections.sort(comments, new Comparator<Comment>() {
             @Override
@@ -145,6 +147,7 @@ public class ViewMonsterFragment extends Fragment {
                 commentBundle.putString("hex", bundle.getString("id", "0"));
                 EditCommentDialog commentDialog = new EditCommentDialog();
                 commentDialog.setArguments(commentBundle);
+                commentDialog.setAdapter(commentArrayAdapter);
                 commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
             }
         });
