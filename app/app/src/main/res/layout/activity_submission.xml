@@ -40,7 +40,7 @@
         android:layout_marginEnd="194dp"
         android:gravity="center"
         android:text="Save Coordinate:"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="Photo:"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,8 +122,8 @@
         android:layout_marginBottom="80dp"
         android:gravity="center"
         android:text="TTTTTTTTTTTTTTTTTTTT"
+        android:textColor="#FFFFFF"
         android:textSize="26dp"
-        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/take_photo_button"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
         app:layout_constraintStart_toStartOf="@+id/transparentView"
@@ -136,7 +136,7 @@
         android:layout_marginEnd="265dp"
         android:layout_marginBottom="130dp"
         android:text="Score:"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
@@ -169,14 +169,17 @@
 
     <Button
         android:id="@+id/SubmitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/custom_button"
         android:text="Submit"
         android:textColor="@color/white"
-        android:background="@drawable/custom_button"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView" />
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView"
+        app:layout_constraintVertical_bias="0.98" />
 
     <!--Photo Related End-->
 

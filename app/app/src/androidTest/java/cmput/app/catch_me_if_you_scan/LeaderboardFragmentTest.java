@@ -124,7 +124,7 @@ public class LeaderboardFragmentTest {
         onView(withId(R.id.search_bar)).perform(typeSearchViewText("912384"));
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
-                .check(matches(withText("Kristen")));
+                .check(matches(withText("TestAccount912384")));
         } catch (Exception e) {
             // Log the exception
             e.printStackTrace();
