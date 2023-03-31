@@ -17,7 +17,7 @@ import java.util.Hashtable;
 /**
  * This class represents the Monster
  */
-public class Monster implements Comparable<Monster>, Parcelable  {
+public class Monster implements Comparable<Monster> {
     private String hashedCode;
     private String name;
     private int score;
@@ -65,28 +65,28 @@ public class Monster implements Comparable<Monster>, Parcelable  {
         this.locationEnabled = locationEnabled;
     }
 
-    protected Monster(Parcel in) {
-        hashedCode = in.readString();
-        name = in.readString();
-        score = in.readInt();
-        scoreRank = in.readInt();
-        visual = in.createStringArray();
-        hashBinary = in.readString();
-        hashHex = in.readString();
-        hashInt = in.readInt();
-        if (in.readByte() == 0) {
-            longitude = null;
-        } else {
-            longitude = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            latitude = null;
-        } else {
-            latitude = in.readDouble();
-        }
-        envPhoto = in.readBlob();
-        locationEnabled = in.readByte() != 0;
-    }
+//    protected Monster(Parcel in) {
+//        hashedCode = in.readString();
+//        name = in.readString();
+//        score = in.readInt();
+//        scoreRank = in.readInt();
+//        visual = in.createStringArray();
+//        hashBinary = in.readString();
+//        hashHex = in.readString();
+//        hashInt = in.readInt();
+//        if (in.readByte() == 0) {
+//            longitude = null;
+//        } else {
+//            longitude = in.readDouble();
+//        }
+//        if (in.readByte() == 0) {
+//            latitude = null;
+//        } else {
+//            latitude = in.readDouble();
+//        }
+//        envPhoto = in.readBlob();
+//        locationEnabled = in.readByte() != 0;
+//    }
 
     /**
      * get the environment photo as a string(byte array) for this monster
@@ -294,55 +294,55 @@ public class Monster implements Comparable<Monster>, Parcelable  {
     }
 
 
-    /**
-     * This method is part of the parcelable implementation
-     */
-    public static final Creator<Monster> CREATOR = new Creator<Monster>() {
-        @Override
-        public Monster createFromParcel(Parcel in) {
-            return new Monster(in);
-        }
-
-        @Override
-        public Monster[] newArray(int size) {
-            return new Monster[size];
-        }
-    };
-
-    /**
-     * This method is part of the parcelable implementation
-     */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    /**
-     * This method is part of the parcelable implementation
-     */
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(hashedCode);
-        dest.writeString(name);
-        dest.writeInt(score);
-        dest.writeInt(scoreRank);
-        dest.writeStringArray(visual);
-        dest.writeString(hashBinary);
-        dest.writeString(hashHex);
-        dest.writeInt(hashInt);
-        if (longitude == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(longitude);
-        }
-        if (latitude == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(latitude);
-        }
-        dest.writeBlob(envPhoto);
-        dest.writeByte((byte) (locationEnabled ? 1 : 0));
-    }
+//    /**
+//     * This method is part of the parcelable implementation
+//     */
+//    public static final Creator<Monster> CREATOR = new Creator<Monster>() {
+//        @Override
+//        public Monster createFromParcel(Parcel in) {
+//            return new Monster(in);
+//        }
+//
+//        @Override
+//        public Monster[] newArray(int size) {
+//            return new Monster[size];
+//        }
+//    };
+//
+//    /**
+//     * This method is part of the parcelable implementation
+//     */
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    /**
+//     * This method is part of the parcelable implementation
+//     */
+//    @Override
+//    public void writeToParcel(@NonNull Parcel dest, int flags) {
+//        dest.writeString(hashedCode);
+//        dest.writeString(name);
+//        dest.writeInt(score);
+//        dest.writeInt(scoreRank);
+//        dest.writeStringArray(visual);
+//        dest.writeString(hashBinary);
+//        dest.writeString(hashHex);
+//        dest.writeInt(hashInt);
+//        if (longitude == null) {
+//            dest.writeByte((byte) 0);
+//        } else {
+//            dest.writeByte((byte) 1);
+//            dest.writeDouble(longitude);
+//        }
+//        if (latitude == null) {
+//            dest.writeByte((byte) 0);
+//        } else {
+//            dest.writeByte((byte) 1);
+//            dest.writeDouble(latitude);
+//        }
+//        dest.writeBlob(envPhoto);
+//        dest.writeByte((byte) (locationEnabled ? 1 : 0));
+//    }
 }

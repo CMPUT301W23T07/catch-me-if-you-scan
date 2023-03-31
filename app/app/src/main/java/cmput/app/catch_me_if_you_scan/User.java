@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * This class represents the User object
  */
-public class User implements Parcelable {
+public class User {
     private String deviceID;
     private String name;
     private String email;
@@ -42,29 +42,29 @@ public class User implements Parcelable {
 
     // getters
 
-    protected User(Parcel in) {
-        deviceID = in.readString();
-        name = in.readString();
-        email = in.readString();
-        description = in.readString();
-        scoreSum = in.readInt();
-        sortedMonster = in.createTypedArrayList(Monster.CREATOR);
-    }
-
-    /**
-     * This method is part of the implementation for parcelable
-     */
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
+//    protected User(Parcel in) {
+//        deviceID = in.readString();
+//        name = in.readString();
+//        email = in.readString();
+//        description = in.readString();
+//        scoreSum = in.readInt();
+//        sortedMonster = in.createTypedArrayList(Monster.CREATOR);
+//    }
+//
+//    /**
+//     * This method is part of the implementation for parcelable
+//     */
+//    public static final Creator<User> CREATOR = new Creator<User>() {
+//        @Override
+//        public User createFromParcel(Parcel in) {
+//            return new User(in);
+//        }
+//
+//        @Override
+//        public User[] newArray(int size) {
+//            return new User[size];
+//        }
+//    };
 
     /**
      * It takes a string has the hash, the function will see if the hash is already contained within the user.
@@ -207,28 +207,28 @@ public class User implements Parcelable {
     }
 
 
-    /**
-     * This method is part of the parcelable implementation
-     * @return
-     */
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    /**
-     * This method is part of the parcelable implementation
-     * @param dest The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     */
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(deviceID);
-        dest.writeString(name);
-        dest.writeString(email);
-        dest.writeString(description);
-        dest.writeInt(scoreSum);
-        dest.writeTypedList(sortedMonster);
-    }
+//    /**
+//     * This method is part of the parcelable implementation
+//     * @return
+//     */
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    /**
+//     * This method is part of the parcelable implementation
+//     * @param dest The Parcel in which the object should be written.
+//     * @param flags Additional flags about how the object should be written.
+//     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+//     */
+//    @Override
+//    public void writeToParcel(@NonNull Parcel dest, int flags) {
+//        dest.writeString(deviceID);
+//        dest.writeString(name);
+//        dest.writeString(email);
+//        dest.writeString(description);
+//        dest.writeInt(scoreSum);
+//        dest.writeTypedList(sortedMonster);
+//    }
 }
