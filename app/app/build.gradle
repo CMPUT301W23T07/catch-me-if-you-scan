@@ -45,6 +45,9 @@ dependencies {
     // For QR Code Location
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
+    // For SVG files
+    implementation 'com.caverock:androidsvg-aar:1.4'
+
     // For Map usability
     implementation 'com.google.maps.android:maps-ktx:3.4.0'
     testImplementation 'junit:junit:4.13.2'
