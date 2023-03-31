@@ -24,10 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/alata"
             android:text="MonsterName"
+
+
             android:textColor="#5A5A5A"
-
-
             android:textSize="13dp"
             app:layout_constraintStart_toEndOf="@+id/monsterImg"
             app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/alata"
             android:text="123pts"
             android:textColor="#5A5A5A"
             android:textSize="13dp"
