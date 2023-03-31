@@ -125,13 +125,13 @@ public class LeaderboardFragmentTest {
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
                 .check(matches(withText("TestAccount912384")));
+
         } catch (Exception e) {
             // Log the exception
             e.printStackTrace();
             // Fail the test with the exception message
             fail(e.getMessage());
         }
-
 
     }
 
