@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private TextView highestScore;
     private TextView lowestScore;
     private ListView monstersList;
+    private ImageButton updateBtn;
     private MonsterListAdapter monsterListAdapter;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
@@ -98,6 +100,7 @@ public class ProfileFragment extends Fragment {
         lowestScore = view.findViewById(R.id.lowest_score_text);
         monstersList = view.findViewById(R.id.MonstersList);
         viewListBtn = view.findViewById(R.id.viewListBtn);
+        updateBtn = view.findViewById(R.id.edit_profile_button);
 
         if(user!=null) {
             userName.setText(user.getName());
@@ -129,6 +132,14 @@ public class ProfileFragment extends Fragment {
                         .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
                         .addToBackStack(null)
                         .commit();
+            }
+        });
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            EditProfileDialog profileDialog = new EditProfileDialog();
+                profileDialog.setUser(user);
+                profileDialog.show(getActivity().getSupportFragmentManager(), "Update Profile");
             }
         });
         monstersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
