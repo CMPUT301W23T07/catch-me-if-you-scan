@@ -92,28 +92,37 @@ public class LoginActivityTest {
     @Test
     public void switchToMainActivityUsingSignUpButton(){
 
-        getInstrumentation().waitForIdleSync();
+        try {
 
-        scenario.onActivity(activity -> {
-        });
+            getInstrumentation().waitForIdleSync();
 
-        onView(withId(R.id.editTextName)).check(matches(isDisplayed()));
-        onView(withId(R.id.editTextName)).perform(click());
-        onView(withId(R.id.editTextName)).perform(typeText(mock.getTestUser()));
-        onView(withId(R.id.editTextName))
-                .perform(pressImeActionButton());
+            scenario.onActivity(activity -> {
+            });
 
-        onView(withId(R.id.editTextEmail)).check(matches(isDisplayed()));
-        onView(withId(R.id.editTextEmail)).perform(click());
-        onView(withId(R.id.editTextEmail)).perform(typeText(mock.getTestEmail()));
-        onView(withId(R.id.editTextName))
-                .perform(pressImeActionButton());
+            onView(withId(R.id.editTextName)).check(matches(isDisplayed()));
+            onView(withId(R.id.editTextName)).perform(click());
+            onView(withId(R.id.editTextName)).perform(typeText(mock.getTestUser()));
+            onView(withId(R.id.editTextName))
+                    .perform(pressImeActionButton());
 
-        onView(withId(R.id.sign_up_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.sign_up_button)).perform(click());
-        onView(withId(R.id.profile_nav)).check(matches(isDisplayed()));
+            onView(withId(R.id.editTextEmail)).check(matches(isDisplayed()));
+            onView(withId(R.id.editTextEmail)).perform(click());
+            onView(withId(R.id.editTextEmail)).perform(typeText(mock.getTestEmail()));
+            onView(withId(R.id.editTextName))
+                    .perform(pressImeActionButton());
 
-        Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
+            onView(withId(R.id.sign_up_button)).check(matches(isDisplayed()));
+            onView(withId(R.id.sign_up_button)).perform(click());
+            onView(withId(R.id.profile_nav)).check(matches(isDisplayed()));
+
+            Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
+
 
     }
 
