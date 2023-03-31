@@ -49,21 +49,20 @@ public class LeaderboardFragmentTest {
     @Rule
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
-    @Before
-    public void setUp() throws Exception {
-        scenario = scenarioRule.getScenario();
-    }
+    private static TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());
+    private static UserController userController = new UserController(FirebaseFirestore.getInstance());
     @BeforeClass
     public static void setUpBeforeClass() {
-        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
-
-        UserController userController = new UserController(FirebaseFirestore.getInstance());
 
         if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
             userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
         }
 
         userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
+    @Before
+    public void setUp() throws Exception {
+        scenario = scenarioRule.getScenario();
     }
     @AfterClass
     public static void finish(){
@@ -93,7 +92,6 @@ public class LeaderboardFragmentTest {
             fail(e.getMessage());
         }
     }
-
     /**
      * Tests if the leaderboard is not displayed in the activity layout after the activity is launched.
      */
@@ -113,19 +111,17 @@ public class LeaderboardFragmentTest {
         }
     }
 
-
-
     @Test
     public void checkFilter() {
         try{
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
-        onView(withId(R.id.search_bar)).perform(typeSearchViewText("Mr."));
+        onView(withId(R.id.search_bar)).perform(typeSearchViewText("TestAccount"));
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
-                .check(matches(withText("Mr. Snowden")));
-        onView(withId(R.id.search_bar)).perform(typeSearchViewText("Krist"));
+                .check(matches(withText("TestAccount912384")));
+        onView(withId(R.id.search_bar)).perform(typeSearchViewText("912384"));
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
                 .check(matches(withText("Kristen")));
@@ -135,6 +131,8 @@ public class LeaderboardFragmentTest {
             // Fail the test with the exception message
             fail(e.getMessage());
         }
+
+
     }
 
 

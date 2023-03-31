@@ -21,6 +21,7 @@
         android:id="@+id/bottom_navigation_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:backgroundTint="#022646"
         app:itemIconTint="@color/menu_item"
         app:itemTextColor="@color/menu_item"
         app:layout_constraintBottom_toBottomOf="parent"

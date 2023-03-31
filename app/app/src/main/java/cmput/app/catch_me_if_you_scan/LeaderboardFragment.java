@@ -1,33 +1,47 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import org.checkerframework.checker.units.qual.A;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
+import java.util.Comparator;
 
 /**
  * A fragment that supports the UI for the leaderboard and its functions such as filtering etc.
  */
 public class LeaderboardFragment extends Fragment {
-
-    private ArrayAdapter<MockLeaderboardUserClass> leaderboardAdapter;
-    private ArrayAdapter<MockLeaderboardUserClass> filteredAdapter;
-    private ArrayList<MockLeaderboardUserClass> dataList = new ArrayList<>();
+    private ArrayAdapter<User> usersLeaderboardAdapter;
+    private ArrayAdapter<Monster> monstersLeaderboardAdapter;
+    private ArrayAdapter<User> usersFilteredAdapter;
+    private ArrayAdapter<User> monstersFilteredAdapter;
     private ListView leaderboard;
+    private ArrayList<User> users = new ArrayList<User>();
+    private ArrayList<Monster> monsters = new ArrayList<Monster>();
+    private User firstPlaceUser;
+    private Monster firstPlaceMonster;
+    private int current;
+    private UserController uc = new UserController(FirebaseFirestore.getInstance());
+    private MonsterController mc = new MonsterController(FirebaseFirestore.getInstance());
+    private TextView filterType;
+    private TextView userName;
+    private TextView points;
 
     /**
      * Creates the fragment
@@ -51,59 +65,149 @@ public class LeaderboardFragment extends Fragment {
      *
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
-        leaderboard = v.findViewById(R.id.leaderboard_list_view);
+        setViewObjects(v);
 
         initSearchBar(v);
-        createMockData();
 
+        users = uc.getAllUsers();
+        monsters = mc.getAllMonsters();
 
-        //Set the mock first place data
-        TextView filterType = v.findViewById(R.id.filter_title_text_view);
-        filterType.setText("Highest Scoring Monsters");
-        TextView userName = v.findViewById(R.id.first_place_username_text_view);
-        userName.setText("rileyzilka01");
-        TextView points = v.findViewById(R.id.first_place_points_text_view);
-        points.setText("9999 points");
+        sortUsers();
+        sortMonsters();
 
-        //Create the custom adapter for the list view
-        leaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, dataList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView user = (TextView) view.findViewById(R.id.username_text_view);
-                TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
-                TextView pos = (TextView) view.findViewById(R.id.position_text_view);
-                user.setText(dataList.get(position).user);
-                points.setText(dataList.get(position).subtitle);
-                pos.setText(dataList.get(position).position);
-                return view;
+        current = 1;
+
+        //Set the first place user
+        filterType.setText("User High Scores");
+        userName.setText(users.get(0).getName());
+        points.setText(String.format("%d", users.get(0).getScoreSum()));
+
+        firstPlaceUser = users.get(0);
+        users.remove(0);
+
+        firstPlaceMonster = monsters.get(0);
+        monsters.remove(0);
+
+        createAdapters();
+
+        leaderboard.setAdapter(usersLeaderboardAdapter);
+        leaderboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (current == 1) {
+                    launchFragmentWithUser(users.get(position));
+                }
+                else if (current == 2) {
+                    launchFragmentWithMonster(monsters.get(position));
+                }
             }
-        };
+        });
 
-        leaderboard.setAdapter(leaderboardAdapter);
+        v.findViewById(R.id.first_place_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (current == 1) {
+                    launchFragmentWithUser(firstPlaceUser);
+                }
+                else if (current == 2) {
+                    launchFragmentWithMonster(firstPlaceMonster);
+                }
+            }
+        });
+
+        v.findViewById(R.id.leaderboard_filter_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeLeaderboard();
+            }
+        });
 
         return v;
     }
 
     /**
-     * This method creates some mock data for testing and usage while the app is incomplete
+     * This method will sort the users returned by the database for leaderboard display
+     * purposes
      */
-    private void createMockData() {
-        MockLeaderboardUserClass item1 = new MockLeaderboardUserClass("Flying-Kimbo", "245 points", "2");
-        MockLeaderboardUserClass item2 = new MockLeaderboardUserClass("Mr. Snowden", "210 points", "3");
-        MockLeaderboardUserClass item3 = new MockLeaderboardUserClass("Kris-Johnson", "199 points", "4");
-        MockLeaderboardUserClass item4 = new MockLeaderboardUserClass("Kristen", "175 points", "5");
-        MockLeaderboardUserClass item5 = new MockLeaderboardUserClass("Wilson", "5 points", "6");
-        dataList.add(item1);
-        dataList.add(item2);
-        dataList.add(item3);
-        dataList.add(item4);
-        dataList.add(item5);
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void sortUsers() {
+        users.sort(new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                if (o1.getScoreSum() < o2.getScoreSum()) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+    }
+
+    /**
+     * This method will sort all the monsters for the second leaderboard type
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void sortMonsters() {
+        monsters.sort(new Comparator<Monster>() {
+            @Override
+            public int compare(Monster o1, Monster o2) {
+                if (o1.getScore() < o2.getScore()) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+    }
+
+    /**
+     * This method creates the adapters that are used for the base leaderboard, no filters applied
+     */
+    public void createAdapters() {
+        //Create the custom adapter for the list view
+        usersLeaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, users) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView user = (TextView) view.findViewById(R.id.username_text_view);
+                TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
+                TextView pos = (TextView) view.findViewById(R.id.position_text_view);
+                user.setText(users.get(position).getName());
+                points.setText(String.format("%d", users.get(position).getScoreSum()));
+                pos.setText(String.format("%d", position+2));
+                return view;
+            }
+        };
+
+        //Create the custom adapter for the list view
+        monstersLeaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, monsters) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView user = (TextView) view.findViewById(R.id.username_text_view);
+                TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
+                TextView pos = (TextView) view.findViewById(R.id.position_text_view);
+                user.setText(monsters.get(position).getName());
+                points.setText(String.format("%d", monsters.get(position).getScore()));
+                pos.setText(String.format("%d", position+2));
+                return view;
+            }
+        };
+    }
+
+    /**
+     * This method will take in the view and get the view objects to edit by their ID's
+     * @param v
+     */
+    public void setViewObjects(View v) {
+        leaderboard = v.findViewById(R.id.leaderboard_list_view);
+        filterType = v.findViewById(R.id.filter_title_text_view);
+        userName = v.findViewById(R.id.first_place_username_text_view);
+        points = v.findViewById(R.id.first_place_points_text_view);
     }
 
     /**
@@ -125,34 +229,125 @@ public class LeaderboardFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (current == 1) {
 
-                ArrayList<MockLeaderboardUserClass> filtered = new ArrayList<>();
+                    ArrayList<User> filtered = new ArrayList<>();
 
-                for (MockLeaderboardUserClass item : dataList) {
-                    if (item.user.toLowerCase().contains(s.toLowerCase())) {
-                        filtered.add(item);
-                        Log.d("FILTERING LEADERBOARD", item.user);
+                    for (User item : users) {
+                        if (item.getName().toLowerCase().contains(s.toLowerCase())) {
+                            filtered.add(item);
+                            Log.d("FILTERING LEADERBOARD", item.getName());
+                        }
                     }
+
+                    usersFilteredAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.position_text_view, filtered) {
+                        @SuppressLint("DefaultLocale")
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            TextView user = (TextView) view.findViewById(R.id.username_text_view);
+                            TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
+                            TextView pos = (TextView) view.findViewById(R.id.position_text_view);
+                            user.setText(filtered.get(position).getName());
+                            points.setText(String.format("%d", filtered.get(position).getScoreSum()));
+                            pos.setText(String.format("%d", position+2));
+                            return view;
+                        }
+                    };
+
+                    leaderboard.setAdapter(usersFilteredAdapter);
                 }
+                else if (current == 2) {
 
-                filteredAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.position_text_view, filtered) {
-                    public View getView(int position, View convertView, ViewGroup parent) {
-                        View view = super.getView(position, convertView, parent);
-                        TextView user = (TextView) view.findViewById(R.id.username_text_view);
-                        TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
-                        TextView pos = (TextView) view.findViewById(R.id.position_text_view);
-                        user.setText(filtered.get(position).user);
-                        points.setText(filtered.get(position).subtitle);
-                        pos.setText(filtered.get(position).position);
-                        return view;
+                    ArrayList<Monster> filtered = new ArrayList<>();
+
+                    for (Monster item : monsters) {
+                        if (item.getName().toLowerCase().contains(s.toLowerCase())) {
+                            filtered.add(item);
+                            Log.d("FILTERING LEADERBOARD", item.getName());
+                        }
                     }
-                };
 
-                leaderboard.setAdapter(filteredAdapter);
+                    monstersFilteredAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.position_text_view, filtered) {
+                        @SuppressLint("DefaultLocale")
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            TextView user = (TextView) view.findViewById(R.id.username_text_view);
+                            TextView points = (TextView) view.findViewById(R.id.subtitle_text_view);
+                            TextView pos = (TextView) view.findViewById(R.id.position_text_view);
+                            user.setText(filtered.get(position).getName());
+                            points.setText(String.format("%d", filtered.get(position).getScore()));
+                            pos.setText(String.format("%d", position+2));
+                            return view;
+                        }
+                    };
 
+                    leaderboard.setAdapter(monstersFilteredAdapter);
+                }
                 return false;
             }
         });
     }
 
+    /**
+     * This method will launch the leaderboard fragment give a user
+     * @param user
+     */
+    private void launchFragmentWithUser(User user) {
+        ProfileFragment nextFrag = new ProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("USER", user);
+        nextFrag.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.main_fragment_container, nextFrag, "userFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    /**
+     * This method will launch the leaderboard fragment give a monster
+     * @param monster
+     */
+    private void launchFragmentWithMonster(Monster monster) {
+        ViewMonsterFragment nextFrag = new ViewMonsterFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("USER", monster);
+        String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        bundle.putString("key", deviceId);
+        bundle.putString("id", monster.getHashHex());
+        nextFrag.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    /**
+     * This method will change the leaderboard upon filter button click
+     * There are 2 main leaderboard types
+     *  1: Highest sum of scores from players
+     *  2: Highest monster score
+     */
+    @SuppressLint("DefaultLocale")
+    private void changeLeaderboard() {
+        if (current == 1) {
+
+            filterType.setText("Highest Scoring Monster");
+            userName.setText(firstPlaceMonster.getName());
+            points.setText(String.format("%d", firstPlaceMonster.getScore()));
+
+            leaderboard.setAdapter(monstersLeaderboardAdapter);
+
+            current = 2;
+        }
+        else if (current == 2) {
+
+            filterType.setText("User High Scores");
+            userName.setText(firstPlaceUser.getName());
+            points.setText(String.format("%d", firstPlaceUser.getScoreSum()));
+
+            leaderboard.setAdapter(usersLeaderboardAdapter);
+
+            current = 1;
+        }
+    }
 }
