@@ -14,6 +14,7 @@
     <style name="Widget.BottomNavigationView"
         parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/alata</item>
+        <item name="android:textSize">13dp</item>
     </style>
 
     <style name="SearchViewTextAppearance" parent="@android:style/TextAppearance">

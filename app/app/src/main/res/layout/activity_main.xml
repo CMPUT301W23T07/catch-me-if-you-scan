@@ -24,6 +24,7 @@
         app:backgroundTint="#022646"
         app:itemIconTint="@color/menu_item"
         app:itemTextColor="@color/menu_item"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
