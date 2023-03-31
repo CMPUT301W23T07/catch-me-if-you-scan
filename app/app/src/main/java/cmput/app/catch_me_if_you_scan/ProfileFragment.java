@@ -99,7 +99,6 @@ public class ProfileFragment extends Fragment {
         monstersList = view.findViewById(R.id.MonstersList);
         viewListBtn = view.findViewById(R.id.viewListBtn);
 
-
         if(user!=null) {
             userName.setText(user.getName());
             userEmail.setText(user.getEmail());

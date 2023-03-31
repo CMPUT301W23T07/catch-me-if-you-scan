@@ -22,7 +22,6 @@ public class User {
     private int scoreSum;
     //    private Region region;
 
-
     private ArrayList<Monster> sortedMonster = new ArrayList<Monster>();
 
 

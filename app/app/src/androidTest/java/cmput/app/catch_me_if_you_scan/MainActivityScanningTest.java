@@ -13,6 +13,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,8 +28,12 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,14 +55,40 @@ public class MainActivityScanningTest {
         Intents.init();
         scenario = scenarioRule.getScenario();
     }
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+        }
+
+        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
+    }
     /**
      * Tests if the MainActivity is created properly.
      */
     @Test
     public void testActivityCreation() {
+        try{
 
         // Verify that the activity is created
         scenario.onActivity(activity -> assertNotNull(activity));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
     /**
      * Tests if the app can navigate to the scanning activity using the navigation bar.
@@ -65,6 +96,7 @@ public class MainActivityScanningTest {
 
     @Test
     public void scanningNotInViewAfterLaunch(){
+        try{
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 
@@ -72,13 +104,17 @@ public class MainActivityScanningTest {
             assertEquals(activity.getClass(),MainActivity.class);
 
         });
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void switchToScanningActivityUsingNavBar(){
-
-
-
+        try{
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
 
         scenario.onActivity(activity -> {
@@ -89,6 +125,12 @@ public class MainActivityScanningTest {
         onView(withId(R.id.camera_nav)).perform(click());
 
         Intents.intended(hasComponent(CaptureAct.class.getCanonicalName()));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
 
     }
 

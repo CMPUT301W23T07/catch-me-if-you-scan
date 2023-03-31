@@ -13,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.junit.Assert.fail;
 
 import android.app.Activity;
 import android.view.View;
@@ -27,6 +28,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.hamcrest.Matcher;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -48,9 +50,7 @@ public class LeaderboardFragmentTest {
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<MainActivity>(MainActivity.class);
 
     private static TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());
-
     private static UserController userController = new UserController(FirebaseFirestore.getInstance());
-
     @BeforeClass
     public static void setUpBeforeClass() {
 
@@ -64,35 +64,56 @@ public class LeaderboardFragmentTest {
     public void setUp() throws Exception {
         scenario = scenarioRule.getScenario();
     }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
+    }
 
     /**
      * Tests if the app can navigate to the leaderboard activity using the navigation bar.
      */
     @Test
     public void switchLeaderboardUsingNavBar() throws InterruptedException {
+        try{
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()));
-    }
 
+        }
+        catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
+    }
     /**
      * Tests if the leaderboard is not displayed in the activity layout after the activity is launched.
      */
     @Test
     public void leaderBoardNotInViewAfterLaunch(){
+        try{
         scenario.onActivity(activity -> {
         });
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.fragment_leaderboard)).check(doesNotExist());
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
-
-
 
     @Test
     public void checkFilter() {
+        try{
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
@@ -104,6 +125,14 @@ public class LeaderboardFragmentTest {
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
                 .check(matches(withText("TestAccount912384")));
+
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
+
     }
 
 
