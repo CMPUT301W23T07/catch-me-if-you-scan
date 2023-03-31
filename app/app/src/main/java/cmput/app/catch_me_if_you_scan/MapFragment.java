@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +51,7 @@ import java.util.Locale;
 /**
  * This class is for the map fragment which appears when the user clicks on the map nav button
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private MapView mView;
     private GoogleMap map;
@@ -60,6 +62,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ArrayList<Integer> rankings = new ArrayList<>();
     private MonsterController mc = new MonsterController(FirebaseFirestore.getInstance());
     private static final float DEFAULT_ZOOM = 15f;
+    private ConstraintLayout mapFilter;
+    private RadioButton bronze;
+    private RadioButton silver;
+    private RadioButton gold;
+    private RadioButton platinum;
+    private RadioButton diamond;
 
 
     /**
@@ -80,8 +88,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
-        rankings.add(2);
-        rankings.add(5);
+        mapFilter = v.findViewById(R.id.map_filter_display);
+        mapFilter.setVisibility(v.GONE);
+        bronze = v.findViewById(R.id.bronze_radio);
+        silver = v.findViewById(R.id.silver_radio);
+        gold = v.findViewById(R.id.gold_radio);
+        platinum = v.findViewById(R.id.platinum_radio);
+        diamond = v.findViewById(R.id.diamond_radio);
 
         permissions = new PermissionManager(getActivity());
 
@@ -96,7 +109,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mapFilter.setVisibility(v.VISIBLE);
+                bronze.setChecked(false);
+                silver.setChecked(false);
+                gold.setChecked(false);
+                platinum.setChecked(false);
+                diamond.setChecked(false);
+            }
+        });
 
+        Button confirmFilters = v.findViewById(R.id.confirm_filter_button);
+        confirmFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFilters(v);
+                mapFilter.setVisibility(v.GONE);
             }
         });
 
@@ -116,6 +143,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map = googleMap;
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.5461, 113.4937), DEFAULT_ZOOM));
+        map.setOnMarkerClickListener(this);
         loadMonsters();
         if (permissions.hasLocationPermissions()) {
             map.setMyLocationEnabled(true);
@@ -154,13 +182,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * the map with an icon
      */
     private void loadMonsters() {
-        //TEMPORARY CODE FOR SETTING THE MARKER SETTINGS WILL FIX LATER
-        int height = 150;
-        int width = 150;
+        int height = 200;
+        int width = 200;
         @SuppressLint("UseCompatLoadingForDrawables")
         BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
         Bitmap b = bitMapDraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        Bitmap diamondMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
         ArrayList<Monster> monsters = new ArrayList<Monster>();
         Log.d("MAP", "BEFORE CONTROLLER REQUEST");
@@ -174,11 +201,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             for (i = 0; i < monsters.size(); i++) {
                 if (monsters.get(i).getLocationEnabled()) {
                     MarkerOptions options = new MarkerOptions()
-                            .position(new LatLng(monsters.get(i).getLocation()[0], monsters.get(i).getLocation()[1]))
-                            .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                            .title(monsters.get(i).getName());
+                            .position(new LatLng(monsters.get(i).getLocation()[0], monsters.get(i).getLocation()[1]));
+                    if (monsters.get(i).getScore() > 150) {
+                        rankings.add(5);
+                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                    } else if (monsters.get(i).getScore() > 100) {
+                        rankings.add(4);
+                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                    } else if (monsters.get(i).getScore() > 60) {
+                        rankings.add(3);
+                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                    } else if (monsters.get(i).getScore() > 20) {
+                        rankings.add(2);
+                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                    } else {
+                        rankings.add(1);
+                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                    }
+                    options.title(monsters.get(i).getHashHex());
                     Marker marker = map.addMarker(options);
                     markers.add(marker);
+
                 }
             }
         }
@@ -188,22 +231,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * This function is to display the filter fragment for the map and get the desired filters
+     * This function closes the filter fragment and gets the desired filters
      * and apply them, the filter includes the ranking of each Monster
      * @param v
      */
     private void getFilters(View v) {
-        FragmentManager fragMan = getChildFragmentManager();
-        FragmentTransaction fragTrans = fragMan.beginTransaction();
-        FilterMapFragment filterFragment = new FilterMapFragment();
-        fragTrans.add(R.id.map, filterFragment);
-        fragTrans.addToBackStack("FILTER");
-        fragTrans.commit();
 
-        Intent i = new Intent(getActivity(), FilterMapFragment.class);
-
-        ArrayList<Integer> tiers = i.getIntegerArrayListExtra("TIERS");
-
+        ArrayList<Integer> tiers = new ArrayList<Integer>();
+        if (bronze.isChecked()) {
+            tiers.add(1);
+        }if (silver.isChecked()) {
+            tiers.add(2);
+        }if (gold.isChecked()) {
+            tiers.add(3);
+        }if (platinum.isChecked()) {
+            tiers.add(4);
+        }if (diamond.isChecked()) {
+            tiers.add(5);
+        }
         filterMonsterTier(tiers);
     }
 
@@ -285,5 +330,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mView.onLowMemory();
+    }
+
+    /**
+     * This is the click listener for the map so that users can click on a monster
+     * @param marker
+     * @return
+     */
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        Log.d("MAP", "User clicked on a monster");
+        ViewMonsterFragment nextFrag = new ViewMonsterFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", marker.getTitle());
+        nextFrag.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                .addToBackStack(null)
+                .commit();
+
+        return true;
     }
 }
