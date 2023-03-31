@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link ProfileFragment} factory method to
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
@@ -51,6 +51,10 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    public void setUser(User u){
+        user = u;
+    }
+
     /**
      * This method will inflate the view with the necessary objects and visual items
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -68,11 +72,16 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Bundle incoming = this.getArguments();
-        if (incoming != null) {
-            user = incoming.getParcelable("USER");
-        }
-        else {
+//        Bundle incoming = this.getArguments();
+//        if (incoming != null) {
+//            user = incoming.getParcelable("USER");
+//        }
+//        else {
+//            deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+//            user = userController.getUserByDeviceID(deviceId);
+//        }
+
+        if(user == null){
             deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
             user = userController.getUserByDeviceID(deviceId);
         }
