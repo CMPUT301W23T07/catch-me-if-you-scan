@@ -101,6 +101,32 @@ public class ViewMonsterFragment extends Fragment{
         String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         UserController userController = new UserController(db);
         User currentUser = userController.getUserByDeviceID(deviceId);
+        Button deleteButton = getView().findViewById(R.id.delete_button);
+        ArrayList<Monster> monsterList = currentUser.getMonsters();
+        boolean inList = false;
+        int i;
+
+        for (i = 0; i < monsterList.size(); i++){
+            if(monster.getHashHex().equals(monsterList.get(i).getHashHex())){
+                inList = true;
+            }
+        }
+
+        if(inList){
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.removeMonster(monster);
+                    userController.deleteMonster(currentUser.getName(), mc.getMonsterDoc(monster.getHashHex()));
+                    deleteButton.setVisibility(View.INVISIBLE);
+                    Toast toast = Toast.makeText(getContext(), "Removed the monster from your account", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+
+        } else {
+            deleteButton.setVisibility(View.INVISIBLE);
+        }
 
         TextView score = (TextView) getView().findViewById(R.id.score);
         TextView name = (TextView) getView().findViewById(R.id.name);
