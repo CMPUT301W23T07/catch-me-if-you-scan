@@ -1,5 +1,10 @@
 package cmput.app.catch_me_if_you_scan;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
@@ -12,7 +17,7 @@ import java.util.Hashtable;
 /**
  * This class represents the Monster
  */
-public class Monster implements Comparable<Monster>  {
+public class Monster implements Comparable<Monster>, Parcelable  {
     private String hashedCode;
     private String name;
     private int score;
@@ -58,6 +63,29 @@ public class Monster implements Comparable<Monster>  {
         this.latitude = latitude;
         this.envPhoto = envPhoto;
         this.locationEnabled = locationEnabled;
+    }
+
+    protected Monster(Parcel in) {
+        hashedCode = in.readString();
+        name = in.readString();
+        score = in.readInt();
+        scoreRank = in.readInt();
+        visual = in.createStringArray();
+        hashBinary = in.readString();
+        hashHex = in.readString();
+        hashInt = in.readInt();
+        if (in.readByte() == 0) {
+            longitude = null;
+        } else {
+            longitude = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            latitude = null;
+        } else {
+            latitude = in.readDouble();
+        }
+        envPhoto = in.readBlob();
+        locationEnabled = in.readByte() != 0;
     }
 
     /**
@@ -261,8 +289,60 @@ public class Monster implements Comparable<Monster>  {
         envPhoto = envString;
     }
 
-    @Override
     public int compareTo(Monster monster) {
         return this.score - monster.score;
+    }
+
+
+    /**
+     * This method is part of the parcelable implementation
+     */
+    public static final Creator<Monster> CREATOR = new Creator<Monster>() {
+        @Override
+        public Monster createFromParcel(Parcel in) {
+            return new Monster(in);
+        }
+
+        @Override
+        public Monster[] newArray(int size) {
+            return new Monster[size];
+        }
+    };
+
+    /**
+     * This method is part of the parcelable implementation
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * This method is part of the parcelable implementation
+     */
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(hashedCode);
+        dest.writeString(name);
+        dest.writeInt(score);
+        dest.writeInt(scoreRank);
+        dest.writeStringArray(visual);
+        dest.writeString(hashBinary);
+        dest.writeString(hashHex);
+        dest.writeInt(hashInt);
+        if (longitude == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(longitude);
+        }
+        if (latitude == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(latitude);
+        }
+        dest.writeBlob(envPhoto);
+        dest.writeByte((byte) (locationEnabled ? 1 : 0));
     }
 }
