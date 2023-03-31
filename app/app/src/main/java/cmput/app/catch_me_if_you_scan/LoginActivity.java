@@ -86,13 +86,21 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Please enter a valid email", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            if (userController.getUser(usrName.getText().toString()) == null) {
+                            User dbUserName = userController.getUser(usrName.getText().toString());
+                            User dbUserEmail = userController.getUserByEmail(usrEmail.getText().toString());
+                            if (dbUserName != null) {
+                                Toast.makeText(LoginActivity.this, "This user name is taken", Toast.LENGTH_SHORT).show();
+                            }
+                            else if (dbUserEmail != null){
+                                Toast.makeText(LoginActivity.this, "This email is taken", Toast.LENGTH_SHORT).show();
+                            }
+
+                            else {
                                 User user = new User(deviceId, usrName.getText().toString(), usrEmail.getText().toString());
                                 userController.create(user);
                                 switchToMain();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "This user name is taken", Toast.LENGTH_SHORT).show();
                             }
+
                         }
                     }
                     else{

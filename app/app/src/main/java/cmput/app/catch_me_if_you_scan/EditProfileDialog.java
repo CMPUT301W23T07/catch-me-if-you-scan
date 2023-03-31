@@ -7,18 +7,25 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class EditProfileDialog extends DialogFragment {
     private User user;
-    private EditText name;
     private EditText email;
     private EditText description;
-
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private UserController userController = new UserController(db);
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -31,18 +38,47 @@ public class EditProfileDialog extends DialogFragment {
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
-        name = view.findViewById(R.id.updateName);
         email = view.findViewById(R.id.updateContact);
         description = view.findViewById(R.id.updateDescription);
 
-        name.setText(user.getName());
         email.setText(user.getEmail());
         description.setText(user.getDescription());
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
+                Button updateBtn = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                updateBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (email.length() == 0){
+                            Toast.makeText(getContext(), "Email invalid", Toast.LENGTH_SHORT).show();
+                        }
+                        if (description.length() == 0){
+                            Toast.makeText(getContext(), "Description invalid", Toast.LENGTH_SHORT).show();
+                        }
 
+                        User dbUserEmail = userController.getUserByEmail(email.getText().toString());
+                        if (dbUserEmail != null && !user.getName().equals(dbUserEmail.getName())){
+                            Toast.makeText( getActivity(), "This email is taken", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            user.setEmail(email.getText().toString());
+                            user.setDescription(description.getText().toString());
+                            HashMap<String, Object> updatedUserDetails = new HashMap<String, Object>();
+                            updatedUserDetails.put("email", email.getText().toString());
+                            updatedUserDetails.put("description", description.getText().toString());
+                            userController.updateUser(user.getName(), updatedUserDetails);
+                            dismiss();
+                            ProfileFragment nextFrag = new ProfileFragment();
+                            nextFrag.setUser(user);
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .add(R.id.main_fragment_container, nextFrag, "userFragment")
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    }
+                });
             }
         });
 

@@ -82,14 +82,20 @@ public class ProfileFragment extends Fragment {
 //            deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 //            user = userController.getUserByDeviceID(deviceId);
 //        }
-
+        updateBtn = view.findViewById(R.id.edit_profile_button);
+        deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         if(user == null){
-            deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
             user = userController.getUserByDeviceID(deviceId);
+            updateBtn.setVisibility(View.VISIBLE);
+        }
+        else if (user.getDeviceID().equals(deviceId)){
+            updateBtn.setVisibility(View.VISIBLE);
         }
 
-        user.setDescription("Hey I'm "+ user.getName());
-
+        if (user.getDescription() == null){
+            user.setDescription("Hey I'm "+ user.getName());
+        }
         userName = view.findViewById(R.id.name_text);
         userEmail = view.findViewById(R.id.email_text);
         bioText = view.findViewById(R.id.bio_text);
@@ -100,18 +106,17 @@ public class ProfileFragment extends Fragment {
         lowestScore = view.findViewById(R.id.lowest_score_text);
         monstersList = view.findViewById(R.id.MonstersList);
         viewListBtn = view.findViewById(R.id.viewListBtn);
-        updateBtn = view.findViewById(R.id.edit_profile_button);
 
-        if(user!=null) {
-            userName.setText(user.getName());
-            userEmail.setText(user.getEmail());
-            bioText.setText(user.getDescription());
-            monstersAmount.setText(Integer.toString(user.getMonstersCount()));
-            monsterListAmount.setText("Monsters(" + Integer.toString(user.getMonstersCount()) + ")");
-            totalScoreSum.setText(Integer.toString(user.getScoreSum()));
-            highestScore.setText(Integer.toString(user.getScoreHighest()));
-            lowestScore.setText(Integer.toString(user.getScoreLowest()));
-        }
+
+        userName.setText(user.getName());
+        userEmail.setText(user.getEmail());
+        bioText.setText(user.getDescription());
+        monstersAmount.setText(Integer.toString(user.getMonstersCount()));
+        monsterListAmount.setText("Monsters(" + Integer.toString(user.getMonstersCount()) + ")");
+        totalScoreSum.setText(Integer.toString(user.getScoreSum()));
+        highestScore.setText(Integer.toString(user.getScoreHighest()));
+        lowestScore.setText(Integer.toString(user.getScoreLowest()));
+
 
        ArrayList<Monster> monstersListData =  user.getMonsters();
 
@@ -134,14 +139,16 @@ public class ProfileFragment extends Fragment {
                         .commit();
             }
         });
-        updateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            EditProfileDialog profileDialog = new EditProfileDialog();
-                profileDialog.setUser(user);
-                profileDialog.show(getActivity().getSupportFragmentManager(), "Update Profile");
-            }
-        });
+       if(updateBtn.getVisibility() == View.VISIBLE ){
+           updateBtn.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   EditProfileDialog profileDialog = new EditProfileDialog();
+                   profileDialog.setUser(user);
+                   profileDialog.show(getActivity().getSupportFragmentManager(), "Update Profile");
+               }
+           });
+       }
         monstersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

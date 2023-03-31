@@ -52,7 +52,8 @@
                 android:backgroundTint="#00FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/edit_pencil" />
+                app:srcCompat="@drawable/edit_pencil"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/bio_text"
