@@ -6,6 +6,7 @@
 package cmput.app.catch_me_if_you_scan;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import android.util.Log;
 import android.view.View;
@@ -38,11 +39,16 @@ public class CaptureActTest {
      */
     @Test
     public void testActivityCreation() {
-
-        // Verify that the activity is created
-        scenario.onActivity(activity -> assertNotNull(activity));
+        try {
+            // Verify that the activity is created
+            scenario.onActivity(activity -> assertNotNull(activity));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
-
 
     /**
      * Cleans up the testing environment after each test method runs.
@@ -51,5 +57,7 @@ public class CaptureActTest {
     public void tearDown() {
         scenario.close();
     }
+
+
 
 }

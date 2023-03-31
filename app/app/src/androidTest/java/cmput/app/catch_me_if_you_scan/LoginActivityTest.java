@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import android.util.Log;
 
@@ -54,19 +55,13 @@ public class LoginActivityTest {
             userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
         }
 
-        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+//        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
     }
     @Before
     public void setUp() {
 
         Intents.init();
         scenario = scenarioRule.getScenario();
-        mock = TestDetails.getInstance(getInstrumentation().getContext());
-        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
-//            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
-            System.out.println(userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName()));
-        }
-
 
     }
     @After
@@ -76,7 +71,6 @@ public class LoginActivityTest {
     }
     @AfterClass
     public static void finish(){
-        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
 
         UserController userController = new UserController(FirebaseFirestore.getInstance());
         userController.deleteUser(mock.getTestUser());
@@ -89,6 +83,7 @@ public class LoginActivityTest {
     public void testActivityCreation() {
         // Verify that the activity is created
         scenario.onActivity(activity -> assertNotNull(activity));
+
     }
 
     /**
@@ -119,7 +114,6 @@ public class LoginActivityTest {
         onView(withId(R.id.profile_nav)).check(matches(isDisplayed()));
 
         Intents.intended(hasComponent(MainActivity.class.getCanonicalName()));
-
 
     }
 

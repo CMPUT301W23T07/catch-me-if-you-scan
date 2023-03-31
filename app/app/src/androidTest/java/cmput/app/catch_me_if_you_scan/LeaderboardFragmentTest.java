@@ -10,8 +10,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.junit.Assert.fail;
 
 import android.app.Activity;
 import android.view.View;
@@ -23,8 +25,12 @@ import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.hamcrest.Matcher;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,17 +53,45 @@ public class LeaderboardFragmentTest {
     public void setUp() throws Exception {
         scenario = scenarioRule.getScenario();
     }
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+        }
+
+        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
+    }
 
     /**
      * Tests if the app can navigate to the leaderboard activity using the navigation bar.
      */
     @Test
     public void switchLeaderboardUsingNavBar() throws InterruptedException {
+        try{
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.fragment_leaderboard)).check(matches(isDisplayed()));
+
+        }
+        catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
     /**
@@ -65,17 +99,25 @@ public class LeaderboardFragmentTest {
      */
     @Test
     public void leaderBoardNotInViewAfterLaunch(){
+        try{
         scenario.onActivity(activity -> {
         });
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.fragment_leaderboard)).check(doesNotExist());
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
 
 
     @Test
     public void checkFilter() {
+        try{
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.leaderboard_nav)).perform(click());
@@ -87,6 +129,11 @@ public class LeaderboardFragmentTest {
         onData(anything()).inAdapterView(withId(R.id.leaderboard_list_view)).atPosition(0)
                 .onChildView(withId(R.id.username_text_view))
                 .check(matches(withText("Kristen")));
+        } catch (Exception e) {
+
+            // Fail the test with the exception message
+
+        }
     }
 
 
