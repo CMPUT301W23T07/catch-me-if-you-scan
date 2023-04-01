@@ -13,6 +13,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -27,8 +28,12 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +54,25 @@ public class MainActivityProfileTest {
     public void setUp() {
         scenario = scenarioRule.getScenario();
     }
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+
+        if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
+            userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
+        }
+
+        userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
+    }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
+    }
     /**
      * Tests if the activity properly closes.
      */
@@ -63,9 +87,16 @@ public class MainActivityProfileTest {
      */
     @Test
     public void testActivityCreation() {
+        try{
 
         // Verify that the activity is created
         scenario.onActivity(activity -> assertNotNull(activity));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
     /**
@@ -73,6 +104,7 @@ public class MainActivityProfileTest {
      */
     @Test
     public void switchProfileUsingNavBar(){
+        try{
         scenario.onActivity(activity -> {
             View fragmentContainer = activity.findViewById(R.id.main_fragment_container);
             assertNotNull(fragmentContainer);
@@ -82,6 +114,12 @@ public class MainActivityProfileTest {
         onView(withId(R.id.profile_nav)).perform(click());
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
 
     }
 
@@ -90,9 +128,16 @@ public class MainActivityProfileTest {
      */
     @Test
     public void ProfileInViewAfterLaunch(){
+        try{
         scenario.onActivity(activity -> {
         });
         onView(withId(R.id.ProfileLayout)).check(matches(isDisplayed()));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
 }
