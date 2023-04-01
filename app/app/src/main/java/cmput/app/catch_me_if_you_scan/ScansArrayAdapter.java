@@ -24,7 +24,7 @@ public class ScansArrayAdapter extends ArrayAdapter<User> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.comment_content, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.user_scanned_item, parent, false);
         } else {
             view = convertView;
         }

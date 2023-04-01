@@ -55,10 +55,12 @@ public class UsersScannedFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         MonsterController mc = new MonsterController(db);
+        UserController uc = new UserController(db);
 
         bundle = this.getArguments();
 
         monster = mc.getMonster(bundle.getString("id", "0"));
+        users = uc.getAllUsersForMonster(mc.getMonsterDoc(monster.getHashHex()));
 
         userListView = getView().findViewById(R.id.scansListView);
         title = getView().findViewById(R.id.scansTitle);
@@ -75,9 +77,10 @@ public class UsersScannedFragment extends Fragment {
                 Bundle b = new Bundle();
                 b.putString("id", monster.getHashHex());
                 ViewMonsterFragment mf = new ViewMonsterFragment();
+                mf.setArguments(b);
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.main_fragment_container, mf);
+                ft.replace(R.id.main_fragment_container, mf).addToBackStack(null);
                 ft.commit();
             }
         });
