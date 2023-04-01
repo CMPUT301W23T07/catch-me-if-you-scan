@@ -86,6 +86,7 @@
         android:autofillHints="none"
         android:ems="10"
         android:hint="@string/hint_name"
+        android:maxLines="1"
 
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@id/middle_guideline"
@@ -101,6 +102,7 @@
         android:autofillHints="none"
         android:ems="10"
         android:hint="@string/hint_email"
+        android:maxLines="1"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
         app:layout_constraintEnd_toEndOf="@+id/editTextName"
