@@ -299,7 +299,7 @@ public class LeaderboardFragment extends Fragment {
 //        nextFrag.setArguments(bundle);
         nextFrag.setUser(user);
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_fragment_container, nextFrag, "userFragment")
+                .replace(R.id.main_fragment_container, nextFrag, "userFragment")
                 .addToBackStack(null)
                 .commit();
     }
@@ -317,7 +317,7 @@ public class LeaderboardFragment extends Fragment {
         bundle.putString("id", monster.getHashHex());
         nextFrag.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                .replace(R.id.main_fragment_container, nextFrag, "monsterFragment")
                 .addToBackStack(null)
                 .commit();
     }

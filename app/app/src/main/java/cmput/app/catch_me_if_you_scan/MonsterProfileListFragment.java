@@ -116,7 +116,7 @@ public class MonsterProfileListFragment extends Fragment {
 
                 FragmentManager fm = getParentFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.main_fragment_container, fragment);
+                ft.replace(R.id.main_fragment_container, fragment).addToBackStack(null);
                 ft.commit();
             }
         });
