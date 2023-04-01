@@ -20,6 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
+/**
+ * dialog to allow user to update their description and contact info
+ */
 public class EditProfileDialog extends DialogFragment {
     private User user;
     private EditText email;
@@ -73,7 +76,7 @@ public class EditProfileDialog extends DialogFragment {
                             ProfileFragment nextFrag = new ProfileFragment();
                             nextFrag.setUser(user);
                             getActivity().getSupportFragmentManager().beginTransaction()
-                                    .add(R.id.main_fragment_container, nextFrag, "userFragment")
+                                    .replace(R.id.main_fragment_container, nextFrag, "userFragment")
                                     .addToBackStack(null)
                                     .commit();
                         }
@@ -84,6 +87,11 @@ public class EditProfileDialog extends DialogFragment {
 
         return dialog;
     }
+
+    /**
+     * sets the user passed to it as the user of the dialog
+     * @param u the user to show data
+     */
     public void setUser(User u){
         user = u;
     }

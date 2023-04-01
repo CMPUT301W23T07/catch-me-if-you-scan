@@ -134,7 +134,7 @@ public class ProfileFragment extends Fragment {
                 MonsterProfileListFragment nextFrag = new MonsterProfileListFragment();
                 nextFrag.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                        .replace(R.id.main_fragment_container, nextFrag, "monsterFragment")
                         .addToBackStack(null)
                         .commit();
             }
@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment {
 
                 FragmentManager fm = getParentFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.main_fragment_container, fragment);
+                ft.replace(R.id.main_fragment_container, fragment).addToBackStack(null);
                 ft.commit();
             }
         });
