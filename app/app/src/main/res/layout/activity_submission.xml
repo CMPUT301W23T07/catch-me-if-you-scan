@@ -6,12 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".SubmissionActivity">
     <!--    This is for the background(environment photo), which is displayed after the user takes a photo-->
+
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F2F2F7"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <ImageView
         android:id="@+id/transparentView"
@@ -20,7 +23,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="200dp"
         android:layout_marginEnd="10dp"
-        android:background="#E6FFFFF1"
+        android:background="@drawable/frosted_effect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -37,7 +40,7 @@
         android:layout_marginEnd="194dp"
         android:gravity="center"
         android:text="Save Coordinate:"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +55,7 @@
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="Photo:"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,12 +86,13 @@
         android:layout_height="48dp"
 
         android:layout_marginStart="-130dp"
-        android:backgroundTint="#022646"
+
 
         android:gravity="center"
 
         android:text="Capture"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button"
         android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/photo_textView"
 
@@ -118,8 +122,8 @@
         android:layout_marginBottom="80dp"
         android:gravity="center"
         android:text="TTTTTTTTTTTTTTTTTTTT"
+        android:textColor="#FFFFFF"
         android:textSize="26dp"
-        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/take_photo_button"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
         app:layout_constraintStart_toStartOf="@+id/transparentView"
@@ -132,7 +136,7 @@
         android:layout_marginEnd="265dp"
         android:layout_marginBottom="130dp"
         android:text="Score:"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
@@ -165,12 +169,17 @@
 
     <Button
         android:id="@+id/SubmitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/custom_button"
         android:text="Submit"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/transparentView"
         app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView" />
+        app:layout_constraintStart_toStartOf="@+id/transparentView"
+        app:layout_constraintTop_toTopOf="@+id/transparentView"
+        app:layout_constraintVertical_bias="0.98" />
 
     <!--Photo Related End-->
 

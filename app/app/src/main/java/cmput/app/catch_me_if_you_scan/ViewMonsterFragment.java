@@ -101,6 +101,28 @@ public class ViewMonsterFragment extends Fragment{
         String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         UserController userController = new UserController(db);
         User currentUser = userController.getUserByDeviceID(deviceId);
+        Button deleteButton = getView().findViewById(R.id.delete_button);
+        boolean inList = false;
+
+        if(currentUser.checkIfHashExist(monster.getHashHex())){
+            inList = true;
+        }
+
+        if(inList){
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.removeMonster(monster);
+                    userController.deleteMonster(currentUser.getName(), mc.getMonsterDoc(monster.getHashHex()));
+                    deleteButton.setVisibility(View.GONE);
+                    Toast toast = Toast.makeText(getContext(), "Removed the monster from your account", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+
+        } else {
+            deleteButton.setVisibility(View.GONE);
+        }
 
         TextView score = (TextView) getView().findViewById(R.id.score);
         TextView name = (TextView) getView().findViewById(R.id.name);
@@ -152,6 +174,21 @@ public class ViewMonsterFragment extends Fragment{
                 commentDialog.setArguments(commentBundle);
                 commentDialog.setAdapter(commentArrayAdapter);
                 commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
+            }
+        });
+
+        Button scans = getView().findViewById(R.id.userScans);
+        scans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putString("id", monster.getHashHex());
+                UsersScannedFragment sf = new UsersScannedFragment();
+                sf.setArguments(b);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_fragment_container, sf).addToBackStack(null);
+                ft.commit();
             }
         });
     }

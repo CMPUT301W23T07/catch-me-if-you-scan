@@ -81,6 +81,13 @@ public class SubmissionActivityTest {
 
         userController.create(new User(mock.getDeviceId(), mock.getTestUser(), mock.getTestEmail()));
     }
+    @AfterClass
+    public static void finish(){
+        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        UserController userController = new UserController(FirebaseFirestore.getInstance());
+        userController.deleteUser(mock.getTestUser());
+    }
     @Before
     public void setUp() {
 
@@ -96,13 +103,7 @@ public class SubmissionActivityTest {
         Intents.release();
         scenario.close();
     }
-    @AfterClass
-    public static void finish(){
-        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
 
-        UserController userController = new UserController(FirebaseFirestore.getInstance());
-        userController.deleteUser(mock.getTestUser());
-    }
 
     /**
      * Tests if the SubmissionActivity is created properly.
@@ -111,11 +112,18 @@ public class SubmissionActivityTest {
     @Test
     public void testActivityCreation() {
 
+        try{
         // Verify that the activity is created
         scenario.onActivity(activity -> {
             assertNotNull(activity);
                 }
         );
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
     /**
@@ -124,6 +132,7 @@ public class SubmissionActivityTest {
     @Test
     public void switchTo_IMAGE_CAPTURE_Test() throws InterruptedException {
 
+        try{
         InstrumentationRegistry.getInstrumentation().waitForIdleSync();
         scenario.onActivity(activity -> {
         });
@@ -131,6 +140,12 @@ public class SubmissionActivityTest {
         onView(withId(R.id.take_photo_button)).perform(click());
 
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE));
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Fail the test with the exception message
+            fail(e.getMessage());
+        }
     }
 
 
