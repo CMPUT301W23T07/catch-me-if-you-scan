@@ -102,14 +102,10 @@ public class ViewMonsterFragment extends Fragment{
         UserController userController = new UserController(db);
         User currentUser = userController.getUserByDeviceID(deviceId);
         Button deleteButton = getView().findViewById(R.id.delete_button);
-        ArrayList<Monster> monsterList = currentUser.getMonsters();
         boolean inList = false;
-        int i;
 
-        for (i = 0; i < monsterList.size(); i++){
-            if(currentUser.checkIfHashExist(monster.getHashHex())){
-                inList = true;
-            }
+        if(currentUser.checkIfHashExist(monster.getHashHex())){
+            inList = true;
         }
 
         if(inList){
@@ -178,6 +174,21 @@ public class ViewMonsterFragment extends Fragment{
                 commentDialog.setArguments(commentBundle);
                 commentDialog.setAdapter(commentArrayAdapter);
                 commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
+            }
+        });
+
+        Button scans = getView().findViewById(R.id.userScans);
+        scans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putString("id", monster.getHashHex());
+                UsersScannedFragment sf = new UsersScannedFragment();
+                sf.setArguments(b);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_fragment_container, sf).addToBackStack(null);
+                ft.commit();
             }
         });
     }

@@ -35,7 +35,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
         TextView date = view.findViewById(R.id.comment_date);
         ImageView avatar = view.findViewById(R.id.comment_avatar);
 
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy HH:mm aa");
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy HH:mm");
         String dateString;
         dateString = df.format(comment.getCommentDate().toDate());
 
