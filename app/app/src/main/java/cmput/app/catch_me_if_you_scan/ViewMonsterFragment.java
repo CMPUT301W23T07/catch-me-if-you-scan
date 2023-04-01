@@ -180,5 +180,19 @@ public class ViewMonsterFragment extends Fragment{
                 commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
             }
         });
+
+        Button scans = getView().findViewById(R.id.userScans);
+        scans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putString("id", monster.getHashHex());
+                UsersScannedFragment sf = new UsersScannedFragment();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_fragment_container, sf);
+                ft.commit();
+            }
+        });
     }
 }
