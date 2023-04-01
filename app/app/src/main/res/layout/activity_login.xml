@@ -8,42 +8,99 @@
     tools:context=".LoginActivity">
 
 
-
-
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="437dp"-->
-<!--        android:rotation="90"-->
-<!--        android:scaleType="fitCenter"-->
-<!--        android:src="@drawable/loginactivity_design_3"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp"
+        app:layout_constraintGuide_percent="0.5" />
 
     <com.caverock.androidsvg.SVGImageView
         android:id="@+id/my_image_view"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
-        android:layout_marginTop="44dp"
-
+        android:layout_height="0dp"
+        android:layout_marginTop="0dp"
         android:foreground="@drawable/loginactivity_horizontal"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="227dp"
+        android:layout_height="90dp"
+
+        android:autoSizeMaxTextSize="120sp"
+        android:autoSizeMinTextSize="20sp"
+        android:autoSizePresetSizes="@array/autosize_text_sizes"
+        android:autoSizeTextType="uniform"
+
+        android:fontFamily="@font/kanit"
+        android:text="catch me"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#FFFFFF"
+
+        app:layout_constraintBottom_toBottomOf="@+id/my_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.313" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="259dp"
+        android:layout_height="80dp"
+
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="120dp"
+
+        android:fontFamily="@font/kanit"
+
+        android:text="if you scan"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#FFFFFF"
+        android:textSize="46dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    android:autoSizeMaxTextSize="150sp"-->
+<!--    android:autoSizeMinTextSize="10sp"-->
+<!--    android:autoSizePresetSizes="@array/autosize_text_sizes"-->
+<!--    android:autoSizeTextType="uniform"-->
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middle_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="536dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="1.0" />
+
 
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="255dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="400dp"
+        android:layout_marginTop="100dp"
         android:autofillHints="none"
         android:ems="10"
         android:hint="@string/hint_name"
+
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/middle_guideline"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_image_view" />
@@ -59,6 +116,7 @@
         app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
         app:layout_constraintEnd_toEndOf="@+id/editTextName"
         app:layout_constraintHorizontal_bias="0.44"
+
         app:layout_constraintStart_toStartOf="@+id/editTextName"
         app:layout_constraintTop_toBottomOf="@+id/editTextName"
         app:layout_constraintVertical_bias="0.53" />
@@ -73,38 +131,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextName" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="436dp"
-        android:layout_height="110dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="140dp"
-        android:fontFamily="@font/kanit"
-        android:text="catch me"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="#FFFFFF"
-        android:textSize="100dp"
-        app:layout_constraintBottom_toBottomOf="@+id/my_image_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/my_image_view"
-        app:layout_constraintVertical_bias="0.355" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="130dp"
-        android:layout_marginBottom="70dp"
-        android:fontFamily="@font/kanit"
-        android:text="if you can"
-        android:textColor="#FFFFFF"
-        android:textSize="100dp"
-        app:layout_constraintBottom_toBottomOf="@+id/my_image_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.514" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
