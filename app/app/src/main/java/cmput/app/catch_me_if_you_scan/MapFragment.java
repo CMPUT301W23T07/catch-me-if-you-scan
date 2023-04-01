@@ -361,7 +361,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         bundle.putString("id", marker.getTitle());
         nextFrag.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                .replace(R.id.main_fragment_container, nextFrag, "monsterFragment")
                 .addToBackStack(null)
                 .commit();
 
