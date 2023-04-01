@@ -70,23 +70,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    android:autoSizeMaxTextSize="150sp"-->
-<!--    android:autoSizeMinTextSize="10sp"-->
-<!--    android:autoSizePresetSizes="@array/autosize_text_sizes"-->
-<!--    android:autoSizeTextType="uniform"-->
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/middle_guideline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintGuide_begin="536dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_guideline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="1.0" />
 
 
     <EditText
