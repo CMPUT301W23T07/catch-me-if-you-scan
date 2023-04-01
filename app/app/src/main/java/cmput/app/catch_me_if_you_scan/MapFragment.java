@@ -181,12 +181,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
      * This method will use the MonsterController class to obtain the monsters and display them on
      * the map with an icon
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void loadMonsters() {
         int height = 200;
         int width = 200;
         @SuppressLint("UseCompatLoadingForDrawables")
-        BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
+        BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.bronze);
         Bitmap b = bitMapDraw.getBitmap();
+        Bitmap bronzeMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.silver);
+        b = bitMapDraw.getBitmap();
+        Bitmap silverMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.gold);
+        b = bitMapDraw.getBitmap();
+        Bitmap goldMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.platinum);
+        b = bitMapDraw.getBitmap();
+        Bitmap platinumMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
+        b = bitMapDraw.getBitmap();
         Bitmap diamondMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
         ArrayList<Monster> monsters = new ArrayList<Monster>();
@@ -207,16 +220,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
                     } else if (monsters.get(i).getScore() > 100) {
                         rankings.add(4);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                        options.icon(BitmapDescriptorFactory.fromBitmap(platinumMarker));
                     } else if (monsters.get(i).getScore() > 60) {
                         rankings.add(3);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                        options.icon(BitmapDescriptorFactory.fromBitmap(goldMarker));
                     } else if (monsters.get(i).getScore() > 20) {
                         rankings.add(2);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                        options.icon(BitmapDescriptorFactory.fromBitmap(silverMarker));
                     } else {
                         rankings.add(1);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+                        options.icon(BitmapDescriptorFactory.fromBitmap(bronzeMarker));
                     }
                     options.title(monsters.get(i).getHashHex());
                     Marker marker = map.addMarker(options);
@@ -260,6 +273,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         for (int i = 0; i < markers.size(); i++) {
             if (!tiers.contains(rankings.get(i))) {
                 markers.get(i).setVisible(false);
+            }
+            else {
+                markers.get(i).setVisible(true);
             }
         }
     }
