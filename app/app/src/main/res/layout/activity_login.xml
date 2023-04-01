@@ -6,66 +6,123 @@
     android:layout_height="match_parent"
     android:background="@drawable/sign_up_background">
 
-    <ImageView
-        android:id="@+id/imageView2"
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.caverock.androidsvg.SVGImageView
+        android:id="@+id/my_image_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="24dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_launcher_catch_me_logo_foreground"
-        app:layout_constraintBottom_toTopOf="@+id/editTextName"
-        app:layout_constraintDimensionRatio="1.7:1"
+        android:layout_marginTop="0dp"
+        android:foreground="@drawable/loginactivity_horizontal"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="227dp"
+        android:layout_height="90dp"
 
-        android:layout_marginBottom="16dp"
-        android:hint="@string/hint_name"
-        android:inputType="textPersonName"
-        android:maxLines="1"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
+        android:autoSizeMaxTextSize="120sp"
+        android:autoSizeMinTextSize="20sp"
+        android:autoSizePresetSizes="@array/autosize_text_sizes"
+        android:autoSizeTextType="uniform"
+
+        android:fontFamily="@font/kanit"
+        android:text="catch me"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#FFFFFF"
+
+        app:layout_constraintBottom_toBottomOf="@+id/my_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.313" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="259dp"
+        android:layout_height="80dp"
+
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="120dp"
+
+        android:fontFamily="@font/kanit"
+
+        android:text="if you scan"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="#FFFFFF"
+        android:textSize="46dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/top"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView2" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middle_guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="536dp" />
+
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="255dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:autofillHints="none"
+        android:ems="10"
+        android:hint="@string/hint_name"
+        android:maxLines="1"
+
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@id/middle_guideline"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_image_view" />
 
     <EditText
         android:id="@+id/editTextEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-
+        android:layout_width="252dp"
+        android:layout_height="53dp"
+        android:autofillHints="none"
+        android:ems="10"
         android:hint="@string/hint_email"
-        android:inputType="textEmailAddress"
         android:maxLines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextName" />
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
+        app:layout_constraintEnd_toEndOf="@+id/editTextName"
+        app:layout_constraintHorizontal_bias="0.44"
+
+        app:layout_constraintStart_toStartOf="@+id/editTextName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextName"
+        app:layout_constraintVertical_bias="0.53" />
 
     <Button
         android:id="@+id/sign_up_button"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/custom_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/sign_up"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,13 +14,18 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -54,6 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         isServicesOK();
+
+        // Color the letter "s" in the text view
+        TextView textView = findViewById(R.id.textView2);
+        SpannableString spannableString = new SpannableString((String) textView.getText());
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.parseColor("#DEAC5B"));
+        spannableString.setSpan(foregroundColorSpan, 7, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.setText(spannableString);
 
 //        checks if user exist in db
         if (userController.getUserByDeviceID(deviceId) != null){
