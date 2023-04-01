@@ -196,7 +196,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         FragmentManager fragMan = getChildFragmentManager();
         FragmentTransaction fragTrans = fragMan.beginTransaction();
         FilterMapFragment filterFragment = new FilterMapFragment();
-        fragTrans.add(R.id.map, filterFragment);
+        fragTrans.replace(R.id.map, filterFragment);
         fragTrans.addToBackStack("FILTER");
         fragTrans.commit();
 

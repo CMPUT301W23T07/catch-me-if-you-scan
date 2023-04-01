@@ -107,7 +107,7 @@ public class ViewMonsterFragment extends Fragment{
         int i;
 
         for (i = 0; i < monsterList.size(); i++){
-            if(monster.getHashHex().equals(monsterList.get(i).getHashHex())){
+            if(currentUser.checkIfHashExist(monster.getHashHex())){
                 inList = true;
             }
         }
@@ -118,14 +118,14 @@ public class ViewMonsterFragment extends Fragment{
                 public void onClick(View v) {
                     currentUser.removeMonster(monster);
                     userController.deleteMonster(currentUser.getName(), mc.getMonsterDoc(monster.getHashHex()));
-                    deleteButton.setVisibility(View.INVISIBLE);
+                    deleteButton.setVisibility(View.GONE);
                     Toast toast = Toast.makeText(getContext(), "Removed the monster from your account", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             });
 
         } else {
-            deleteButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.GONE);
         }
 
         TextView score = (TextView) getView().findViewById(R.id.score);
