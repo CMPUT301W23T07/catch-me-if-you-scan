@@ -48,6 +48,7 @@ public class ViewMonsterFragment extends Fragment{
     private CommentController commentController;
     private FirebaseFirestore db;
     private Bundle bundle;
+    private User currentUser;
 
     public ViewMonsterFragment() {
         // Required empty public constructor
@@ -98,9 +99,11 @@ public class ViewMonsterFragment extends Fragment{
 
         commentListView.setAdapter(commentArrayAdapter);
 
-        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
         UserController userController = new UserController(db);
-        User currentUser = userController.getUserByDeviceID(deviceId);
+        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        currentUser = userController.getUserByDeviceID(deviceId);
+
         Button deleteButton = getView().findViewById(R.id.delete_button);
         boolean inList = false;
 
@@ -112,11 +115,37 @@ public class ViewMonsterFragment extends Fragment{
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    System.out.println((currentUser.getMonstersCount()));
                     currentUser.removeMonster(monster);
                     userController.deleteMonster(currentUser.getName(), mc.getMonsterDoc(monster.getHashHex()));
                     deleteButton.setVisibility(View.GONE);
                     Toast toast = Toast.makeText(getContext(), "Removed the monster from your account", Toast.LENGTH_SHORT);
                     toast.show();
+                    System.out.println((currentUser.getMonstersCount()));
+
+                    if(currentUser.getMonstersCount()>2){
+                        MonsterProfileListFragment listFragment = new MonsterProfileListFragment();
+                        bundle.putString("key",currentUser.getDeviceID());
+                        listFragment.setArguments(bundle);
+                        FragmentManager fm = getParentFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        for(int i = 0; i <fm.getBackStackEntryCount()-1; i++){
+                            fm.popBackStack();
+                        }
+                        ft.replace(R.id.main_fragment_container, listFragment);
+                        ft.commit();
+
+                    }
+                    else{
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        FragmentManager fm = getParentFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        for(int i = 0; i <fm.getBackStackEntryCount()-1; i++){
+                            fm.popBackStack();
+                        }
+                        ft.replace(R.id.main_fragment_container, profileFragment);
+                        ft.commit();
+                    }
                 }
             });
 
@@ -191,5 +220,6 @@ public class ViewMonsterFragment extends Fragment{
                 ft.commit();
             }
         });
+
     }
 }
