@@ -6,8 +6,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,6 +32,7 @@ import androidx.core.content.FileProvider;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.hash.HashCode;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -51,7 +55,7 @@ public class SubmissionActivity extends AppCompatActivity {
     private double latitude;
     // All Buttons and Views
     Button photoButton;
-    Button deletePhotoButton;
+    FloatingActionButton deletePhotoButton;
     Button submitMonsterButton;
     Switch coordinateSwitch;
     ImageView MonsterImageView;
@@ -97,10 +101,13 @@ public class SubmissionActivity extends AppCompatActivity {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(90);
                     bigImage = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
                     // Put the rotated image onto the background
                     backgroundImg.setImageBitmap(bigImage);
                     backgroundImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                        RenderEffect renderEffect = RenderEffect.createBlurEffect(10f, 1f, Shader.TileMode.CLAMP);
+                        backgroundImg.setRenderEffect(renderEffect);
+                    }
                     ////////////////////////////////////////////////////////////////////////////////
                 }
             });
@@ -392,5 +399,7 @@ public class SubmissionActivity extends AppCompatActivity {
         monsterNameView = findViewById(R.id.MonsterNameTextView);
         submitMonsterButton = findViewById(R.id.SubmitButton);
     }
+
+
 
 }

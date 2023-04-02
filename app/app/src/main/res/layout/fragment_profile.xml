@@ -13,11 +13,13 @@
     <FrameLayout
         android:id="@+id/frameLayout2"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="132dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:background="@drawable/profile_background"
         app:layout_constraintBottom_toTopOf="@+id/frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,21 +30,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <TextView
                 android:id="@+id/name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="6dp"
                 android:layout_marginTop="60dp"
-                android:layout_marginEnd="12dp"
                 android:fontFamily="@font/alata"
                 android:text="TextView"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/bio_text"
                 app:layout_constraintEnd_toStartOf="@+id/email_text"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <ImageButton
                 android:id="@+id/edit_profile_button"
@@ -57,12 +59,10 @@
 
             <TextView
                 android:id="@+id/bio_text"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginBottom="12dp"
                 android:fontFamily="@font/alata"
                 android:text="TextView"
                 android:textAlignment="center"
@@ -70,19 +70,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/name_text" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.858" />
 
             <TextView
                 android:id="@+id/email_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:layout_marginTop="60dp"
+                android:layout_marginEnd="6dp"
                 android:fontFamily="@font/alata"
                 android:text="TextView"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/bio_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/name_text"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -91,7 +94,7 @@
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="48dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
@@ -99,12 +102,14 @@
         app:layout_constraintBottom_toTopOf="@+id/frameLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ListBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/ListBox">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/num_codes_text"
@@ -112,11 +117,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/alata"
                 android:text="TextView"
                 android:textColor="@android:color/darker_gray"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:fontFamily="@font/alata" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/viewListBtn"
@@ -136,7 +141,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-`
+            `
+
             <ListView
                 android:id="@+id/MonstersList"
                 android:layout_width="match_parent"
@@ -163,7 +169,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -244,6 +252,7 @@
                 android:text="TextView"
                 android:textColor="@color/white"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -261,8 +270,10 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/highest_score_text"
                 app:layout_constraintEnd_toStartOf="@+id/textView12"
+                app:layout_constraintHorizontal_bias="0.22"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scores_sum_text" />
+                app:layout_constraintTop_toBottomOf="@+id/scores_sum_text"
+                app:layout_constraintVertical_bias="0.37" />
 
             <TextView
                 android:id="@+id/highest_score_text"

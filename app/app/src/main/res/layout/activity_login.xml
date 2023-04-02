@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/sign_up_background">
 
+
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
@@ -20,6 +22,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="0dp"
@@ -29,6 +33,8 @@
         android:layout_marginEnd="32dp"
 
         android:layout_marginBottom="16dp"
+        android:background="@drawable/blue_to_yellow"
+        android:backgroundTint="@color/ic_launcher_background"
         android:fontFamily="@font/alata"
         android:hint="@string/hint_name"
         android:inputType="textPersonName"
@@ -46,6 +52,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
 
+        android:background="@drawable/blue_to_yellow"
+        android:backgroundTint="@color/ic_launcher_background"
         android:fontFamily="@font/alata"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
