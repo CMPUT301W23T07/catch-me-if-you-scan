@@ -15,7 +15,7 @@
         android:fontFamily="@font/alata"
         android:hint="Write a comment..."
         android:inputType="textMultiLine"
-        android:maxLength="150"
+        android:maxLength="300"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
