@@ -14,7 +14,7 @@
 ## About the game
 It is a fun game that allows us to hunt for the coolest monsters (QR codes) that score the most points. Players will run around scanning QR codes, barcodes, etc. trying to find barcodes and QR codes that give them the most points to compete with eachother and be the number one hunter.
 
-<br><br>![qr-code-moving](https://user-images.githubusercontent.com/66914036/229384465-a2f964b3-e03e-4da0-a05a-4b862303b58d.gif)
+<br><br>
 
 ## Features
 
