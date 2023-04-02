@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -124,7 +125,7 @@ public class MonsterController {
      */
     public ArrayList<Monster> getAllMonsters() {
         ArrayList<Monster> allMonsters = new ArrayList<Monster>();
-        Task<QuerySnapshot> task = collection.get();
+        Task<QuerySnapshot> task = collection.orderBy("score", Query.Direction.DESCENDING).get();
         while (!task.isSuccessful()) {
             continue;
         }
