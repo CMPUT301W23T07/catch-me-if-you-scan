@@ -235,8 +235,11 @@ public class ViewMonsterFragment extends Fragment{
                 bg.getViewTreeObserver().removeOnPreDrawListener(this);
                 byte[] img = monster.getEnvPhoto();
                 Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
-                //Bitmap resizedBmp = Bitmap.createBitmap(bmp, 0, 200, bg.getMeasuredWidth(), bg.getMeasuredHeight());
-                bg.setImageBitmap(bmp);
+                if(bmp != null) {
+                    BlurPhoto blurredPhoto = new BlurPhoto(bmp);
+                    //Bitmap resizedBmp = Bitmap.createBitmap(bmp, 0, 200, bg.getMeasuredWidth(), bg.getMeasuredHeight());
+                    bg.setImageBitmap(blurredPhoto.getBlurredImage());
+                }
                 return true;
             }
         });

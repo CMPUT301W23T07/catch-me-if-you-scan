@@ -17,7 +17,7 @@ public class BlurPhoto {
      */
     public BlurPhoto(Bitmap notBlurredImage) {
         // This is responsible for the effect of the image
-        int radius = 8;
+        int radius = 6;
 
         // Compress the picture to 480 x 640
         notBlurredImage = Bitmap.createScaledBitmap(notBlurredImage, 480, 640, true);
