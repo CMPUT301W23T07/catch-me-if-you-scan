@@ -14,6 +14,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
+import android.view.Menu;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -65,6 +69,27 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager(); // obtain the FragmentManager
+
+        View containerView = findViewById(R.id.main_fragment_container);
+        containerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // This method will be called whenever the layout changes
+                // You can perform any necessary actions here, such as updating the UI
+                Fragment fragment = fragmentManager.findFragmentById(R.id.main_fragment_container); // replace with the ID of your container view
+                if (fragment instanceof ProfileFragment) {
+                    navbar.getMenu().findItem(R.id.profile_nav).setChecked(true);
+                } else if(fragment instanceof LeaderboardFragment){
+                    navbar.getMenu().findItem(R.id.leaderboard_nav).setChecked(true);
+                } else if(fragment instanceof MapFragment) {
+                    navbar.getMenu().findItem(R.id.map_nav).setChecked(true);
+                }
+            }
+        });
+
 
     }
 
