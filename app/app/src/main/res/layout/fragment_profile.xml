@@ -160,19 +160,16 @@
 
                         <TextView
                             android:id="@+id/name_text"
+                            android:layout_marginTop="36dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
                             android:fontFamily="@font/alata"
                             android:maxLength="10"
                             android:text="TextView"
                             android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/email_text"
-                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.32999998" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageButton
                             android:id="@+id/edit_profile_button"
@@ -190,8 +187,6 @@
                             android:id="@+id/bio_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginEnd="12dp"
                             android:fontFamily="@font/alata"
                             android:maxLines="2"
                             android:text="TextView"
@@ -199,26 +194,20 @@
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.501"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.661" />
+                            app:layout_constraintTop_toBottomOf="@+id/email_text" />
 
                         <TextView
                             android:id="@+id/email_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="20dp"
                             android:fontFamily="@font/alata"
-                            android:maxLength="10"
+                            android:maxLength="50"
                             android:text="TextView"
                             android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.32999998" />
+                            app:layout_constraintTop_toBottomOf="@+id/name_text" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </FrameLayout>
