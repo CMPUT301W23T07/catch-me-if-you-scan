@@ -37,7 +37,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/alata"
                     android:text="My Monster"
                     android:textColor="@color/white"
                     android:textSize="24dp" />
@@ -84,6 +84,7 @@
                     android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata"
                     android:text="100"
                     android:textColor="@color/white"
                     android:textSize="36dp" />
@@ -92,6 +93,7 @@
                     android:id="@+id/points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata"
                     android:layout_marginBottom="10dp"
                     android:text="points"
                     android:textColor="@color/white" />
@@ -101,6 +103,7 @@
                 android:id="@+id/userScans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/alata"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/custom_button"
                 android:textColor="@color/white"
