@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -271,6 +272,27 @@ public class ViewMonsterFragment extends Fragment{
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.main_fragment_container, sf).addToBackStack(null);
                 ft.commit();
+            }
+        });
+
+        ImageButton imageButton = getView().findViewById(R.id.imageButton);
+        ImageView fullImage = getView().findViewById(R.id.fullImage);
+
+        fullImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fullImage.setVisibility(View.GONE);
+            }
+        });
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                byte[] img = monster.getEnvPhoto();
+                Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
+                if(bmp != null) {
+                    fullImage.setImageBitmap(bmp);
+                    fullImage.setVisibility(View.VISIBLE);
+                }
             }
         });
 
