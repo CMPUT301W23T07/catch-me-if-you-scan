@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        replaceFragment(new ProfileFragment());
+        replaceFragment(new ProfileFragment(), true);
 
         BottomNavigationView navbar = findViewById(R.id.bottom_navigation_bar);
         navbar.getMenu().getItem(3).setChecked(true);
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     switchToScanningActivity();
                     break;
                 case R.id.profile_nav:
-                    replaceFragment(new ProfileFragment());
+                    replaceFragment(new ProfileFragment(), true);
                     break;
             }
             return true;
@@ -74,9 +74,28 @@ public class MainActivity extends AppCompatActivity {
      * @param fragment The fragment to be replaced with.
      */
     private void replaceFragment(Fragment fragment) {
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.main_fragment_container, fragment).addToBackStack(null);
+
+        ft.commit();
+    }
+
+    /**
+     * Replaces the current fragment with a new profile fragment.
+     * without adding it to the backstack.
+     *
+     * @param fragment The fragment to be replaced with.
+     */
+    private void replaceFragment(Fragment fragment, boolean isProfile) {
+
+        FragmentManager fm = getSupportFragmentManager();
+        for(int i = 0; i <fm.getBackStackEntryCount(); i++){
+            fm.popBackStack();
+        }
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.main_fragment_container, fragment);
 
         ft.commit();
     }
@@ -91,6 +110,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        replaceFragment(new ProfileFragment());
+        replaceFragment(new ProfileFragment(),true);
     }
 }

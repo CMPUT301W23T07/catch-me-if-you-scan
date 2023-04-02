@@ -53,6 +53,10 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * sets the passed user to current user of this fragment
+     * @param u
+     */
     public void setUser(User u){
         user = u;
     }
@@ -74,14 +78,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-//        Bundle incoming = this.getArguments();
-//        if (incoming != null) {
-//            user = incoming.getParcelable("USER");
-//        }
-//        else {
-//            deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-//            user = userController.getUserByDeviceID(deviceId);
-//        }
+
         updateBtn = view.findViewById(R.id.edit_profile_button);
         deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         if(user == null){
@@ -154,7 +151,6 @@ public class ProfileFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Monster monster = monstersListData.get(monstersListData.size()-1);
                 Bundle bundle = new Bundle();
-                bundle.putString("key", user.getDeviceID());
                 bundle.putString("id", monster.getHashHex());
                 ViewMonsterFragment fragment = new ViewMonsterFragment();
                 fragment.setArguments(bundle);
@@ -163,9 +159,11 @@ public class ProfileFragment extends Fragment {
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.main_fragment_container, fragment).addToBackStack(null);
                 ft.commit();
+
             }
         });
 
+        FragmentManager fm = getParentFragmentManager();
 
         return view;
     }
