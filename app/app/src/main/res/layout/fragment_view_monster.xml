@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewMonsterFragment"
-    android:background="@color/white">
+    android:background="@color/design_default_color_on_secondary"
+    tools:context=".ViewMonsterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -93,8 +93,8 @@
                     android:id="@+id/points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/alata"
                     android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/alata"
                     android:text="points"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -103,19 +103,19 @@
                 android:id="@+id/userScans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/alata"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/custom_button"
-                android:textColor="@color/white"
+                android:fontFamily="@font/alata"
                 android:paddingHorizontal="32dp"
-                android:text="See who scanned me" />
+                android:text="See who scanned me"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_margin="8dp"
             android:background="@drawable/monsters_profile_list_container"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,10 +124,10 @@
 
             <EditText
                 android:id="@+id/editComment"
-                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
-                android:layout_marginHorizontal="16dp"
                 android:layout_height="45dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:focusable="false"
                 android:hint="Name"
@@ -165,10 +165,18 @@
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:background="@android:drawable/ic_menu_gallery"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:drawable/ic_menu_gallery"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
