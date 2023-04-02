@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:focusable="true"
+        android:fontFamily="@font/alata"
         android:hint="Write a comment..."
         android:inputType="textMultiLine"
         android:maxLength="300"

@@ -12,20 +12,27 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,15 +82,18 @@ public class ViewMonsterFragment extends Fragment{
 
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+
         db = FirebaseFirestore.getInstance();
         MonsterController mc = new MonsterController(db);
+        UserController userController = new UserController(db);
 
+        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        User currentUser = userController.getUserByDeviceID(deviceId);
         bundle = this.getArguments();
-
         monster = mc.getMonster(bundle.getString("id", "0"));
-
         commentController = new CommentController(db);
         comments = commentController.getCommentForMonster(monster.getHashHex());
 
@@ -98,13 +108,59 @@ public class ViewMonsterFragment extends Fragment{
         commentArrayAdapter = new CommentArrayAdapter(this.getContext(), comments);
 
         commentListView.setAdapter(commentArrayAdapter);
+        commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Comment c = commentArrayAdapter.getItem(position);
 
+                ProfileFragment pf = new ProfileFragment();
+                pf.setUser(userController.getUser(c.getUsername()));
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_fragment_container, pf).addToBackStack(null);
+                ft.commit();
+            }
+        });
 
-        UserController userController = new UserController(db);
-        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        currentUser = userController.getUserByDeviceID(deviceId);
+        commentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Comment c = commentArrayAdapter.getItem(position);
+                if(c.getUsername().equals(currentUser.getName())){
+                    PopupMenu p = new PopupMenu(getContext(), view);
+                    p.getMenuInflater().inflate(R.menu.comment_menu, p.getMenu());
+                    p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if(item.getTitle().equals("Edit")){
+                                Bundle commentBundle = new Bundle();
+                                commentBundle.putString("hex", bundle.getString("id", "0"));
+                                EditCommentDialog commentDialog = new EditCommentDialog();
+                                commentDialog.setArguments(commentBundle);
+                                commentDialog.setAdapter(commentArrayAdapter);
+                                commentDialog.setComment(c);
+                                commentDialog.show(getActivity().getSupportFragmentManager(), "Edit a comment");
 
-        Button deleteButton = getView().findViewById(R.id.delete_button);
+                                p.dismiss();
+                            } else if (item.getTitle().equals("Delete")){
+                                commentController.deleteComment(c.getDbId());
+                                commentArrayAdapter.remove(c);
+
+                                p.dismiss();
+                            }
+                            return true;
+                        }
+                    });
+                    p.show();
+                } else {
+                    Toast t = Toast.makeText(getContext(), "This is not your comment!", Toast.LENGTH_SHORT);
+                    t.show();
+                }
+                return true;
+            }
+        });
+
+        FloatingActionButton deleteButton = getView().findViewById(R.id.delete_button);
         boolean inList = false;
 
         if(currentUser.checkIfHashExist(monster.getHashHex())){

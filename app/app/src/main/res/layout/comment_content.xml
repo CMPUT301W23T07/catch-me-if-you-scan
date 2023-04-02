@@ -24,6 +24,7 @@
             android:id="@+id/comment_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
             android:text="TextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        android:fontFamily="@font/alata"
         android:text="TextView"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/comment_avatar"
@@ -61,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        android:fontFamily="@font/alata"
         android:text="TextView"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/comment_user"

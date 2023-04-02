@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:radius="24dp" />
-    <solid android:color="#80000000" />
-    <padding
-        android:bottom="8dp"
-        android:left="8dp"
-        android:right="8dp"
-        android:top="8dp" />
-    <size android:height="48dp" />
-    <blur android:radius="8dp" />
+android:shape="rectangle">
+<gradient
+    android:type="linear"
+    android:startColor="#40B2EBF2"
+    android:endColor="#40DEAC5B"
+    android:angle="45"/>
+<corners android:radius="24dp" />
 </shape>
