@@ -84,7 +84,8 @@ public class EditCommentDialog extends DialogFragment {
                             comment = new Comment(commentEditText.getText().toString(), new Timestamp(new Date()), hex, username);
 
                             CommentController cc = new CommentController(db);
-                            cc.create(comment);
+                            String id = cc.create(comment);
+                            comment.setDbId(id);
 
                             adapter.add(comment);
                             adapter.notifyDataSetChanged();
