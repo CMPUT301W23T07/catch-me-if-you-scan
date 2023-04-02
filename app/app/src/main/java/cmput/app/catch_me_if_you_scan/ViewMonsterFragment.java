@@ -32,6 +32,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -161,7 +162,7 @@ public class ViewMonsterFragment extends Fragment{
             }
         });
 
-        Button deleteButton = getView().findViewById(R.id.delete_button);
+        FloatingActionButton deleteButton = getView().findViewById(R.id.delete_button);
         boolean inList = false;
 
         if(currentUser.checkIfHashExist(monster.getHashHex())){
