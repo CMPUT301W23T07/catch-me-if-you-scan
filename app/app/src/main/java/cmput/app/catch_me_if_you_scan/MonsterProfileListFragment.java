@@ -31,6 +31,7 @@ public class MonsterProfileListFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
+    private User user;
     private ListView monsterList;
     private SearchView searchbtn;
     private MonsterListfragmentAdapter adapter;
@@ -42,6 +43,7 @@ public class MonsterProfileListFragment extends Fragment {
     public MonsterProfileListFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -93,9 +95,10 @@ public class MonsterProfileListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_monster_profile_list, container, false);
         Bundle bundle = this.getArguments();
 
-        String deviceId = bundle.getString("key");
 
-        User user = userController.getUserByDeviceID(deviceId);
+        String deviceId = bundle.getString("key");
+        user = userController.getUserByDeviceID(deviceId);
+
         ArrayList<Monster> monstersListData =  user.getMonsters();
 
         adapter = new MonsterListfragmentAdapter(getActivity(), monstersListData);
@@ -110,7 +113,6 @@ public class MonsterProfileListFragment extends Fragment {
                 Monster monster = monstersListData.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putString("id", monster.getHashHex());
-                bundle.putString("key",deviceId);
                 ViewMonsterFragment fragment = new ViewMonsterFragment();
                 fragment.setArguments(bundle);
 
