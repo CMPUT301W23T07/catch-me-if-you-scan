@@ -50,6 +50,7 @@ public class LoginActivityTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
+        getInstrumentation().waitForIdleSync();
 
         if (userController.getUserByDeviceID(mock.getDeviceId()) != null) {
             userController.deleteUser(userController.getUserByDeviceID(mock.getDeviceId()).getName());
@@ -75,7 +76,6 @@ public class LoginActivityTest {
         UserController userController = new UserController(FirebaseFirestore.getInstance());
         userController.deleteUser(mock.getTestUser());
     }
-
     /**
      * Tests if the LoginActivity activity is created.
      */
@@ -85,7 +85,6 @@ public class LoginActivityTest {
         scenario.onActivity(activity -> assertNotNull(activity));
 
     }
-
     /**
      * Tests if the SignUp button switches the LoginActivity activity to the MainActivity activity.
      */
