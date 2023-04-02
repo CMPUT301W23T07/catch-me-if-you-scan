@@ -14,9 +14,9 @@
         <ImageView
             android:id="@+id/environment"
             android:layout_width="match_parent"
-            android:layout_height="255dp"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/name"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,84 +24,125 @@
             app:layout_constraintVertical_bias="0.0"
             tools:src="@tools:sample/backgrounds/scenic" />
 
-        <ImageView
-            android:id="@+id/monsterImg"
-            android:layout_width="155dp"
-            android:layout_height="155dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/my_qr_summary_background"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.087"
-            tools:src="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/monsterImg"
+                    android:layout_width="153dp"
+                    android:layout_height="153dp"
+                    tools:src="@tools:sample/avatars" />
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="My Monster"
-            android:textSize="24dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/monsterImg" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100"
-            android:textSize="36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_button"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp">
 
-        <TextView
-            android:id="@+id/points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="points"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/score" />
+                <TextView
+                    android:id="@+id/name"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="My Monster"
+                    android:textSize="24dp" />
 
-        <ListView
-            android:id="@+id/commentListView"
-            android:longClickable="true"
+                <TextView
+                    android:id="@+id/score"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100"
+                    android:textSize="36dp" />
+
+                <TextView
+                    android:id="@+id/points"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="points" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/userScans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/custom_button"
+                android:textColor="@color/white"
+                android:paddingHorizontal="32dp"
+                android:text="See who scanned me" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@drawable/monsters_profile_list_container"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editComment" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <Button
-            android:id="@+id/userScans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="See who scanned me"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/points" />
+            <EditText
+                android:id="@+id/editComment"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_height="45dp"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/editComment"
-            android:layout_width="279dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:focusable="false"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userScans" />
+            <ListView
+                android:id="@+id/commentListView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:longClickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editComment" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/delete_button"
