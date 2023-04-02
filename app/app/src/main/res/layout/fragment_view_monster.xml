@@ -152,6 +152,7 @@
             android:layout_marginEnd="16dp"
             android:backgroundTint="@color/red_cancel_button"
             android:text="Delete"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
