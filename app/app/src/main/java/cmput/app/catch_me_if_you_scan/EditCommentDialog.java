@@ -25,6 +25,11 @@ import java.util.Date;
 public class EditCommentDialog extends DialogFragment {
 
     private CommentArrayAdapter adapter;
+    private Comment comment;
+
+    public void setComment(Comment c){
+        comment = c;
+    }
 
     @NonNull
     @Override
@@ -39,6 +44,9 @@ public class EditCommentDialog extends DialogFragment {
                 .create();
 
         EditText commentEditText = view.findViewById(R.id.editCommentText);
+        if(comment != null){
+            commentEditText.setText(comment.getCommentMessage());
+        }
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
@@ -50,9 +58,21 @@ public class EditCommentDialog extends DialogFragment {
 
                     @Override
                     public void onClick(View view) {
-                        if(commentEditText.getText().toString().trim().isEmpty()){
+                        if (commentEditText.getText().toString().trim().isEmpty()) {
                             Toast toast = Toast.makeText(getContext(), "Your comment is empty!", Toast.LENGTH_SHORT);
                             toast.show();
+                        } else if (comment != null) {
+                            //adapter.remove(comment);
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                            comment.setCommentMessage(commentEditText.getText().toString());
+                            CommentController cc = new CommentController(db);
+                            cc.updateComment(comment.getDbId(), commentEditText.getText().toString(), comment.getCommentDate());
+
+                            //adapter.add(comment);
+                            adapter.notifyDataSetChanged();
+
+                            dismiss();
                         } else {
                             // Add a comment to the db
                             String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -61,7 +81,7 @@ public class EditCommentDialog extends DialogFragment {
                             User currentUser = userController.getUserByDeviceID(deviceId);
                             String username = currentUser.getName();
                             String hex = getArguments().getString("hex", "0");
-                            Comment comment = new Comment(commentEditText.getText().toString(), new Timestamp(new Date()), hex, username);
+                            comment = new Comment(commentEditText.getText().toString(), new Timestamp(new Date()), hex, username);
 
                             CommentController cc = new CommentController(db);
                             cc.create(comment);
