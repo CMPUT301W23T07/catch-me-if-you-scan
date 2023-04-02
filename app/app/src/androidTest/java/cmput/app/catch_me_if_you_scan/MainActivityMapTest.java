@@ -46,6 +46,8 @@ public class MainActivityMapTest {
     public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
     public ActivityScenario<MainActivity> scenario;
 
+    private static TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());
+
     /**
      * Sets up the test scenario.
      */
@@ -55,7 +57,8 @@ public class MainActivityMapTest {
     }
     @BeforeClass
     public static void setUpBeforeClass() {
-        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
+
+        getInstrumentation().waitForIdleSync();
 
         UserController userController = new UserController(FirebaseFirestore.getInstance());
 
@@ -67,7 +70,6 @@ public class MainActivityMapTest {
     }
     @AfterClass
     public static void finish(){
-        TestDetails mock = TestDetails.getInstance(getInstrumentation().getContext());;
 
         UserController userController = new UserController(FirebaseFirestore.getInstance());
         userController.deleteUser(mock.getTestUser());

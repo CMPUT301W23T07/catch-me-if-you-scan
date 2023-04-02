@@ -94,7 +94,7 @@ public class ProfileFragment extends Fragment {
         }
 
         if (user.getDescription() == null){
-            user.setDescription("Hey I'm "+ user.getName());
+            user.setDescription("A brief bio intro for "+ user.getName());
         }
         userName = view.findViewById(R.id.name_text);
         userEmail = view.findViewById(R.id.email_text);

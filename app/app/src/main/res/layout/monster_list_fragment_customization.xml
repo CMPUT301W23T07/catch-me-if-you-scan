@@ -25,10 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
+        android:fontFamily="@font/alata"
         android:text="MonsterName"
         android:textColor="#5A5A5A"
-        android:textSize="17dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/monsterImgFragment"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,10 +38,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="15dp"
+        android:fontFamily="@font/alata"
         android:text="123pts"
         android:textColor="#5A5A5A"
-        android:textSize="17dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/MonsterNameListFragment"
         app:layout_constraintTop_toTopOf="parent" />
 
