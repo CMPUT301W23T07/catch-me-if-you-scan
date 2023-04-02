@@ -12,17 +12,23 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,10 +80,16 @@ public class ViewMonsterFragment extends Fragment{
 
     }
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+
         db = FirebaseFirestore.getInstance();
         MonsterController mc = new MonsterController(db);
+        UserController userController = new UserController(db);
+
+        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        User currentUser = userController.getUserByDeviceID(deviceId);
 
         bundle = this.getArguments();
 
@@ -97,10 +109,80 @@ public class ViewMonsterFragment extends Fragment{
         commentArrayAdapter = new CommentArrayAdapter(this.getContext(), comments);
 
         commentListView.setAdapter(commentArrayAdapter);
+        commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Comment c = commentArrayAdapter.getItem(position);
 
-        String deviceId = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        UserController userController = new UserController(db);
-        User currentUser = userController.getUserByDeviceID(deviceId);
+                ProfileFragment pf = new ProfileFragment();
+                pf.setUser(userController.getUser(c.getUsername()));
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_fragment_container, pf).addToBackStack(null);
+                ft.commit();
+            }
+        });
+
+        commentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Comment c = commentArrayAdapter.getItem(position);
+                if(c.getUsername().equals(currentUser.getName())){
+                    PopupMenu p = new PopupMenu(getContext(), view);
+                    p.getMenuInflater().inflate(R.menu.comment_menu, p.getMenu());
+                    p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if(item.getTitle().equals("Edit")){
+                                Bundle commentBundle = new Bundle();
+                                commentBundle.putString("hex", bundle.getString("id", "0"));
+                                EditCommentDialog commentDialog = new EditCommentDialog();
+                                commentDialog.setArguments(commentBundle);
+                                commentDialog.setAdapter(commentArrayAdapter);
+                                commentDialog.setComment(c);
+                                commentDialog.show(getActivity().getSupportFragmentManager(), "Edit a comment");
+
+                                p.dismiss();
+                            } else if (item.getTitle().equals("Delete")){
+                                commentController.deleteComment(c.getDbId());
+                                commentArrayAdapter.remove(c);
+
+                                p.dismiss();
+                            }
+                            return true;
+                        }
+                    });
+                    p.show();
+                } else {
+                    Toast t = Toast.makeText(getContext(), "This is not your comment!", Toast.LENGTH_SHORT);
+                    t.show();
+                }
+                return true;
+            }
+        });
+
+        Button deleteButton = getView().findViewById(R.id.delete_button);
+        boolean inList = false;
+
+        if(currentUser.checkIfHashExist(monster.getHashHex())){
+            inList = true;
+        }
+
+        if(inList){
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.removeMonster(monster);
+                    userController.deleteMonster(currentUser.getName(), mc.getMonsterDoc(monster.getHashHex()));
+                    deleteButton.setVisibility(View.GONE);
+                    Toast toast = Toast.makeText(getContext(), "Removed the monster from your account", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+
+        } else {
+            deleteButton.setVisibility(View.GONE);
+        }
 
         TextView score = (TextView) getView().findViewById(R.id.score);
         TextView name = (TextView) getView().findViewById(R.id.name);
@@ -152,6 +234,21 @@ public class ViewMonsterFragment extends Fragment{
                 commentDialog.setArguments(commentBundle);
                 commentDialog.setAdapter(commentArrayAdapter);
                 commentDialog.show(getActivity().getSupportFragmentManager(), "Make a comment");
+            }
+        });
+
+        Button scans = getView().findViewById(R.id.userScans);
+        scans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putString("id", monster.getHashHex());
+                UsersScannedFragment sf = new UsersScannedFragment();
+                sf.setArguments(b);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_fragment_container, sf).addToBackStack(null);
+                ft.commit();
             }
         });
     }
