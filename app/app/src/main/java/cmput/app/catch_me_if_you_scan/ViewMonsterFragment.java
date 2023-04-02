@@ -129,7 +129,7 @@ public class ViewMonsterFragment extends Fragment{
                         listFragment.setArguments(bundle);
                         FragmentManager fm = getParentFragmentManager();
                         FragmentTransaction ft = fm.beginTransaction();
-                        for(int i = 0; i <fm.getBackStackEntryCount()-1; i++){
+                        for(int i = 0; i <fm.getBackStackEntryCount(); i++){
                             fm.popBackStack();
                         }
                         ft.replace(R.id.main_fragment_container, listFragment);
@@ -140,7 +140,7 @@ public class ViewMonsterFragment extends Fragment{
                         ProfileFragment profileFragment = new ProfileFragment();
                         FragmentManager fm = getParentFragmentManager();
                         FragmentTransaction ft = fm.beginTransaction();
-                        for(int i = 0; i <fm.getBackStackEntryCount()-1; i++){
+                        for(int i = 0; i <fm.getBackStackEntryCount(); i++){
                             fm.popBackStack();
                         }
                         ft.replace(R.id.main_fragment_container, profileFragment);
@@ -158,12 +158,6 @@ public class ViewMonsterFragment extends Fragment{
 
         ImageView mv = (ImageView) getView().findViewById(R.id.monsterImg);
         ImageView bg = (ImageView) getView().findViewById(R.id.environment);
-
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
 
         name.setText(monster.getName());
         score.setText(Integer.toString(monster.getScore()));

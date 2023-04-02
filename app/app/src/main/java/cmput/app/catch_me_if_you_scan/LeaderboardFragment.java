@@ -294,9 +294,6 @@ public class LeaderboardFragment extends Fragment {
      */
     private void launchFragmentWithUser(User user) {
         ProfileFragment nextFrag = new ProfileFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable("USER", user);
-//        nextFrag.setArguments(bundle);
         nextFrag.setUser(user);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_fragment_container, nextFrag, "userFragment")
@@ -311,9 +308,6 @@ public class LeaderboardFragment extends Fragment {
     private void launchFragmentWithMonster(Monster monster) {
         ViewMonsterFragment nextFrag = new ViewMonsterFragment();
         Bundle bundle = new Bundle();
-//        bundle.putParcelable("USER", monster);
-//        String deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-//        bundle.putString("key", deviceId);
         bundle.putString("id", monster.getHashHex());
         nextFrag.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction()

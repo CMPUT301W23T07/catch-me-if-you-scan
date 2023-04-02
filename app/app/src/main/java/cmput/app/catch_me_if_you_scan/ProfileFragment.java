@@ -78,7 +78,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        FragmentManager fm = getParentFragmentManager();
 
         updateBtn = view.findViewById(R.id.edit_profile_button);
         deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -164,6 +163,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        FragmentManager fm = getParentFragmentManager();
 
         return view;
     }
