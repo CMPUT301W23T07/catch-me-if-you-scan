@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Matrix;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
@@ -101,13 +102,13 @@ public class SubmissionActivity extends AppCompatActivity {
                     Matrix matrix = new Matrix();
                     matrix.postRotate(90);
                     bigImage = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                    // This will blur the bigImage
+                    BlurPhoto blurredPhoto = new BlurPhoto(bigImage);
+                    backgroundImg.setImageBitmap(blurredPhoto.getBlurredImage());
+
                     // Put the rotated image onto the background
-                    backgroundImg.setImageBitmap(bigImage);
                     backgroundImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                        RenderEffect renderEffect = RenderEffect.createBlurEffect(10f, 1f, Shader.TileMode.CLAMP);
-                        backgroundImg.setRenderEffect(renderEffect);
-                    }
                     ////////////////////////////////////////////////////////////////////////////////
                 }
             });
