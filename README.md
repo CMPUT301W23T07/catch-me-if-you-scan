@@ -12,11 +12,11 @@
 
 
 ## 📖 About
-Get ready to embark on a thrilling adventure with this exciting game that allows you to compete with your friends to become the ultimate monster collector. As players, you will scan QR codes, barcodes, and other codes, searching for the coolest monsters that yield the highest points.
+Get ready to embark on a thrilling adventure with this exciting game that allows you to compete with your friends to become the ultimate monster collector. As players, you will scan QR codes and barcodes, searching for the coolest monsters that yield the highest points.
 
 The game presents a fun and challenging opportunity to test your skills and knowledge of the area, as you explore the world around you and discover hidden treasures that others might overlook. You can compete with your friends and develop your collection skills to outdo each other and become the top collector.
 
-With every successful capture, you'll feel the thrill of victory and move one step closer to becoming the ultimate monster collector. The game's exhilarating gameplay will keep you engaged for hours, as you uncover new and exciting locations and uncover hidden clues.
+With every successful capture, you'll feel the thrill of victory and move one step closer to becoming number 1. The game's exhilarating gameplay will keep you engaged for hours, as you uncover new and exciting locations and uncover hidden gems.
 
 So, what are you waiting for? Download the game today and start your journey to becoming the ultimate monster collector. Whether you're a seasoned player or a beginner, the game promises to deliver an unforgettable experience that will keep you coming back for more.
 
@@ -29,8 +29,8 @@ So, what are you waiting for? Download the game today and start your journey to 
 - Challenge yourself to test your skills and knowledge of your surroundings, competing with friends to become the top collector.
 - Use your Android smartphone's scanning feature to easily collect points by scanning QR codes and barcodes with an intuitive and user-friendly interface.
 - Complex algorithms visualize QR codes and barcodes as unique monsters, adding to the excitement of each successful scan.
-- Competitive multiplayer mode allows you to challenge friends and leave comments and reviews about the monsters you collect, gaining insight into their strategies and tactics.
-- Download the game today for an unforgettable experience that promises to keep you coming back for more, whether you're a seasoned player or a beginner.
+- A Competitive multiplayer environment allows you to challenge friends and leave comments and reviews about the monsters you collect, gaining insight into their strategies and tactics.
+- Download the game today for an unforgettable experience that promises to keep you coming back for more!
 
 <br><br>
 <div>
