@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -19,6 +18,12 @@ import java.util.ArrayList;
  * Adapter for comment list view - shows message and username
  */
 public class CommentArrayAdapter extends ArrayAdapter<Comment> {
+
+    /**
+     * This is the constructor for the comment array adapter
+     * @param context
+     * @param comments
+     */
     CommentArrayAdapter(Context context, ArrayList<Comment> comments){
         super(context, 0, comments);
     }

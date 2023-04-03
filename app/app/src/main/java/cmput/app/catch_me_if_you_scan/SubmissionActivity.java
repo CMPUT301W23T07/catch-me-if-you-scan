@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Matrix;
-import android.graphics.RenderEffect;
-import android.graphics.Shader;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -400,7 +396,4 @@ public class SubmissionActivity extends AppCompatActivity {
         monsterNameView = findViewById(R.id.MonsterNameTextView);
         submitMonsterButton = findViewById(R.id.SubmitButton);
     }
-
-
-
 }

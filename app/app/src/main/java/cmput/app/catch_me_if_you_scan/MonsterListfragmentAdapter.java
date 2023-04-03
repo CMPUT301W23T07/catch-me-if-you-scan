@@ -20,9 +20,10 @@ import java.util.List;
  * An adapter to show the customization of monsters in the list
  */
 public class MonsterListfragmentAdapter extends ArrayAdapter<Monster> {
+
     /**
-       a custom adapter the design each item in ViewList view individually.
-    */
+     * a custom adapter the design each item in ViewList view individually.
+     */
     public MonsterListfragmentAdapter(Context context, List<Monster> Monsters) {
 //        creates the adapter
         super(context, 0, Monsters);

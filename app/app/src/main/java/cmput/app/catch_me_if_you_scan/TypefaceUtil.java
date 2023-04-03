@@ -5,6 +5,9 @@ import android.graphics.Typeface;
 
 import java.lang.reflect.Field;
 
+/**
+ * This is the utility class for the font type facing
+ */
 public class TypefaceUtil {
 
     /**

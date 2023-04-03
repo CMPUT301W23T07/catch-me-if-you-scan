@@ -1,10 +1,5 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
-
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
@@ -21,7 +16,6 @@ public class Monster implements Comparable<Monster> {
     private String hashedCode;
     private String name;
     private int score;
-    private int scoreRank;
     private String[] visual;
     private ArrayList<Comment> comments = new ArrayList<Comment>();
     private HashCode hash;
@@ -35,6 +29,13 @@ public class Monster implements Comparable<Monster> {
     private boolean locationEnabled;
 
 
+    /**
+     * This is one of the constructors used for the Monster class
+     * @param code
+     * @param latitude
+     * @param longitude
+     * @param envPhoto
+     */
     public Monster(String code, Double latitude, Double longitude, byte[] envPhoto){
         this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
@@ -48,6 +49,16 @@ public class Monster implements Comparable<Monster> {
         this.locationEnabled = locationEnabled;
     }
 
+    /**
+     * This constructor is used by the MonsterController class
+     * @param name
+     * @param score
+     * @param hashHex
+     * @param longitude
+     * @param latitude
+     * @param envPhoto
+     * @param locationEnabled
+     */
     public Monster(String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto, boolean locationEnabled) {
         this.hash = HashCode.fromString(hashHex);
         this.hashInt = this.hash.asInt();
@@ -140,18 +151,6 @@ public class Monster implements Comparable<Monster> {
         this.name = name;
     }
 
-    /**
-     * ranks the score based on a fixed limits
-     * @return score's ranks
-     */
-    public int getScoreRank(){
-        if(this.score < 99) scoreRank = 1;
-        else if(this.score < 199) scoreRank = 2;
-        else if(this.score < 399) scoreRank = 3;
-        else if(this.score < 599) scoreRank = 4;
-        else if(this.score >= 600) scoreRank = 5;
-        return this.scoreRank;
-    }
     /**
      * It creates a unique name for the monster
      * by using its hash's bits
@@ -263,69 +262,30 @@ public class Monster implements Comparable<Monster> {
      */
     public void setLocationEnabled(boolean locationEnabled) { this.locationEnabled = locationEnabled; }
 
+    /**
+     * This method sets the locations for the monster
+     * @param latitude_param
+     * @param longitude_param
+     */
     public void setLocations(Double latitude_param, Double longitude_param){
         latitude = latitude_param;
         longitude = longitude_param;
     }
 
+    /**
+     * This method sets the environment photo for the monster
+     * @param envString
+     */
     public void setEnvPhoto(byte[] envString){
         envPhoto = envString;
     }
 
+    /**
+     * This method is used for comparing monsters
+     * @param monster the object to be compared.
+     * @return
+     */
     public int compareTo(Monster monster) {
         return this.score - monster.score;
     }
-
-
-//    /**
-//     * This method is part of the parcelable implementation
-//     */
-//    public static final Creator<Monster> CREATOR = new Creator<Monster>() {
-//        @Override
-//        public Monster createFromParcel(Parcel in) {
-//            return new Monster(in);
-//        }
-//
-//        @Override
-//        public Monster[] newArray(int size) {
-//            return new Monster[size];
-//        }
-//    };
-//
-//    /**
-//     * This method is part of the parcelable implementation
-//     */
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    /**
-//     * This method is part of the parcelable implementation
-//     */
-//    @Override
-//    public void writeToParcel(@NonNull Parcel dest, int flags) {
-//        dest.writeString(hashedCode);
-//        dest.writeString(name);
-//        dest.writeInt(score);
-//        dest.writeInt(scoreRank);
-//        dest.writeStringArray(visual);
-//        dest.writeString(hashBinary);
-//        dest.writeString(hashHex);
-//        dest.writeInt(hashInt);
-//        if (longitude == null) {
-//            dest.writeByte((byte) 0);
-//        } else {
-//            dest.writeByte((byte) 1);
-//            dest.writeDouble(longitude);
-//        }
-//        if (latitude == null) {
-//            dest.writeByte((byte) 0);
-//        } else {
-//            dest.writeByte((byte) 1);
-//            dest.writeDouble(latitude);
-//        }
-//        dest.writeBlob(envPhoto);
-//        dest.writeByte((byte) (locationEnabled ? 1 : 0));
-//    }
 }

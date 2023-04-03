@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * This class is the controller for interacting with the comments collection in the database
+ * it follows the CRUD model (Create, Read, Update, Delete)
+ */
 public class CommentController {
     private FirebaseFirestore db;
     private CollectionReference collection;

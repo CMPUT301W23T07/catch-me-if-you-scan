@@ -1,6 +1,5 @@
 package cmput.app.catch_me_if_you_scan;
 
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +27,15 @@ public class EditProfileDialog extends DialogFragment {
     private EditText description;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
+
+    /**
+     * This method is called when the dialog is created, it will inflate the view
+     * with the desired elements
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

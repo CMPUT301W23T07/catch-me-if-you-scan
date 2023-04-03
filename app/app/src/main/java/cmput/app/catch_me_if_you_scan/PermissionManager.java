@@ -21,7 +21,6 @@ import java.util.List;
  * It also handles the result of the permission request and shows relevant messages to the user.
  */
 public class PermissionManager {
-
     // Request code for the permission request
     private static final int PERMISSION_REQUEST_CODE = 101;
 
@@ -91,7 +90,6 @@ public class PermissionManager {
      * @param grantResults The results of the permission request.
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             boolean allPermissionsGranted = true;

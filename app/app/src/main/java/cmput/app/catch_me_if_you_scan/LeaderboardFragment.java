@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -290,7 +289,7 @@ public class LeaderboardFragment extends Fragment {
     }
 
     /**
-     * This method will launch the leaderboard fragment give a user
+     * This method will launch the profile fragment for the selected user
      * @param user
      */
     private void launchFragmentWithUser(User user) {
@@ -303,7 +302,7 @@ public class LeaderboardFragment extends Fragment {
     }
 
     /**
-     * This method will launch the leaderboard fragment give a monster
+     * This method will launch the view monster fragment for the selected monster
      * @param monster
      */
     private void launchFragmentWithMonster(Monster monster) {

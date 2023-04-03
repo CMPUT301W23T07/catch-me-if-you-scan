@@ -1,32 +1,22 @@
-/**
- * The MainActivity class is responsible for managing the UI elements and navigation of the app.
- * It contains methods to replace fragments, switch to the ScanningActivity, and initialize the Bottom Navigation Bar.
- * The OnMapReadyCallback interface is implemented for the MapFragment to handle the Google Maps API.
- */
+
 package cmput.app.catch_me_if_you_scan;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarMenu;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
+/**
+ * The MainActivity class is responsible for managing the UI elements and navigation of the app.
+ * It contains methods to replace fragments, switch to the ScanningActivity, and initialize the Bottom Navigation Bar.
+ * The OnMapReadyCallback interface is implemented for the MapFragment to handle the Google Maps API.
+ */
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -132,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
         scanningManager.scanCode();
     }
 
+    /**
+     * This method handles the activities onResume call
+     */
     @Override
     protected void onResume() {
         super.onResume();

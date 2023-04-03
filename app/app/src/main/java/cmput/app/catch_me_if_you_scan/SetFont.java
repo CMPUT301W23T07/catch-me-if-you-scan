@@ -1,15 +1,17 @@
 package cmput.app.catch_me_if_you_scan;
 
 import android.app.Application;
-import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 
-import java.lang.reflect.Field;
-
+/**
+ * This class is used for setting the font in the application
+ */
 public class SetFont
         extends Application {
 
+    /**
+     * creates the font
+     */
     @Override
     public void onCreate() {
         super.onCreate();

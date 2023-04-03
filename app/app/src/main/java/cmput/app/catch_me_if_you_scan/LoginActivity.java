@@ -1,22 +1,13 @@
-/**
- * The LoginActivity class represents the main entry point of the application and handles the user's
- * login functionality. It checks if the Google Play Services version is up-to-date and requests all necessary
- * permissions from the user before switching to the MainActivity.
- */
-
 
 package cmput.app.catch_me_if_you_scan;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -32,21 +23,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.concurrent.ExecutionException;
-
+/**
+ * The LoginActivity class represents the main entry point of the application and handles the user's
+ * login functionality. It checks if the Google Play Services version is up-to-date and requests all necessary
+ * permissions from the user before switching to the MainActivity.
+ */
 public class LoginActivity extends AppCompatActivity {
-
     private static final String TAG = "MainActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private UserController userController = new UserController(db);
-    PermissionManager permissionManager;
-
+    private PermissionManager permissionManager;
     private String deviceId;
     private EditText usrName;
     private EditText usrEmail;
-
 
     /**
      * This method is called when the activity is starting. It initializes the activity, sets the content view,
@@ -127,6 +117,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method is called when the activity is resumed
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -168,22 +161,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
-/**
- * This method is called when the permission request has been completed. It forwards the permission results to
- * the permission manager.
- * @param requestCode the request code of the permission request
- * @param permissions the requested permissions
- * @param grantResults the grant results of the requested permissions
- * */
+    /**
+     * This method is called when the permission request has been completed. It forwards the permission results to
+     * the permission manager.
+     * @param requestCode the request code of the permission request
+     * @param permissions the requested permissions
+     * @param grantResults the grant results of the requested permissions
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
-
 }
 
 

@@ -25,6 +25,10 @@ public class UserController {
     private FirebaseFirestore db;
     private CollectionReference collection;
 
+    /**
+     * Constructor for the user controller, initializes the database connection
+     * @param db
+     */
     public UserController(FirebaseFirestore db){
         this.db = db;
         this.collection = db.collection("User");
@@ -367,5 +371,4 @@ public class UserController {
         }
         return false;
     }
-
 }
