@@ -19,6 +19,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Display a list of the users who have scanned a monster.
+ * Use putArgs to send in a Bundle containing the monster to get user scans from.
+ */
 public class UsersScannedFragment extends Fragment {
 
     ArrayList<User> users;
@@ -34,11 +38,6 @@ public class UsersScannedFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UsersScannedFragment newInstance(String param1, String param2) {
-        UsersScannedFragment fragment = new UsersScannedFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +50,12 @@ public class UsersScannedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_users_scanned, container, false);
     }
 
+    /**
+     * Populate the fragment with users who scanned and set listeners on them so profiles can be visited
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
 
@@ -72,6 +77,7 @@ public class UsersScannedFragment extends Fragment {
         userAdapter = new ScansArrayAdapter(this.getContext(), users);
         userListView.setAdapter(userAdapter);
 
+        // Back button; simply relaunches the monster fragment
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +92,7 @@ public class UsersScannedFragment extends Fragment {
             }
         });
 
+        // On clicking user, launch their profile fragment
         userListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

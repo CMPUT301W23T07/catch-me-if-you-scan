@@ -44,7 +44,8 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Displays the information and comments for a monster.
+ * Use putArgs to send a Bundle containing the hex hash of the monster with key "id"
  */
 public class ViewMonsterFragment extends Fragment{
 
@@ -82,7 +83,12 @@ public class ViewMonsterFragment extends Fragment{
 
     }
 
-
+    /**
+     * Populate view with information and set listeners
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
 
@@ -100,6 +106,7 @@ public class ViewMonsterFragment extends Fragment{
 
         byte[] img = monster.getEnvPhoto();
         Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
+        // Display the environment photo without blurring
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +131,8 @@ public class ViewMonsterFragment extends Fragment{
         commentArrayAdapter = new CommentArrayAdapter(this.getContext(), comments);
 
         commentListView.setAdapter(commentArrayAdapter);
+
+        // Go to author profile of clicked comment
         commentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -138,6 +147,7 @@ public class ViewMonsterFragment extends Fragment{
             }
         });
 
+        // Long hold comment to edit/delete it
         commentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -183,6 +193,7 @@ public class ViewMonsterFragment extends Fragment{
             inList = true;
         }
 
+        // If comment is yours, show a delete button
         if(inList){
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -233,6 +244,8 @@ public class ViewMonsterFragment extends Fragment{
 
         name.setText(monster.getName());
         score.setText(Integer.toString(monster.getScore()));
+
+        // Draw monster visual
         mv.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
@@ -245,6 +258,7 @@ public class ViewMonsterFragment extends Fragment{
             }
         });
 
+        // Draw background environment photo
         bg.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
@@ -262,6 +276,7 @@ public class ViewMonsterFragment extends Fragment{
         TextView comment = (TextView) getView().findViewById(R.id.editComment);
         comment.setHint("Write a comment...");
 
+        // Create new comment
         comment.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -275,6 +290,8 @@ public class ViewMonsterFragment extends Fragment{
         });
 
         Button scans = getView().findViewById(R.id.userScans);
+
+        // Show users who scanned this monster
         scans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
