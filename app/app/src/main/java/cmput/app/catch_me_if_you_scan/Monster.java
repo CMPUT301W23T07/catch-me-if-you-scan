@@ -65,29 +65,6 @@ public class Monster implements Comparable<Monster> {
         this.locationEnabled = locationEnabled;
     }
 
-//    protected Monster(Parcel in) {
-//        hashedCode = in.readString();
-//        name = in.readString();
-//        score = in.readInt();
-//        scoreRank = in.readInt();
-//        visual = in.createStringArray();
-//        hashBinary = in.readString();
-//        hashHex = in.readString();
-//        hashInt = in.readInt();
-//        if (in.readByte() == 0) {
-//            longitude = null;
-//        } else {
-//            longitude = in.readDouble();
-//        }
-//        if (in.readByte() == 0) {
-//            latitude = null;
-//        } else {
-//            latitude = in.readDouble();
-//        }
-//        envPhoto = in.readBlob();
-//        locationEnabled = in.readByte() != 0;
-//    }
-
     /**
      * get the environment photo as a string(byte array) for this monster
      * @return String representing environment photo.
