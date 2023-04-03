@@ -60,7 +60,7 @@ Install my-project with git
 - [Yosri Swidan](https://github.com/ImYosrii), 2nd Year CS, Full stack web dev
 - [Mark Julius Abraham](https://github.com/MarkJuliusAbraham), 3rd year CS, future dropout
 - [Riley Zilka](https://github.com/rileyzilka01), Senior ML Engineer with 10+ years of experience
-- [Jay Kim](https://github.com/Flying-Kimbo), 3rd Year CS
+- [Jay Kim](https://github.com/Flying-Kimbo), 3rd Year CS, Founder of TWPS
 - [Charlie Kim](https://github.com/charliekim2), 3rd year CS, Amazon CEO
 - [Mohammad-Sajjad Ahmadi](https://github.com/AMD-Bull), 3rd Year CS, Intern CTO @ Google
 
