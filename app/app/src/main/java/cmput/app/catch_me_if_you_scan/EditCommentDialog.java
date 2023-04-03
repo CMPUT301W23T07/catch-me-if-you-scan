@@ -22,15 +22,31 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Dialog for creating/editing comments
+ * Pass in the Adapter for the list view using setAdapter.
+ * To edit an existing comment, use setComment.
+ */
 public class EditCommentDialog extends DialogFragment {
 
     private CommentArrayAdapter adapter;
     private Comment comment;
 
+    /**
+     * Used to pass in an existing comment to edit.
+     * @param c Existing Comment to edit
+     */
     public void setComment(Comment c){
         comment = c;
     }
 
+    /**
+     * Populates dialog - fill EditText with previous message if editing an old comment.
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return the new EditCommentDialog.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -58,10 +74,12 @@ public class EditCommentDialog extends DialogFragment {
 
                     @Override
                     public void onClick(View view) {
+                        // Disallow adding comment if empty
                         if (commentEditText.getText().toString().trim().isEmpty()) {
                             Toast toast = Toast.makeText(getContext(), "Your comment is empty!", Toast.LENGTH_SHORT);
                             toast.show();
                         } else if (comment != null) {
+                            // Edit existing comment
                             //adapter.remove(comment);
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -103,6 +121,10 @@ public class EditCommentDialog extends DialogFragment {
 
     }
 
+    /**
+     * Pass the fragment the adapter so it can update the list view.
+     * @param a CommentArrayAdapter to add/edit comment in
+     */
     public void setAdapter(CommentArrayAdapter a){
         adapter = a;
     }
