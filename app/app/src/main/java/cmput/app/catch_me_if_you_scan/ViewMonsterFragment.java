@@ -96,6 +96,17 @@ public class ViewMonsterFragment extends Fragment{
         monster = mc.getMonster(bundle.getString("id", "0"));
         commentController = new CommentController(db);
         comments = commentController.getCommentForMonster(monster.getHashHex());
+        Button button = view.findViewById(R.id.button);
+
+        byte[] img = monster.getEnvPhoto();
+        Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EnvPhotoDialogFragment object = new EnvPhotoDialogFragment(bmp);
+                object.show(getActivity().getSupportFragmentManager(), "Environtment Photo");
+            }
+        });
 
         Collections.sort(comments, new Comparator<Comment>() {
             @Override
@@ -233,8 +244,7 @@ public class ViewMonsterFragment extends Fragment{
             @Override
             public boolean onPreDraw() {
                 bg.getViewTreeObserver().removeOnPreDrawListener(this);
-                byte[] img = monster.getEnvPhoto();
-                Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
+
                 if(bmp != null) {
                     BlurPhoto blurredPhoto = new BlurPhoto(bmp);
                     //Bitmap resizedBmp = Bitmap.createBitmap(bmp, 0, 200, bg.getMeasuredWidth(), bg.getMeasuredHeight());
