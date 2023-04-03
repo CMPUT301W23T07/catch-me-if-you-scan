@@ -34,6 +34,10 @@ public class UserController {
         this.collection = db.collection("User");
     }
 
+    public UserController(CollectionReference collection) {
+        this.collection = collection;
+    }
+
     /**
      * Takes in a user object and writes to the database.
      * @param user user to write to database

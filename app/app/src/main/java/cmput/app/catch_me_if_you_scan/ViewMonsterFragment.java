@@ -127,6 +127,26 @@ public class ViewMonsterFragment extends Fragment{
             }
         });
 
+        Button locate = view.findViewById(R.id.locate_monster_button);
+        locate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (monster.getLocationEnabled()) {
+                    MapFragment nextFrag = new MapFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", monster.getHashHex());
+                    nextFrag.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                            .addToBackStack(null)
+                            .commit();
+                }
+                else {
+                    Toast.makeText(getContext(), "This monster does not have location enabled", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         Collections.sort(comments, new Comparator<Comment>() {
             @Override
             public int compare(Comment o1, Comment o2) {

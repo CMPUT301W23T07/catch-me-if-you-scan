@@ -59,6 +59,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private RadioButton gold;
     private RadioButton platinum;
     private RadioButton diamond;
+    private Monster monster;
+    private int bundlePresent = 0;
+    private Bitmap bronzeMarker;
+    private Bitmap silverMarker;
+    private Bitmap goldMarker;
+    private Bitmap platinumMarker;
+    private Bitmap diamondMarker;
 
 
     /**
@@ -79,53 +86,74 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mapFilter = v.findViewById(R.id.map_filter_display);
-        mapFilter.setVisibility(v.GONE);
-        bronze = v.findViewById(R.id.bronze_radio);
-        silver = v.findViewById(R.id.silver_radio);
-        gold = v.findViewById(R.id.gold_radio);
-        platinum = v.findViewById(R.id.platinum_radio);
-        diamond = v.findViewById(R.id.diamond_radio);
+        Bundle bundle = this.getArguments();
 
-        permissions = new PermissionManager(getActivity());
+        setMarkerIcons();
 
-        mView = v.findViewById(R.id.map_view);
-        mView.onCreate(savedInstanceState);
+        if (bundle == null) {
+            bundlePresent = 1;
+            mapFilter = v.findViewById(R.id.map_filter_display);
+            mapFilter.setVisibility(v.GONE);
+            bronze = v.findViewById(R.id.bronze_radio);
+            silver = v.findViewById(R.id.silver_radio);
+            gold = v.findViewById(R.id.gold_radio);
+            platinum = v.findViewById(R.id.platinum_radio);
+            diamond = v.findViewById(R.id.diamond_radio);
 
-        mView.getMapAsync(this);
+            permissions = new PermissionManager(getActivity());
 
-        initSearchBar(v);
+            mView = v.findViewById(R.id.map_view);
+            mView.onCreate(savedInstanceState);
 
-        Button filterButton = v.findViewById(R.id.filter_map_button);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mapFilter.setVisibility(v.VISIBLE);
-                bronze.setChecked(false);
-                silver.setChecked(false);
-                gold.setChecked(false);
-                platinum.setChecked(false);
-                diamond.setChecked(false);
-            }
-        });
+            mView.getMapAsync(this);
 
-        Button confirmFilters = v.findViewById(R.id.confirm_filter_button);
-        confirmFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFilters(v);
-                mapFilter.setVisibility(v.GONE);
-            }
-        });
+            initSearchBar(v);
 
-        Button clearFilters = v.findViewById(R.id.clear_filters_button);
-        clearFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                removeFilters();
-                mapFilter.setVisibility(v.GONE);
-            }
-        });
+            Button filterButton = v.findViewById(R.id.filter_map_button);
+            filterButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mapFilter.setVisibility(v.VISIBLE);
+                    bronze.setChecked(false);
+                    silver.setChecked(false);
+                    gold.setChecked(false);
+                    platinum.setChecked(false);
+                    diamond.setChecked(false);
+                }
+            });
+
+            Button confirmFilters = v.findViewById(R.id.confirm_filter_button);
+            confirmFilters.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getFilters(v);
+                    mapFilter.setVisibility(v.GONE);
+                }
+            });
+
+            Button clearFilters = v.findViewById(R.id.clear_filters_button);
+            clearFilters.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    removeFilters();
+                    mapFilter.setVisibility(v.GONE);
+                }
+            });
+        }
+        else {
+            v.findViewById(R.id.map_filter_display).setVisibility(v.GONE);
+            v.findViewById(R.id.map_search_bar).setVisibility(v.GONE);
+            v.findViewById(R.id.filter_map_button).setVisibility(v.GONE);
+
+            monster = mc.getMonster(bundle.getString("id", "0"));
+
+            permissions = new PermissionManager(getActivity());
+
+            mView = v.findViewById(R.id.map_view);
+            mView.onCreate(savedInstanceState);
+
+            mView.getMapAsync(this);
+        }
 
         return v;
     }
@@ -141,12 +169,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         map.getUiSettings().setMyLocationButtonEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(53.5461, 113.4937), DEFAULT_ZOOM));
-        map.setOnMarkerClickListener(this);
-        loadMonsters();
-        if (permissions.hasLocationPermissions()) {
-            map.setMyLocationEnabled(true);
-            getCurrentLocation();
+
+        if (bundlePresent == 1) {
+            map.setOnMarkerClickListener(this);
+            loadMonsters();
+            if (permissions.hasLocationPermissions()) {
+                map.setMyLocationEnabled(true);
+                getCurrentLocation();
+            }
+        }
+        else {
+            if (permissions.hasLocationPermissions()) {
+                map.setMyLocationEnabled(true);
+                setMonsterLocation();
+            }
         }
     }
 
@@ -177,29 +213,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     /**
+     * This method will set the location to be centered on the monster passed in
+     */
+    private void setMonsterLocation() {
+        Double[] loc = monster.getLocation();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc[0], loc[1]), DEFAULT_ZOOM));
+        createMonsterMarker();
+    }
+
+
+    /**
+     * If a monster is passed into the fragment, this function will create the marker for it
+     */
+    private void createMonsterMarker() {
+        if (monster.getLocationEnabled()) {
+            MarkerOptions options = new MarkerOptions()
+                    .position(new LatLng(monster.getLocation()[0], monster.getLocation()[1]));
+            options = setMarkerIcon(options, monster);
+            options.title(monster.getName());
+            Marker marker = map.addMarker(options);
+            markers.add(marker);
+        }
+    }
+
+
+    /**
      * This method will use the MonsterController class to obtain the monsters and display them on
      * the map with an icon
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     private void loadMonsters() {
-        int height = 200;
-        int width = 200;
-        @SuppressLint("UseCompatLoadingForDrawables")
-        BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.bronze);
-        Bitmap b = bitMapDraw.getBitmap();
-        Bitmap bronzeMarker = Bitmap.createScaledBitmap(b, width, height, false);
-        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.silver);
-        b = bitMapDraw.getBitmap();
-        Bitmap silverMarker = Bitmap.createScaledBitmap(b, width, height, false);
-        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.gold);
-        b = bitMapDraw.getBitmap();
-        Bitmap goldMarker = Bitmap.createScaledBitmap(b, width, height, false);
-        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.platinum);
-        b = bitMapDraw.getBitmap();
-        Bitmap platinumMarker = Bitmap.createScaledBitmap(b, width, height, false);
-        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
-        b = bitMapDraw.getBitmap();
-        Bitmap diamondMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
         ArrayList<Monster> monsters = new ArrayList<Monster>();
         Log.d("MAP", "BEFORE CONTROLLER REQUEST");
@@ -214,22 +257,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 if (monsters.get(i).getLocationEnabled()) {
                     MarkerOptions options = new MarkerOptions()
                             .position(new LatLng(monsters.get(i).getLocation()[0], monsters.get(i).getLocation()[1]));
-                    if (monsters.get(i).getScore() > 150) {
-                        rankings.add(5);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
-                    } else if (monsters.get(i).getScore() > 100) {
-                        rankings.add(4);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(platinumMarker));
-                    } else if (monsters.get(i).getScore() > 60) {
-                        rankings.add(3);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(goldMarker));
-                    } else if (monsters.get(i).getScore() > 20) {
-                        rankings.add(2);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(silverMarker));
-                    } else {
-                        rankings.add(1);
-                        options.icon(BitmapDescriptorFactory.fromBitmap(bronzeMarker));
-                    }
+                    options = setMarkerIcon(options, monsters.get(i));
                     options.title(monsters.get(i).getHashHex());
                     Marker marker = map.addMarker(options);
                     markers.add(marker);
@@ -240,6 +268,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         else {
             Log.d("MAP", "MONSTERS ARRAY IS NULL");
         }
+    }
+
+    /**
+     * This method will set the marker icon options for the given options object and monster
+     * @param options
+     * @param monster
+     * @return
+     */
+    private MarkerOptions setMarkerIcon(MarkerOptions options, Monster monster) {
+        if (monster.getScore() > 150) {
+            rankings.add(5);
+            options.icon(BitmapDescriptorFactory.fromBitmap(diamondMarker));
+        } else if (monster.getScore() > 100) {
+            rankings.add(4);
+            options.icon(BitmapDescriptorFactory.fromBitmap(platinumMarker));
+        } else if (monster.getScore() > 60) {
+            rankings.add(3);
+            options.icon(BitmapDescriptorFactory.fromBitmap(goldMarker));
+        } else if (monster.getScore() > 20) {
+            rankings.add(2);
+            options.icon(BitmapDescriptorFactory.fromBitmap(silverMarker));
+        } else {
+            rankings.add(1);
+            options.icon(BitmapDescriptorFactory.fromBitmap(bronzeMarker));
+        }
+        return options;
     }
 
     /**
@@ -291,6 +345,50 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 markers.get(i).setVisible(true);
             }
         }
+    }
+
+    /**
+     * This method will set the marker icons for usage in the fragment
+     */
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setMarkerIcons() {
+        int height = 200;
+        int width = 200;
+        BitmapDrawable bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.bronze);
+        Bitmap b = bitMapDraw.getBitmap();
+        bronzeMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.silver);
+        b = bitMapDraw.getBitmap();
+        silverMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.gold);
+        b = bitMapDraw.getBitmap();
+        goldMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.platinum);
+        b = bitMapDraw.getBitmap();
+        platinumMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        bitMapDraw = (BitmapDrawable)getResources().getDrawable(R.drawable.diamond);
+        b = bitMapDraw.getBitmap();
+        diamondMarker = Bitmap.createScaledBitmap(b, width, height, false);
+    }
+
+    /**
+     * This is the click listener for the map so that users can click on a monster
+     * @param marker
+     * @return
+     */
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        Log.d("MAP", "User clicked on a monster");
+        ViewMonsterFragment nextFrag = new ViewMonsterFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", marker.getTitle());
+        nextFrag.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_fragment_container, nextFrag, "monsterFragment")
+                .addToBackStack(null)
+                .commit();
+
+        return true;
     }
 
     /**
@@ -358,25 +456,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onLowMemory() {
         super.onLowMemory();
         mView.onLowMemory();
-    }
-
-    /**
-     * This is the click listener for the map so that users can click on a monster
-     * @param marker
-     * @return
-     */
-    @Override
-    public boolean onMarkerClick(@NonNull Marker marker) {
-        Log.d("MAP", "User clicked on a monster");
-        ViewMonsterFragment nextFrag = new ViewMonsterFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("id", marker.getTitle());
-        nextFrag.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_fragment_container, nextFrag, "monsterFragment")
-                .addToBackStack(null)
-                .commit();
-
-        return true;
     }
 }

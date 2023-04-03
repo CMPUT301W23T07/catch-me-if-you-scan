@@ -30,6 +30,14 @@ public class CommentController {
     }
 
     /**
+     * Constructor strictly used in testing
+     * @param collection collection reference to the test collection
+     */
+    public CommentController(CollectionReference collection) {
+        this.collection = collection;
+    }
+
+    /**
      * Creates a comment in the db.
      * Structure:
      *     user: mahmadi
@@ -88,7 +96,7 @@ public class CommentController {
      * @return ArrayList of comments that were written by the user
      */
     public ArrayList<Comment> getCommentForUser(String user) {
-        Task<QuerySnapshot> task = collection.whereEqualTo("username", user).get();
+        Task<QuerySnapshot> task = collection.whereEqualTo("user", user).get();
         while (!task.isComplete()) {
             continue;
         }
@@ -134,7 +142,7 @@ public class CommentController {
     public boolean updateComment(String dbID, String content, Timestamp date) {
         Map<String, Object> newContent = new HashMap<>();
         newContent.put("content", content);
-        newContent.put("date", date);
+        newContent.put("datePosted", date);
         Task<Void> task = collection.document(dbID).update(newContent);
         while (!task.isComplete()) {
             continue;

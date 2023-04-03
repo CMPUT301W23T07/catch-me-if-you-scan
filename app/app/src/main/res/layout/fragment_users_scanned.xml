@@ -21,6 +21,7 @@
             <Button
                 android:id="@+id/backButton"
                 android:textColor="@color/white"
+                android:fontFamily="@font/alata"
                 android:layout_width="96dp"
                 android:background="@drawable/custom_button"
                 android:layout_height="wrap_content"
@@ -28,6 +29,7 @@
 
             <TextView
                 android:id="@+id/scansTitle"
+                android:fontFamily="@font/alata"
                 android:textColor="@color/white"
                 android:layout_marginStart="4dp"
                 android:layout_width="0dp"

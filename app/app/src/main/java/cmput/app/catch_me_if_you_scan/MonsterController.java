@@ -32,6 +32,14 @@ public class MonsterController {
     }
 
     /**
+     * Constructor only to be used in Unit testing.
+     * @param collection collection reference to the test collection in the db
+     */
+    public MonsterController(CollectionReference collection) {
+        this.collection = collection;
+    }
+
+    /**
      * Adds Monster to Database Collection.
      * @return A boolean value correlated with the success of the database write.
      */
