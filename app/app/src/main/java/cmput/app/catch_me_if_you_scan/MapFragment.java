@@ -280,6 +280,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
+    /**
+     * This method will set the marker icon options for the given options object and monster
+     * @param options
+     * @param monster
+     * @return
+     */
     private MarkerOptions setMarkerIcon(MarkerOptions options, Monster monster) {
         if (monster.getScore() > 150) {
             rankings.add(5);
