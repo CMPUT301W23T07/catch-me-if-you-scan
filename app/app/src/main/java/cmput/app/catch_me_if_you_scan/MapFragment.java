@@ -127,6 +127,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         });
 
+        Button clearFilters = v.findViewById(R.id.clear_filters_button);
+        clearFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeFilters();
+                mapFilter.setVisibility(v.GONE);
+            }
+        });
+
         return v;
     }
 
@@ -262,6 +271,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }if (diamond.isChecked()) {
             tiers.add(5);
         }
+        filterMonsterTier(tiers);
+    }
+
+    /**
+     * This method will remove all filters by setting the tiers list to contain all tiers, and the
+     * map will redisplay all markers
+     */
+    private void removeFilters() {
+        ArrayList<Integer> tiers = new ArrayList<Integer>();
+        tiers.add(1);
+        tiers.add(2);
+        tiers.add(3);
+        tiers.add(4);
+        tiers.add(5);
         filterMonsterTier(tiers);
     }
 
