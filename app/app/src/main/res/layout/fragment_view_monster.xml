@@ -151,11 +151,11 @@
             android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:clickable="true"
             app:backgroundTint="#9E1A1A"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
@@ -163,16 +163,17 @@
             android:id="@+id/env_photo"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:drawable/ic_menu_gallery"
+                android:background="@drawable/baseline_image_24"
+                android:backgroundTint="#90002147"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -182,16 +183,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/env_photo">
 
             <Button
                 android:id="@+id/button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/ic_menu_mylocation"
+                android:background="@drawable/baseline_pin_drop_24"
+                android:backgroundTint="#90002147"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
