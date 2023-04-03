@@ -8,21 +8,29 @@
   </h2>
   <a href="https://github.com/CMPUT301W23T07/catch-me-if-you-scan/wiki"><strong>Docs</strong></a>
 </div>
-<br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br>
 
 
-## About the game
-It is a fun game that allows us to hunt for the coolest monsters (QR codes) that score the most points. Players will run around scanning QR codes, barcodes, etc. trying to find barcodes and QR codes that give them the most points to compete with eachother and be the number one hunter.
+## 📖 About
+Get ready to embark on a thrilling adventure with this exciting game that allows you to compete with your friends to become the ultimate monster collector. As players, you will scan QR codes, barcodes, and other codes, searching for the coolest monsters that yield the highest points.
+
+The game presents a fun and challenging opportunity to test your skills and knowledge of the area, as you explore the world around you and discover hidden treasures that others might overlook. You can compete with your friends and develop your collection skills to outdo each other and become the top collector.
+
+With every successful capture, you'll feel the thrill of victory and move one step closer to becoming the ultimate monster collector. The game's exhilarating gameplay will keep you engaged for hours, as you uncover new and exciting locations and uncover hidden clues.
+
+So, what are you waiting for? Download the game today and start your journey to becoming the ultimate monster collector. Whether you're a seasoned player or a beginner, the game promises to deliver an unforgettable experience that will keep you coming back for more.
 
 <br><br>
 
-## Features
+## 🌟 Features
 
-- Scavenger hunt gameplay: Players are required to physically search for QR codes and barcodes in their environment to score points.
-- QR code/barcode scanning: The game likely involves the use of a Android smartphone to scan the codes and collect points.
-- Monster Visual: QR codes/barcodes are visualized as Monsters using complex algorethim.
-- Competitive multiplayer: players are to compete against one another to see who can score the most points and become the top hunter.
-- Commenting: players can comment on monsters ane leaave reviwes about it. 
+- Embark on an exhilarating adventure and compete with friends to become the ultimate monster collector.
+- Engaging scavenger hunt gameplay requires you to physically search for QR codes and barcodes, earning points for each successful scan.
+- Challenge yourself to test your skills and knowledge of your surroundings, competing with friends to become the top collector.
+- Use your Android smartphone's scanning feature to easily collect points by scanning QR codes and barcodes with an intuitive and user-friendly interface.
+- Complex algorithms visualize QR codes and barcodes as unique monsters, adding to the excitement of each successful scan.
+- Competitive multiplayer mode allows you to challenge friends and leave comments and reviews about the monsters you collect, gaining insight into their strategies and tactics.
+- Download the game today for an unforgettable experience that promises to keep you coming back for more, whether you're a seasoned player or a beginner.
 
 <br><br>
 <div>
@@ -34,7 +42,7 @@ It is a fun game that allows us to hunt for the coolest monsters (QR codes) that
  </p>
 <br><br>
 
-## Installation
+## 📲 Installation
 
 Install my-project with git
 
@@ -54,9 +62,12 @@ Install my-project with git
 - [Riley Zilka](https://github.com/rileyzilka01), Senior ML Engineer with 10+ years of experience
 - [Jay Kim](https://github.com/Flying-Kimbo), 3rd Year CS
 - [Charlie Kim](https://github.com/charliekim2), 3rd year CS, Amazon CEO
-- [Mohammad-Sajjad Ahmadi](https://github.com/AMD-Bull), 3rd Year CS
+- [Mohammad-Sajjad Ahmadi](https://github.com/AMD-Bull), 3rd Year CS, Intern CTO @ Google
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br>
+## 🎟️ FREE Starter Code
+<img src="https://cdn.discordapp.com/attachments/1061032878303101004/1092310704163409930/image.png">
+<br><br><br><br><br><br>
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
 <img src="https://user-images.githubusercontent.com/66914036/229384480-94c7ba96-1323-41cd-ab7d-cb68f0117413.gif">
 <a/>
