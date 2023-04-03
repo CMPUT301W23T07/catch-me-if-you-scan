@@ -37,6 +37,7 @@ public class LeaderboardFragment extends Fragment {
     private User firstPlaceUser;
     private Monster firstPlaceMonster;
     private int current;
+    private int monstersRetrieved = 0;
     private UserController uc = new UserController(FirebaseFirestore.getInstance());
     private MonsterController mc = new MonsterController(FirebaseFirestore.getInstance());
     private TextView filterType;
@@ -78,10 +79,8 @@ public class LeaderboardFragment extends Fragment {
         initSearchBar(v);
 
         users = uc.getAllUsers();
-        monsters = mc.getAllMonsters();
 
         sortUsers();
-        sortMonsters();
 
         current = 1;
 
@@ -93,10 +92,7 @@ public class LeaderboardFragment extends Fragment {
         firstPlaceUser = users.get(0);
         users.remove(0);
 
-        firstPlaceMonster = monsters.get(0);
-        monsters.remove(0);
-
-        createAdapters();
+        createUserAdapter();
 
         leaderboard.setAdapter(usersLeaderboardAdapter);
         leaderboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -167,9 +163,9 @@ public class LeaderboardFragment extends Fragment {
     }
 
     /**
-     * This method creates the adapters that are used for the base leaderboard, no filters applied
+     * This method creates the user adapter that is used for the base leaderboard, no filters applied
      */
-    public void createAdapters() {
+    public void createUserAdapter() {
         //Create the custom adapter for the list view
         usersLeaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, users) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -179,11 +175,16 @@ public class LeaderboardFragment extends Fragment {
                 TextView pos = (TextView) view.findViewById(R.id.position_text_view);
                 user.setText(users.get(position).getName());
                 points.setText(String.format("%d", users.get(position).getScoreSum()));
-                pos.setText(String.format("%d", position+2));
+                pos.setText(String.format("%d", position + 2));
                 return view;
             }
         };
+    }
 
+    /**
+     * This method creates the monster adapter that is used for the base leaderboard, no filters applied
+     */
+    public void createMonsterAdapter() {
         //Create the custom adapter for the list view
         monstersLeaderboardAdapter = new ArrayAdapter(getActivity(), R.layout.leaderboard_list_item, R.id.username_text_view, monsters) {
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -325,6 +326,15 @@ public class LeaderboardFragment extends Fragment {
     @SuppressLint("DefaultLocale")
     private void changeLeaderboard() {
         if (current == 1) {
+
+            if (monstersRetrieved == 0) {
+                monsters = mc.getAllMonsters();
+                sortMonsters();
+                firstPlaceMonster = monsters.get(0);
+                monsters.remove(0);
+                createMonsterAdapter();
+                monstersRetrieved = 1;
+            }
 
             filterType.setText("Highest Scoring Monster");
             userName.setText(firstPlaceMonster.getName());

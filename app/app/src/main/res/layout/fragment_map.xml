@@ -47,11 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="100dp"
             android:background="@drawable/map_filter_background"
-            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,15 +123,31 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginBottom="12dp"
                 android:background="@drawable/custom_button"
                 android:text="@string/confirm"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#BF5F5F"
+                app:layout_constraintBottom_toTopOf="@+id/clear_filters_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/diamond_radio" />
+
+            <Button
+                android:id="@+id/clear_filters_button"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/custom_button"
+                android:text="@string/clear_filters"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#BF5F5F"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/diamond_radio" />
+                app:layout_constraintTop_toBottomOf="@+id/confirm_filter_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
