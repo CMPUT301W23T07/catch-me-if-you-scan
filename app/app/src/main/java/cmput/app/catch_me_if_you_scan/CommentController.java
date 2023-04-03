@@ -3,14 +3,10 @@ package cmput.app.catch_me_if_you_scan;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +23,14 @@ public class CommentController {
     public CommentController(FirebaseFirestore db){
         this.db = db;
         this.collection = db.collection("Comment");
+    }
+
+    /**
+     * Constructor strictly used in testing
+     * @param collection collection reference to the test collection
+     */
+    public CommentController(CollectionReference collection) {
+        this.collection = collection;
     }
 
     /**
@@ -88,7 +92,7 @@ public class CommentController {
      * @return ArrayList of comments that were written by the user
      */
     public ArrayList<Comment> getCommentForUser(String user) {
-        Task<QuerySnapshot> task = collection.whereEqualTo("username", user).get();
+        Task<QuerySnapshot> task = collection.whereEqualTo("user", user).get();
         while (!task.isComplete()) {
             continue;
         }
@@ -134,7 +138,7 @@ public class CommentController {
     public boolean updateComment(String dbID, String content, Timestamp date) {
         Map<String, Object> newContent = new HashMap<>();
         newContent.put("content", content);
-        newContent.put("date", date);
+        newContent.put("datePosted", date);
         Task<Void> task = collection.document(dbID).update(newContent);
         while (!task.isComplete()) {
             continue;
