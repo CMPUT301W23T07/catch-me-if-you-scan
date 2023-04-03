@@ -103,8 +103,13 @@ public class ViewMonsterFragment extends Fragment{
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EnvPhotoDialogFragment object = new EnvPhotoDialogFragment(bmp);
-                object.show(getActivity().getSupportFragmentManager(), "Environtment Photo");
+                if(bmp !=null){
+                    EnvPhotoDialogFragment object = new EnvPhotoDialogFragment(bmp);
+                    object.show(getActivity().getSupportFragmentManager(), "Environtment Photo");
+                }
+                else{
+                    Toast.makeText(getContext(), "There is no image to show", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
