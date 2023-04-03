@@ -101,6 +101,9 @@ public class MonsterControllerTest {
         assertEquals(confirm.getResult().getData().get("name"), dummyMonster.getName());
         assertEquals(confirm.getResult().getData().get("locationEnabled"), dummyMonster.getLocationEnabled());
         assertEquals(confirm.getResult().getData().get("score"), Integer.toUnsignedLong(dummyMonster.getScore()));
+
+        Task<Void> deleteDummy = this.testDb.document(dummyMonster.getHashHex()).delete();
+        while(!deleteDummy.isComplete()) continue;
     }
 
     /**
