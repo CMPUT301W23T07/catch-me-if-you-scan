@@ -217,7 +217,7 @@ public class Monster implements Comparable<Monster> {
 
         bitWords.put(4, new String[]{"Mo", "Re", "C", "P" , "V"});
         bitWords.put(5, new String[]{"e", "o", "a", "y" , "i"});
-        bitWords.put(6, new String[]{"l", "h", "vi", "j", "r"});
+        bitWords.put(6, new String[]{"l", "ha", "vi", "j", "r"});
         bitWords.put(7, new String[]{"so", "te", "an" ,"er", "sa"});
     }
 
