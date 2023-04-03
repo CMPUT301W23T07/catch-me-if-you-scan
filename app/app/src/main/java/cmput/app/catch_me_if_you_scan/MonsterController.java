@@ -31,12 +31,6 @@ public class MonsterController {
         this.collection = db.collection("Monster");
     }
 
-    /*
-    Takes in a Monster object and sends it to the database.
-    Validates Monster fields to ensure all necessary fields are filled in
-    and returns "true" if the creation was successful and false if it was
-    unsuccessful along with a console log of the issue.
-     */
     /**
      * Adds Monster to Database Collection.
      * @return A boolean value correlated with the success of the database write.
@@ -84,10 +78,6 @@ public class MonsterController {
      * gets a monster with a specific hex code
      * @param hex Hex code of monster
      * @return monster object with given hex code
-     */
-    /*
-    Returns the monster object with the given ID if it exists
-    Returns null if it does not exist in the database.
      */
     public Monster getMonster(String hex){
         Task<DocumentSnapshot> task = collection.document(hex).get();
