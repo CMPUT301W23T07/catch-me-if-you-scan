@@ -1,7 +1,5 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,19 +10,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,11 +25,8 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.nio.charset.StandardCharsets;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +36,6 @@ import java.util.Comparator;
  * Use putArgs to send a Bundle containing the hex hash of the monster with key "id"
  */
 public class ViewMonsterFragment extends Fragment{
-
     private Monster monster;
     private ListView commentListView;
     private ArrayList<Comment> comments;
@@ -58,10 +45,18 @@ public class ViewMonsterFragment extends Fragment{
     private Bundle bundle;
     private User currentUser;
 
+    /**
+     * constructor
+     */
     public ViewMonsterFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * This method creates the fragment view
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO:
@@ -73,6 +68,18 @@ public class ViewMonsterFragment extends Fragment{
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * This method inflates the view with the elements contained inside
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

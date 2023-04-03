@@ -1,9 +1,7 @@
 package cmput.app.catch_me_if_you_scan;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,18 +11,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,17 +36,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 
 /**
  * This class is for the map fragment which appears when the user clicks on the map nav button
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-
     private MapView mView;
     private GoogleMap map;
     private PermissionManager permissions;
@@ -138,7 +129,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         return v;
     }
-
 
     /**
      * This method is called once the map is ready to be initialized and created, it will call the
@@ -302,7 +292,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             }
         }
     }
-
 
     /**
      * This function is for creating the async search function for the map, it will take the

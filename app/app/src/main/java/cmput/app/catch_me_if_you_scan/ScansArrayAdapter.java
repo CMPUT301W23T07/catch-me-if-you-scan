@@ -18,6 +18,11 @@ import java.util.ArrayList;
  */
 public class ScansArrayAdapter extends ArrayAdapter<User> {
 
+    /**
+     * constructor
+     * @param context
+     * @param users
+     */
     ScansArrayAdapter(Context context, ArrayList<User> users){
         super(context, 0, users);
     }

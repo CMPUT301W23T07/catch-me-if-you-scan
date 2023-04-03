@@ -3,19 +3,12 @@ package cmput.app.catch_me_if_you_scan;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.google.common.collect.Table;
 import com.google.common.hash.HashCode;
-import com.google.common.primitives.Ints;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class is the overhead for the entire monster visual system generation
  */
 public class VisualSystem {
-
     private HashCode hash;
     private int size;
     private boolean[][] map;
@@ -59,8 +52,6 @@ public class VisualSystem {
         int padding = this.size - scale * this.monsterSize;
         this.scale(scale, -16777216);
 
-        //System.out.println(this.pixels.length);
-        //this.bmp.setPixels(this.pixels, 0, this.size, 0,padding/2, this.monsterSize*scale, this.monsterSize*scale);
         int[][] drawMap = this.rotate();
 
         for(int i = 0; i<drawMap.length; i++){

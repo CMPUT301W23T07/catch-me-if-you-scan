@@ -219,8 +219,11 @@ public class BlurPhoto {
         this.blurredImage = bitmap;
     }
 
+    /**
+     * Returns the blurred image
+     * @return
+     */
     public Bitmap getBlurredImage() {
         return this.blurredImage;
     }
-
 }

@@ -3,19 +3,19 @@ package cmput.app.catch_me_if_you_scan;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * This class is the controller for interacting with the comments collection in the database
+ * it follows the CRUD model (Create, Read, Update, Delete)
+ */
 public class CommentController {
     private FirebaseFirestore db;
     private CollectionReference collection;
