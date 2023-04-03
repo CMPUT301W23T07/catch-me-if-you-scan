@@ -42,11 +42,11 @@ package cmput.app.catch_me_if_you_scan;
          Monster monster = createMonster("yosri");
 
          //checks it returns the correct name
-         assertEquals(monster.getName(), "Kusemoyo Wayochisa");
+         assertEquals(monster.getName(), "Simuel Vivisa");
 
          Monster monster2 = createMonster("jay");
          //checks it returns the correct name
-         assertEquals(monster2.getName(), "Kunamori Guyodasa");
+         assertEquals(monster2.getName(), "Kaliem Reajan");
      }
 
      /**
