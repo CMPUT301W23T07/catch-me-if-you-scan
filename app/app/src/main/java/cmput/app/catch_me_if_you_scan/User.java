@@ -1,34 +1,39 @@
 package cmput.app.catch_me_if_you_scan;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
+/**
+ * This class represents the User object
+ */
 public class User {
     private String deviceID;
     private String name;
     private String email;
     private String description;
     private int scoreSum;
-    //    private Region region;
+    private ArrayList<Monster> sortedMonster = new ArrayList<Monster>();
 
-    // sorted from smallest score to biggest score
-    private PriorityQueue<Monster> monstersPQ = new PriorityQueue<Monster>(11, new Comparator<Monster>() {
-        @Override
-        public int compare(Monster t1, Monster t2) {
-            if (t1.getScore() > t2.getScore()) {
-                return 1;
-            }
-            return -1;
-        };
-    });
-
-//    constructor
+    /**
+     * Constructor for the user
+     * @param deviceID
+     * @param name
+     * @param email
+     */
     public User(String deviceID, String name, String email) {
         this.deviceID = deviceID;
         this.name = name;
         this.email = email;
     }
-//    constructor
+
+    /**
+     * This constructor is used in the user controller
+     * @param deviceID
+     * @param name
+     * @param email
+     * @param description
+     */
     public User(String deviceID, String name, String email, String description) {
         this.deviceID = deviceID;
         this.name = name;
@@ -36,7 +41,20 @@ public class User {
         this.description = description;
     }
 
-    // getters
+    /**
+     * It takes a string has the hash, the function will see if the hash is already contained within the user.
+     *
+     * @return Boolean; true if the hash already exists or false if the hash does not exist
+     */
+    public boolean checkIfHashExist(String monsterHash){
+        for (int i=0; i<sortedMonster.size(); i++){
+            Monster next = sortedMonster.get(i);
+            if (Objects.equals(next.getHashHex(), monsterHash)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * gets name of user
@@ -83,8 +101,9 @@ public class User {
      * @return the score of the highest score monster
      */
     public int getScoreHighest(){
-        if(monstersPQ.size()>=1){
-            Monster monster = (Monster) monstersPQ.toArray()[monstersPQ.size()-1];
+        if(sortedMonster.size()>=1){
+            Collections.sort(sortedMonster);
+            Monster monster = sortedMonster.get(sortedMonster.size()-1);
             return monster.getScore();
         }
         return 0;
@@ -95,21 +114,30 @@ public class User {
      * @return lowest score monster
      */
     public int getScoreLowest(){
-        if(monstersPQ.size()>=1){
-            return monstersPQ.peek().getScore();
+        if(sortedMonster.size()>=1){
+            Collections.sort(sortedMonster);
+            return sortedMonster.get(0).getScore();
         }
         return 0;
     }
 
     /**
      * count how many monster user scanned
+     *
      * @return number of monster scanned
      */
     public int getMonstersCount(){
-        return monstersPQ.size();
+        return sortedMonster.size();
     }
 
-    // setters
+    /**
+     * Gets the monsters related to the user
+     * @return
+     */
+    public ArrayList<Monster>  getMonsters(){
+        Collections.sort(sortedMonster);
+        return sortedMonster;
+    }
 
     /**
      * sets name of user
@@ -141,7 +169,7 @@ public class User {
      * @param monster the monster to be added
      */
     public void addMonster(Monster monster) {
-        monstersPQ.add(monster);
+        sortedMonster.add(monster);
         this.scoreSum += monster.getScore();
     }
 
@@ -151,6 +179,6 @@ public class User {
      */
     public void removeMonster(Monster monster){
         this.scoreSum -= monster.getScore();
-        monstersPQ.remove(monster);
+        sortedMonster.remove(monster);
     }
 }

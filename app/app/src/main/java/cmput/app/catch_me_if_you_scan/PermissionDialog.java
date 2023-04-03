@@ -12,17 +12,14 @@ import android.widget.Button;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-
 /**
-
- This class represents a dialog fragment that is used to request user permissions for the app.
- The dialog is used to request the user to grant storage, camera and location permissions.
- When the user clicks on the OK button, the app settings are opened and the user can grant the required permissions.
- When the user clicks on the CANCEL button, the dialog is dismissed.
- This class must only be used if the user has chosen "Don't Ask Again" for all permission requests.
+ * This class represents a dialog fragment that is used to request user permissions for the app.
+ * The dialog is used to request the user to grant storage, camera and location permissions.
+ * When the user clicks on the OK button, the app settings are opened and the user can grant the required permissions.
+ * When the user clicks on the CANCEL button, the dialog is dismissed.
+ * This class must only be used if the user has chosen "Don't Ask Again" for all permission requests.
  */
 public class PermissionDialog extends DialogFragment {
-
 
     /**
      * This method creates a new instance of the PermissionDialog class.

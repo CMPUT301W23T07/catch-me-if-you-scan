@@ -9,12 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class Monster {
-    private String dbID;
+/**
+ * This class represents the Monster
+ */
+public class Monster implements Comparable<Monster> {
     private String hashedCode;
     private String name;
     private int score;
-    private int scoreRank;
     private String[] visual;
     private ArrayList<Comment> comments = new ArrayList<Comment>();
     private HashCode hash;
@@ -24,9 +25,18 @@ public class Monster {
     private Hashtable<Integer,String[]> bitWords = new Hashtable<Integer, String[]>();
     private Double longitude;
     private Double latitude;
+    private byte[] envPhoto;
+    private boolean locationEnabled;
 
 
-    Monster(String code, Double latitude, Double longitude){
+    /**
+     * This is one of the constructors used for the Monster class
+     * @param code
+     * @param latitude
+     * @param longitude
+     * @param envPhoto
+     */
+    public Monster(String code, Double latitude, Double longitude, byte[] envPhoto){
         this.hashedCode = code;
         this.hash = Hashing.sha256().hashString(code, StandardCharsets.UTF_8);
         this.hashHex = hash.toString();
@@ -35,15 +45,43 @@ public class Monster {
         this.initializedHashTables();
         this.latitude = latitude;
         this.longitude = longitude;
+        this.envPhoto = envPhoto;
+        this.locationEnabled = locationEnabled;
     }
 
-    Monster(String dbID, String name, int score, int hashInt, Double longitude, Double latitude) {
-        this.dbID = dbID;
+    /**
+     * This constructor is used by the MonsterController class
+     * @param name
+     * @param score
+     * @param hashHex
+     * @param longitude
+     * @param latitude
+     * @param envPhoto
+     * @param locationEnabled
+     */
+    public Monster(String name, int score, String hashHex, Double longitude, Double latitude, byte[] envPhoto, boolean locationEnabled) {
+        this.hash = HashCode.fromString(hashHex);
+        this.hashInt = this.hash.asInt();
+        this.hashBinary = Integer.toBinaryString(this.hashInt);
+        this.hashHex = hashHex;
+
+        this.initializedHashTables();
+
         this.score = score;
         this.name = name;
-        this.hashInt = hashInt;
+
         this.longitude = longitude;
         this.latitude = latitude;
+        this.envPhoto = envPhoto;
+        this.locationEnabled = locationEnabled;
+    }
+
+    /**
+     * get the environment photo as a string(byte array) for this monster
+     * @return String representing environment photo.
+     */
+    public byte[] getEnvPhoto(){
+        return this.envPhoto;
     }
 
     /**
@@ -114,18 +152,6 @@ public class Monster {
     }
 
     /**
-     * ranks the score based on a fixed limits
-     * @return score's ranks
-     */
-    public int getScoreRank(){
-        if(this.score < 99) scoreRank = 1;
-        else if(this.score < 199) scoreRank = 2;
-        else if(this.score < 399) scoreRank = 3;
-        else if(this.score < 599) scoreRank = 4;
-        else if(this.score >= 600) scoreRank = 5;
-        return this.scoreRank;
-    }
-    /**
      * It creates a unique name for the monster
      * by using its hash's bits
      * @return the name of the monster
@@ -135,10 +161,16 @@ public class Monster {
         for(int i = 0; i<8; i++){
             // turn the 0/1 char into 0/1 int
             int currentBit = (int) hashBinary.charAt(i) - 48;
+
+            //get the first 8 bits
+            String substring = hashBinary.substring(i, 8 + i);
+            int substring_as_int = Integer.parseInt(substring, 2);
             // gets the word from the list at given (i)
-            String bitWord = bitWords.get(i)[currentBit];
+            int currentPosition = substring_as_int%(5);
+
+            String bitWord = bitWords.get(i)[currentPosition];
             if(i==0){
-                name = bitWord;
+                this.name = bitWord;
             }
             else if(i==4){
                 this.name = this.name + " " + bitWord;
@@ -177,15 +209,15 @@ public class Monster {
      * initializes the hashtables for the visual/naming systems to use
      */
     public void initializedHashTables(){
-        bitWords.put(0, new String[]{"Ko", "Ku"});
-        bitWords.put(1, new String[]{"se", "na"});
-        bitWords.put(2, new String[]{"mo", "to"});
-        bitWords.put(3, new String[]{"yo", "ri"});
+        bitWords.put(0, new String[]{"K", "Cr", "D", "P", "S"});
+        bitWords.put(1, new String[]{"u", "e", "i", "o", "a"});
+        bitWords.put(2, new String[]{"e", "r", "a", "li", "mu"});
+        bitWords.put(3, new String[]{"ia", "em", "st", "la", "el"});
 
-        bitWords.put(4, new String[]{"Wa", "Gu"});
-        bitWords.put(5, new String[]{"re", "yo"});
-        bitWords.put(6, new String[]{"da", "chi"});
-        bitWords.put(7, new String[]{"sa", "na"});
+        bitWords.put(4, new String[]{"Mo", "Re", "C", "P" , "V"});
+        bitWords.put(5, new String[]{"e", "o", "a", "y" , "i"});
+        bitWords.put(6, new String[]{"l", "ha", "vi", "j", "r"});
+        bitWords.put(7, new String[]{"so", "te", "an" ,"er", "sa"});
     }
 
     /**
@@ -208,5 +240,52 @@ public class Monster {
      */
     public String getHashedCode() {
         return this.hashedCode;
+    }
+
+    /**
+     * gets the HashCode object assiociated with this monster
+     * @return HashCode object
+     */
+    public HashCode getHash(){
+        return this.hash;
+    }
+
+    /**
+     * gets the locationEnabled status of a monster
+     * @return boolean value corresponding with whether location is enabled or not
+     */
+    public boolean getLocationEnabled() { return this.locationEnabled; }
+
+    /**
+     * sets the locationEnabled status of a monster
+     * @param locationEnabled new status of location
+     */
+    public void setLocationEnabled(boolean locationEnabled) { this.locationEnabled = locationEnabled; }
+
+    /**
+     * This method sets the locations for the monster
+     * @param latitude_param
+     * @param longitude_param
+     */
+    public void setLocations(Double latitude_param, Double longitude_param){
+        latitude = latitude_param;
+        longitude = longitude_param;
+    }
+
+    /**
+     * This method sets the environment photo for the monster
+     * @param envString
+     */
+    public void setEnvPhoto(byte[] envString){
+        envPhoto = envString;
+    }
+
+    /**
+     * This method is used for comparing monsters
+     * @param monster the object to be compared.
+     * @return
+     */
+    public int compareTo(Monster monster) {
+        return this.score - monster.score;
     }
 }

@@ -1,32 +1,36 @@
 package cmput.app.catch_me_if_you_scan;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.widget.Button;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-public class ScanningManager {
-    private Button scan_button;
+/**
+ * This class manages the scanning and functions
+ */
+public class ScanningManager extends AppCompatActivity{
     private String message;
     private ComponentActivity activity;
     private ActivityResultLauncher<ScanOptions> barLauncher;
 
+    /**
+     * Constructor for ScanningManager.
+     *
+     * @param activity the activity in which the ScanningManager is used.
+     */
     public ScanningManager(ComponentActivity activity) {
         this.activity = activity;
 
+        // Registering for ScanContract activity result
         this.barLauncher = activity.registerForActivityResult(new ScanContract(), result ->
         {
             // If the capture was successful. We take them to the Submission Activity
-            if ((result.getContents() != null))
-            {
+            if ((result.getContents() != null)) {
                 message = result.getContents();
 
                 Intent intent = new Intent(activity, SubmissionActivity.class);
@@ -36,6 +40,17 @@ public class ScanningManager {
             }
         });
     }
+
+    /**
+     * Constructor
+     */
+    public ScanningManager() {
+        // Github Actions does not work when this empty constructor is not here
+    }
+
+    /**
+     * Launches the barcode scanner using the ScanContract library with custom options.
+     */
     public void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");

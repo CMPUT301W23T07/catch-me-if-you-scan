@@ -4,162 +4,197 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SubmissionActivity">
-    <!--    This is for the background(environment photo), which is displayed after the user takes a photo-->
+    android:background="@color/off_white"
+    android:clipChildren="true"
+    android:clipToPadding="true">
+
+
     <ImageView
         android:id="@+id/background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-
-    <ImageView
-        android:id="@+id/transparentView"
-        android:layout_width="370dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="200dp"
-        android:background="#E6FFFFF1"
+        android:background="#F2F2F7"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    Photo Related Start-->
-    <TextView
-        android:id="@+id/SaveGeo_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="194dp"
-        android:gravity="center"
-        android:text="Save Coordinate:"
-        android:textColor="#000000"
-        android:textSize="19dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <TextView
-        android:id="@id/photo_textView"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-280dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="Photo:"
-        android:textColor="#000000"
-        android:textSize="19dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <Button
-        android:id="@id/cancel_photo_button"
-        android:layout_width="110dp"
-        android:layout_height="48dp"
-
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/red_cancel_button"
-
-        android:gravity="center"
-        android:text="Delete"
-
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toEndOf="@+id/take_photo_button"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <Button
-        android:id="@id/take_photo_button"
-        android:layout_width="110dp"
-        android:layout_height="48dp"
-
-        android:layout_marginStart="-130dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#022646"
-
-        android:gravity="center"
-
-        android:text="Capture"
-        android:textColor="#FFFFFF"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/photo_textView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <Switch
-        android:id="@+id/geoLocation_switch"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="130dp"
-        android:scaleX="1.7"
-        android:scaleY="1.5"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <TextView
-        android:id="@+id/NameView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:gravity="center"
-        android:text="TTTTTTTTTTTTTTTTTTTT"
-        android:textSize="26dp"
-        app:layout_constraintBottom_toTopOf="@+id/take_photo_button"
-        app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <TextView
-        android:id="@+id/Score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="265dp"
-        android:layout_marginBottom="80dp"
-        android:text="Score:"
-        android:textColor="#000000"
-        android:textSize="19dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginBottom="90dp"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="17dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/transparentView" />
-
-    <ImageView
-        android:id="@+id/monsterImageView"
+    <FrameLayout
+        android:id="@+id/frameLayout6"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginBottom="200dp"
-        app:layout_constraintBottom_toBottomOf="@+id/transparentView"
-        app:layout_constraintEnd_toEndOf="@+id/transparentView"
-        app:layout_constraintStart_toStartOf="@+id/transparentView"
-        app:layout_constraintTop_toTopOf="@+id/background_image"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frosted_effect"
+        android:gravity="center"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!--Photo Related End-->
+        <ImageView
+            android:id="@+id/monsterImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_corner"
+            android:clipToOutline="true"
+            tools:srcCompat="@tools:sample/avatars" />
+    </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frosted_effect"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout6">
 
+        <TextView
+            android:id="@+id/MonsterNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/leaderboard_p1_background"
+            android:fontFamily="@font/alata"
+            android:includeFontPadding="false"
+            android:paddingBottom="3dp"
+            android:text="Monster Name"
+            android:textAlignment="center"
+            android:textColor="@color/earth_yellow"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
+            android:text="Score:"
+            android:textColor="@color/medium_blue"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MonsterScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
+            android:gravity="center"
+            android:text="999"
+            android:textAlignment="center"
+            android:textColor="@color/oxford_blue"
+            android:textSize="40sp"
+            android:translationY="-8dp" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout7"
+        android:layout_width="0dp"
+        android:layout_height="258dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/frosted_effect"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/alata"
+            android:text="Take background photo:"
+            android:textColor="@color/licorice"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.050000012" />
+
+        <Button
+            android:id="@+id/take_photo_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/custom_button"
+            android:fontFamily="@font/alata"
+            android:text="Capture"
+            android:textColor="@color/ic_launcher_catch_me_logo_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cancel_photo_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9"
+            app:layout_constraintVertical_bias="0.06999999" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/alata"
+            android:text="Include location:"
+            android:textColor="@color/licorice"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/take_photo_button"
+            app:layout_constraintVertical_bias="0.32999998" />
+
+        <Button
+            android:id="@+id/SubmitButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:background="@drawable/custom_button"
+            android:fontFamily="@font/alata"
+            android:text="Register your monster"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.606"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/geoLocation_switch" />
+
+        <Switch
+            android:id="@+id/geoLocation_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.67"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            app:layout_constraintTop_toBottomOf="@+id/take_photo_button"
+            app:layout_constraintVertical_bias="0.35000002" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cancel_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:clickable="true"
+            app:backgroundTint="#9E1A1A"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toEndOf="@+id/textView9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.24000001"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
