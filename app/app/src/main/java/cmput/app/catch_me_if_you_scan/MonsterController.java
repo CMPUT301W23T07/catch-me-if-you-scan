@@ -39,6 +39,14 @@ public class MonsterController {
         this.collection = db.collection("Monster");
     }
 
+    /**
+     * Constructor only to be used in Unit testing.
+     * @param collection collection reference to the test collection in the db
+     */
+    public MonsterController(CollectionReference collection) {
+        this.collection = collection;
+    }
+
     /*
     Takes in a Monster object and sends it to the database.
     Validates Monster fields to ensure all necessary fields are filled in
