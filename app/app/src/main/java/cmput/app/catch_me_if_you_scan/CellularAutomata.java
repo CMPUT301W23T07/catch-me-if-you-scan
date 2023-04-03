@@ -4,6 +4,9 @@ import com.google.common.hash.HashCode;
 
 import java.util.Arrays;
 
+/**
+ * This class represents the cellular automata for the visual system
+ */
 public class CellularAutomata {
     private boolean[][] map;
     private int size;

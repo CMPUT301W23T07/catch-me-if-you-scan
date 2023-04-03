@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MonsterProfileListFragment#newInstance} factory method to
+ * Use the {@link MonsterProfileListFragment} factory method to
  * create an instance of this fragment.
  */
 public class MonsterProfileListFragment extends Fragment {
