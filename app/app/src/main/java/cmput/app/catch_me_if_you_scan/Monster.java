@@ -164,10 +164,10 @@ public class Monster implements Comparable<Monster> {
             int currentBit = (int) hashBinary.charAt(i) - 48;
 
             //get the first 8 bits
-            String substring = hashBinary.substring(0, 8-i);
+            String substring = hashBinary.substring(i, 8 + i);
             int substring_as_int = Integer.parseInt(substring, 2);
             // gets the word from the list at given (i)
-            int currentPosition = substring_as_int%(4);
+            int currentPosition = substring_as_int%(5);
 
             String bitWord = bitWords.get(i)[currentPosition];
             if(i==0){
@@ -210,15 +210,15 @@ public class Monster implements Comparable<Monster> {
      * initializes the hashtables for the visual/naming systems to use
      */
     public void initializedHashTables(){
-        bitWords.put(0, new String[]{"Ko", "Ku", "D", "M"});
-        bitWords.put(1, new String[]{"a", "e", "i", "o"});
-        bitWords.put(2, new String[]{"mi", "r", "ca", "li"});
-        bitWords.put(3, new String[]{"o", "em", "st", "ly"});
+        bitWords.put(0, new String[]{"K", "Cr", "D", "P", "S"});
+        bitWords.put(1, new String[]{"u", "e", "i", "o", "a"});
+        bitWords.put(2, new String[]{"e", "r", "a", "li", "mu"});
+        bitWords.put(3, new String[]{"ia", "em", "st", "la", "el"});
 
-        bitWords.put(4, new String[]{"Mu", "Re", "C", "X"});
-        bitWords.put(5, new String[]{"e", "o", "a", "y"});
-        bitWords.put(6, new String[]{"da", "r", "vi", "j"});
-        bitWords.put(7, new String[]{"sa", "ta", "an" ,"er"});
+        bitWords.put(4, new String[]{"Mo", "Re", "C", "P" , "V"});
+        bitWords.put(5, new String[]{"e", "o", "a", "y" , "i"});
+        bitWords.put(6, new String[]{"l", "h", "vi", "j", "r"});
+        bitWords.put(7, new String[]{"so", "te", "an" ,"er", "sa"});
     }
 
     /**
